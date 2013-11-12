@@ -1,7 +1,7 @@
 import java.awt.event.*;
 
 import javax.media.opengl.GLCanvas;
-
+import javax.swing.SwingUtilities;
 /**
  * The UserInput class is an extension of the Control class. It also implements three 
  * interfaces, each providing handler methods for the different kinds of user input.
@@ -22,8 +22,12 @@ public class UserInput extends Control
 		implements MouseListener, MouseMotionListener, KeyListener
 {
 	// TODO: Add fields to help calculate mouse movement
-	private int initialX;
-	private int initialY;
+
+	private int x;
+	private int y;
+	private int X;
+	private int Y;
+	
 	/**
 	 * UserInput constructor.
 	 * <p>
@@ -48,10 +52,15 @@ public class UserInput extends Control
 	@Override
 	public void update()
 	{
-		// TODO: Set dX and dY to values corresponding to mouse movement
-		//this.getdX();
-		
-	}
+		// TODO: Set dX and dY to values corresponding to mouse movement	
+			dX = X - x;
+			dY = Y - y;
+			x = X;
+			y = Y;
+			
+			}
+			
+	
 
 	/*
 	 * **********************************************
@@ -63,61 +72,55 @@ public class UserInput extends Control
 	public void mousePressed(MouseEvent event)
 	{
 		// TODO: Detect the location where the mouse has been pressed
-		
-		initialX = event.getX();
-		initialY = event.getY();
+		if (SwingUtilities.isLeftMouseButton(event)) {
+			x =	event.getX();
+			y = event.getY();
+			X = x;
+			Y = y;
+		}
+	
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent event)
 	{		
 		// TODO: Detect mouse movement while the mouse button is down
-		dX = event.getX()-initialX;
-		dY = event.getY()-initialY;
+		if (SwingUtilities.isLeftMouseButton(event)) {
+			x = X;
+			y = Y;
+		 X = event.getX();
+		 Y = event.getY();
+		}
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent event)
-	{
-		this.setdX(0);
-		this.setdY(0);
-	}
-	
 	@Override
 	public void keyPressed(KeyEvent event)
 	{
-
-			if(event.getKeyChar() == 'w') {
-				forward = true;
-			}
-			if(event.getKeyChar() == 'a') {
-				left = true;
-			}
-			if(event.getKeyChar() == 's') {
-				back = true;
-			}
-			if(event.getKeyChar() == 'd') {
-				right = true;
-			}
+		// TODO: Set forward, back, left and right to corresponding key presses
 		
-	}
-
+		if (event.getKeyCode() == KeyEvent.VK_W) {
+			 forward = true; }
+			else if (event.getKeyCode() == KeyEvent.VK_S) { 
+			 back = true;}
+			else if (event.getKeyCode() == KeyEvent.VK_A){
+			 left = true;}
+			else if (event.getKeyCode() == KeyEvent.VK_D){
+			 right = true;}
+		
+		}
+	
 	@Override
 	public void keyReleased(KeyEvent event)
 	{
-
-		if(event.getKeyChar() == 'w') {
-			forward = false;
-		}
-		if(event.getKeyChar() == 'a') {
-			left = false;
-		}
-		if(event.getKeyChar() == 's') {
-			back = false;
-		}
-		if(event.getKeyChar() == 'd') {
-			right = false;
-		}
+		// TODO: Set forward, back, left and right to corresponding key presses
+		if (event.getKeyCode() == KeyEvent.VK_W) {
+		 forward = false; }
+		else if (event.getKeyCode() == KeyEvent.VK_S) { 
+		 back = false; }
+		else if (event.getKeyCode() == KeyEvent.VK_A){
+		 left = false; }
+		else if (event.getKeyCode() == KeyEvent.VK_D){
+		 right = false; }
 		
 	}
 
@@ -152,7 +155,10 @@ public class UserInput extends Control
 	{
 	}
 
-
+	@Override
+	public void mouseReleased(MouseEvent event)
+	{
+	}
 
 
 }
