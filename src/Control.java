@@ -76,15 +76,6 @@ public abstract class Control
 		return dY;
 	}
 	
-	public void setdX(int dx) {
-		this.dX = dx;
-	}
-
-	public void setdY(int dy) {
-		this.dY = dy;
-	}
-	
-	
 	/**
 	 * Updates the fields of the Control class to represent the
 	 * most up-to-date values. 
