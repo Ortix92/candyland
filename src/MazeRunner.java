@@ -72,9 +72,9 @@ public class MazeRunner extends Frame implements GLEventListener {
 			}
 		});
 
-		initJOGL();							// Initialize JOGL.
-		initObjects();						// Initialize all the objects!
-		
+//		initJOGL();							// Initialize JOGL.
+//		initObjects();						// Initialize all the objects!
+//		
 		// Set the frame to visible. This automatically calls upon OpenGL to prevent a blank screen.
 		setVisible(true);
 	}
