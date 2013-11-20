@@ -56,11 +56,15 @@ public class World {
 
 		}
 	}
-
-	public static void main(String[] args) {
-		World world = new World("map.txt");
-		world.loadMapFromFile();
-
+	
+	public ArrayList<ArrayList<Integer>> getMap() {
+		return map;
 	}
+
+//	public static void main(String[] args) {
+//		World world = new World("map.txt");
+//		world.loadMapFromFile();
+//
+//	}
 
 }

@@ -37,12 +37,19 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class editor {
 
 	private JFrame frame;
 	private final Action action = new SwingAction();
 	private World world;
+	private int editorPanelWidth = 600;
+	private int editorPanelHeight = 600;
+	private Painter editorPanel;
 
 	/**
 	 * Launch the application.
@@ -66,15 +73,17 @@ public class editor {
 	}
 
 	/**
+	 * set the listener whether we are drawing or not
+	 */
+	public void drawMap(boolean draw) {
+		this.editorPanel.setDrawMapListener(draw);
+	}
+
+	/**
 	 * Create the application.
 	 */
 	public editor() {
 		initialize();
-	}
-
-	private Component drawMap() {
-		Painter painter = new Painter();
-		return painter;
 	}
 
 	/**
@@ -82,7 +91,7 @@ public class editor {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1080, 717);
+		frame.setBounds(100, 100, 1080, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -115,24 +124,25 @@ public class editor {
 		// Load maze button
 		JButton btnLoadMaze = new JButton("Load Maze");
 		btnLoadMaze.setAction(action);
+		btnLoadMaze.setText("Load Maze");
 
 		JLabel lblVisualEditor = new JLabel("Visual Editor");
 
 		// New Maze Button
 		JButton btnNewMaze = new JButton("New Maze");
 
-		/**
-		 * Here we load the JOGLPanel where we will draw the map
-		 */
-		JPanel JOGLPanel = new Painter();
-		
-		
-		// END JOGLPanel
-		
+		// JOGL Panel
+		this.editorPanel = new Painter(editorPanelWidth, editorPanelHeight);
+
+		// Export the maze
+		JButton btnExportMaze = new JButton("Export Maze");
+		btnExportMaze.setAction(action);
+		btnExportMaze.setText("Export Maze");
+
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout
 				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
+						.createParallelGroup(Alignment.TRAILING)
 						.addGroup(
 								groupLayout
 										.createSequentialGroup()
@@ -150,19 +160,24 @@ public class editor {
 																btnLoadMaze,
 																GroupLayout.PREFERRED_SIZE,
 																120,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																btnExportMaze,
+																GroupLayout.PREFERRED_SIZE,
+																120,
 																GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(
 												ComponentPlacement.RELATED,
-												231, Short.MAX_VALUE)
-										.addComponent(JOGLPanel,
+												283, Short.MAX_VALUE)
+										.addComponent(editorPanel,
 												GroupLayout.PREFERRED_SIZE,
-												660, GroupLayout.PREFERRED_SIZE)
-										.addGap(30))
+												600, GroupLayout.PREFERRED_SIZE)
+										.addGap(38))
 						.addGroup(
 								groupLayout.createSequentialGroup()
-										.addContainerGap(692, Short.MAX_VALUE)
+										.addContainerGap(695, Short.MAX_VALUE)
 										.addComponent(lblVisualEditor)
-										.addGap(314)));
+										.addGap(311)));
 		groupLayout
 				.setVerticalGroup(groupLayout
 						.createParallelGroup(Alignment.LEADING)
@@ -176,15 +191,15 @@ public class editor {
 														.addGroup(
 																groupLayout
 																		.createSequentialGroup()
-																		.addGap(60)
+																		.addGap(23)
 																		.addComponent(
 																				lblVisualEditor)
 																		.addPreferredGap(
 																				ComponentPlacement.RELATED)
 																		.addComponent(
-																				JOGLPanel,
+																				editorPanel,
 																				GroupLayout.PREFERRED_SIZE,
-																				515,
+																				600,
 																				GroupLayout.PREFERRED_SIZE))
 														.addGroup(
 																groupLayout
@@ -200,8 +215,14 @@ public class editor {
 																				btnLoadMaze,
 																				GroupLayout.PREFERRED_SIZE,
 																				64,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(18)
+																		.addComponent(
+																				btnExportMaze,
+																				GroupLayout.PREFERRED_SIZE,
+																				64,
 																				GroupLayout.PREFERRED_SIZE)))
-										.addContainerGap(63, Short.MAX_VALUE)));
+										.addContainerGap(48, Short.MAX_VALUE)));
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
@@ -210,12 +231,35 @@ public class editor {
 		private static final long serialVersionUID = 3928887640385948568L;
 
 		public SwingAction() {
-			putValue(NAME, "Load Maze");
-			putValue(SHORT_DESCRIPTION, "Load the maze text file");
+			// putValue(NAME, "Load Maze");
+			// putValue(SHORT_DESCRIPTION, "Load the maze text file");
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(((JButton) e.getSource()).getText());
+			String button = ((JButton) e.getSource()).getText();
+			switch (button) {
+			case "Load Maze":
+				this.loadMaze();
+				break;
+			case "Export Maze":
+				this.exportMaze();
+			}
+
+		}
+
+		private void exportMaze() {
+			ArrayList<ArrayList<Integer>> map = editor.this.editorPanel
+					.getMaze();
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter("map.txt"));				
+				
+			} catch (IOException e) {
+				System.out.println("Could not write to file!");
+				e.printStackTrace();
+			}
+		}
+
+		private void loadMaze() {
 			JFileChooser chooser = new JFileChooser();
 			int returnVal = chooser.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -224,7 +268,8 @@ public class editor {
 				// Create new World
 				world = new World(chooser.getSelectedFile().getAbsolutePath());
 				world.loadMapFromFile();
-				editor.this.drawMap();
+				editor.this.editorPanel.setMaze(world.getMap());
+				editor.this.drawMap(true);
 
 			}
 		}

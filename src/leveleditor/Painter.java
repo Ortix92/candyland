@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 
 import javax.media.opengl.GL;
@@ -15,6 +16,7 @@ import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLJPanel;
+import javax.swing.JPanel;
 
 import com.sun.opengl.util.Animator;
 
@@ -24,11 +26,11 @@ import com.sun.opengl.util.Animator;
  * @author Kang
  * 
  */
-public class Painter extends GLJPanel implements GLEventListener, MouseListener {
+public class Painter extends JPanel implements GLEventListener, MouseListener {
 	static final long serialVersionUID = 7526471155622776147L;
 
 	// Screen size.
-	private int screenWidth = 300, screenHeight = 300;
+	private int screenWidth, screenHeight;
 	private float buttonSize = screenHeight / 10.0f;
 
 	// A GLCanvas is a component that can be added to a frame. The drawing
@@ -42,19 +44,27 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 
 	private ArrayList<Point2D.Float> points;
 
+	private int resolution;
+
+	private boolean drawMap;
+
+	private ArrayList<ArrayList<Integer>> maze;
+
+	private int boxSize;
+
 	/**
 	 * When instantiating, a GLCanvas is added for us to play with. An animator
 	 * is created to continuously render the canvas.
 	 */
-	public Painter() {
-
+	public Painter(int width, int height) {
+		screenWidth = width;
+		screenHeight = height;
 		points = new ArrayList<Point2D.Float>();
 
 		// Set the desired size and background color of the frame
 		setSize(screenWidth, screenHeight);
 		// setBackground(Color.white);
 		setBackground(new Color(0.95f, 0.95f, 0.95f));
-
 
 		// The OpenGL capabilities should be set before initializing the
 		// GLCanvas. We use double buffering and hardware acceleration.
@@ -65,6 +75,9 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 		// Create a GLCanvas with the specified capabilities and add it to this
 		// frame. Now, we have a canvas to draw on using JOGL.
 		canvas = new GLCanvas(caps);
+
+		// Manually set size
+		canvas.setSize(screenWidth, screenHeight);
 		add(canvas);
 
 		// Set the canvas' GL event listener to be this class. Doing so gives
@@ -132,17 +145,120 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 		GL gl = drawable.getGL();
 
 		// Set the clear color and clear the screen.
-		gl.glClearColor(0.95f, 0.95f, 0.95f, 1);
+		gl.glClearColor(0.05f, 0.05f, 0.05f, 1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
+		// Draw the grid
+		drawGrid(gl);
+
+		// Draw the Map
+		drawMap(gl);
+
 		// Draw the buttons.
-		//drawButtons(gl);
+		// drawButtons(gl);
 
 		// Draw a figure based on the current draw mode and user input
-		//drawFigure(gl);
+		drawFigure(gl);
 
 		// Flush the OpenGL buffer, outputting the result to the screen.
 		gl.glFlush();
+	}
+
+	/**
+	 * Set maze resolution
+	 * 
+	 * @param resolution
+	 *            simple integer which sets the resolution
+	 */
+	private void setResolution(int resolution) {
+		this.resolution = resolution;
+	}
+
+	/**
+	 * Set the maze array
+	 * 
+	 * @param maze
+	 *            the maze is a 2x2 ArrayList of Integers
+	 */
+	public void setMaze(ArrayList<ArrayList<Integer>> maze) {
+		this.maze = maze;
+		this.setResolution(this.maze.size());
+	}
+
+	public ArrayList<ArrayList<Integer>> getMaze() {
+		return this.maze;
+	}
+
+	/**
+	 * Draw the grid based on the resolution of the matrix (can be set by user)
+	 * 
+	 * @param gl
+	 */
+	private void drawGrid(GL gl) {
+		// size of the grid (how many vertical and horizontal lines)
+		gl.glLineWidth(1);
+		if (this.drawMap) {
+			float x1 = this.screenWidth / this.resolution;
+			float y1 = this.screenHeight / this.resolution;
+			for (int i = 0; i < resolution; i++) {
+				this.lineOnScreen(gl, 0, y1, this.screenWidth, y1);
+				y1 = y1 + (this.screenHeight / this.resolution);
+				this.lineOnScreen(gl, x1, 0, x1, this.screenHeight);
+				x1 = x1 + (this.screenWidth / this.resolution);
+			}
+		}
+	}
+
+	/**
+	 * Draw the map in case the drawMap bool value has been set to true
+	 * 
+	 * @param gl
+	 *            the OpenGL object
+	 */
+	private void drawMap(GL gl) {
+		if (this.drawMap) {
+			boxSize = this.screenWidth / this.resolution;
+			for (int i = 0; i < maze.size(); i++) {
+				for (int j = 0; j < maze.size(); j++) {
+					if (this.maze.get(i).get(j) != 0) {
+						boxOnScreen(gl, getXLocationBlock(j),
+								getYLocationBlock(i), boxSize);
+					}
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * @param i
+	 *            iterator
+	 * @return the Y location of the maze tile
+	 */
+	private float getYLocationBlock(int i) {
+		i++; // add 1 to the iterator to shift down by a single row
+		return this.screenHeight - i * this.screenHeight / this.resolution;
+	}
+
+	/**
+	 * 
+	 * @param i
+	 *            iterator
+	 * @return the X location of the maze tile
+	 */
+	private float getXLocationBlock(int i) {
+		return i * this.screenWidth / this.resolution;
+	}
+
+	/**
+	 * Sets the map listener so the map starts drawing
+	 * 
+	 * @param draw
+	 *            true will allow the map to be drawn, false will prevent that
+	 *            from happening
+	 */
+	public void setDrawMapListener(boolean draw) {
+		this.drawMap = draw;
 	}
 
 	/**
@@ -200,7 +316,7 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 		// Set line and point size, and set color to black.
 		gl.glLineWidth(3);
 		gl.glPointSize(10.0f);
-		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		gl.glColor3f(1.0f, 1.0f, 1.0f);
 
 		Point2D.Float p1, p2, p3;
 		switch (drawMode) {
@@ -240,7 +356,7 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 				double x3 = p3.getX();
 				double y3 = p3.getY();
 
-				//triangleOnScreen(gl, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+				// triangleOnScreen(gl, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
 				drawKoch(gl, x1, y1, x2, y2, 4);
 				drawKoch(gl, x2, y2, x3, y3, 4);
 				drawKoch(gl, x3, y3, x1, y1, 4);
@@ -267,10 +383,10 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 			double v1 = (y2 - y1) / 3 + y1;
 			double u3 = (x2 - x1) * 2 / 3 + x1;
 			double v3 = (y2 - y1) * 2 / 3 + y1;
-			double u2 = (u3-u1) * Math.cos(Math.toRadians(-60)) - (v3-v1)
-					* Math.sin(Math.toRadians(-60))+u1;
-			double v2 = (u3-u1) * Math.sin(Math.toRadians(-60)) + (v3-v1)
-					* Math.cos(Math.toRadians(-60))+v1;
+			double u2 = (u3 - u1) * Math.cos(Math.toRadians(-60)) - (v3 - v1)
+					* Math.sin(Math.toRadians(-60)) + u1;
+			double v2 = (u3 - u1) * Math.sin(Math.toRadians(-60)) + (v3 - v1)
+					* Math.cos(Math.toRadians(-60)) + v1;
 
 			drawKoch(gl, x1, y1, u1, v1, level);
 			drawKoch(gl, u1, v1, u2, v2, level);
@@ -329,7 +445,6 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
 		GL gl = drawable.getGL();
-
 		// Set the new screen size and adjusting the viewport
 		screenWidth = width;
 		screenHeight = height;
@@ -349,50 +464,92 @@ public class Painter extends GLJPanel implements GLEventListener, MouseListener 
 	 */
 	public void mouseReleased(MouseEvent me) {
 		// Check if the coordinates correspond to any of the top left buttons
-		boolean buttonPressed = false;
-		if (me.getY() < buttonSize) {
-			if (me.getX() < buttonSize) {
-				// The first button is clicked
-				points.clear();
-				drawMode = DM_POINT;
-				System.out.println("Draw mode: DRAW_POINT");
-				buttonPressed = true;
-			} else if (me.getX() < 2 * buttonSize) {
-				// The second button is clicked
-				points.clear();
-				drawMode = DM_LINE;
-				System.out.println("Draw mode: DRAW_LINE");
-				buttonPressed = true;
-			} else if (me.getX() < 3 * buttonSize) {
-				// The Third button is clicked
-				points.clear();
-				drawMode = DM_KOCH;
-				System.out.println("Draw mode: DRAW_KOCH");
-				buttonPressed = true;
-			}
-		}
+		// boolean buttonPressed = false;
+		// if (me.getY() < buttonSize) {
+		// if (me.getX() < buttonSize) {
+		// // The first button is clicked
+		// points.clear();
+		// drawMode = DM_POINT;
+		// System.out.println("Draw mode: DRAW_POINT");
+		// buttonPressed = true;
+		// } else if (me.getX() < 2 * buttonSize) {
+		// // The second button is clicked
+		// points.clear();
+		// drawMode = DM_LINE;
+		// System.out.println("Draw mode: DRAW_LINE");
+		// buttonPressed = true;
+		// } else if (me.getX() < 3 * buttonSize) {
+		// // The Third button is clicked
+		// points.clear();
+		// drawMode = DM_KOCH;
+		// System.out.println("Draw mode: DRAW_KOCH");
+		// buttonPressed = true;
+		// }
+		// }
 
 		// Only register a new point, if the click did not hit any button
-		if (!buttonPressed) {
+		// if (!buttonPressed) {
+		//
+		// if (drawMode == DM_POINT && points.size() >= 1) {
+		// // If we're drawing points and one point was stored, reset the
+		// // points list
+		// points.clear();
+		// } else if (drawMode == DM_LINE && points.size() >= 2) {
+		// // If we're drawing lines and two points were already stored,
+		// // reset the points list
+		// points.clear();
+		// } else if (drawMode == DM_KOCH && points.size() >= 3) {
+		// // If we're drawing lines and three points were already stored,
+		// // reset the points list
+		// points.clear();
+		// }
 
-			if (drawMode == DM_POINT && points.size() >= 1) {
-				// If we're drawing points and one point was stored, reset the
-				// points list
-				points.clear();
-			} else if (drawMode == DM_LINE && points.size() >= 2) {
-				// If we're drawing lines and two points were already stored,
-				// reset the points list
-				points.clear();
-			} else if (drawMode == DM_KOCH && points.size() >= 3) {
-				// If we're drawing lines and three points were already stored,
-				// reset the points list
-				points.clear();
+		// Add a new point to the points list.
+		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
+		this.changeTile(points);
+
+		// Clear points after tile has been set
+		points.clear();
+
+		// System.out.println(me.getX() + " " + (screenHeight - me.getY()));
+
+	}
+
+	private void changeTile(ArrayList<Float> points2) {
+		if (this.drawMap) {
+
+			int i = 0;
+			// Look for the x Coordinate of the tile
+			boolean tileXFound = false;
+			int tileX = 0;
+			while (!tileXFound) {
+				if (points.get(0).x > i * boxSize
+						&& points.get(0).x <= (i + 1) * boxSize) {
+					tileX = i;
+					tileXFound = true;
+				} else {
+					i++;
+				}
 			}
 
-			// Add a new point to the points list.
-			points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
-			System.out.println(me.getX() + " " + (screenHeight - me.getY()));
+			// Look for the y Coordinate of the tile
+			boolean tileYFound = false;
+			int tileY = 0;
+			i = 0;
+			while (!tileYFound) {
+				if (points.get(0).y > i * boxSize
+						&& points.get(0).y <= (i + 1) * boxSize) {
+					tileY = i;
+					tileYFound = true;
+				} else {
+					i++;
+				}
+			}
+			System.out.println((this.maze.size() - 1 - tileY) + " " + tileX);
+			this.maze.get(this.maze.size() - 1 - tileY).set(tileX,
+					1 - this.maze.get(this.maze.size() - 1 - tileY).get(tileX));
 		}
+
 	}
 
 	@Override
