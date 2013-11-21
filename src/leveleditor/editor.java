@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JMenuBar;
@@ -42,6 +43,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+
+import java.awt.Canvas;
+
+import javax.swing.SwingConstants;
+
 public class editor {
 
 	private JFrame frame;
@@ -50,6 +58,7 @@ public class editor {
 	private int editorPanelWidth = 600;
 	private int editorPanelHeight = 600;
 	private Painter editorPanel;
+	private JSlider resolutionSlider;
 
 	/**
 	 * Launch the application.
@@ -141,6 +150,21 @@ public class editor {
 		btnExportMaze.setAction(action);
 		btnExportMaze.setText("Export Maze");
 
+		resolutionSlider = new JSlider();
+		resolutionSlider.setOrientation(SwingConstants.VERTICAL);
+		resolutionSlider.setMaximum(50);
+		resolutionSlider.setToolTipText("Select the resolution of the grid. ");
+		resolutionSlider.setSnapToTicks(true);
+		resolutionSlider.setPaintLabels(true);
+		resolutionSlider.setPaintTicks(true);
+		resolutionSlider.setMinorTickSpacing(5);
+		resolutionSlider.setMinimum(0);
+		resolutionSlider.setMajorTickSpacing(20);
+
+		JLabel lblOptions = new JLabel("Options");
+
+		JLabel lblGridResolution = new JLabel("Grid Resolution");
+
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout
 				.setHorizontalGroup(groupLayout
@@ -148,29 +172,51 @@ public class editor {
 						.addGroup(
 								groupLayout
 										.createSequentialGroup()
-										.addGap(23)
 										.addGroup(
 												groupLayout
 														.createParallelGroup(
 																Alignment.LEADING)
-														.addComponent(
-																btnNewMaze,
-																GroupLayout.PREFERRED_SIZE,
-																120,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																btnLoadMaze,
-																GroupLayout.PREFERRED_SIZE,
-																120,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																btnExportMaze,
-																GroupLayout.PREFERRED_SIZE,
-																120,
-																GroupLayout.PREFERRED_SIZE))
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGap(23)
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								btnNewMaze,
+																								GroupLayout.PREFERRED_SIZE,
+																								120,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btnLoadMaze,
+																								GroupLayout.PREFERRED_SIZE,
+																								120,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btnExportMaze,
+																								GroupLayout.PREFERRED_SIZE,
+																								120,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addGap(18)
+																		.addComponent(
+																				resolutionSlider,
+																				GroupLayout.PREFERRED_SIZE,
+																				212,
+																				GroupLayout.PREFERRED_SIZE))
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGap(58)
+																		.addComponent(
+																				lblOptions)
+																		.addGap(119)
+																		.addComponent(
+																				lblGridResolution)))
 										.addPreferredGap(
-												ComponentPlacement.RELATED,
-												283, Short.MAX_VALUE)
+												ComponentPlacement.RELATED, 53,
+												Short.MAX_VALUE)
 										.addComponent(editorPanel,
 												GroupLayout.PREFERRED_SIZE,
 												600, GroupLayout.PREFERRED_SIZE)
@@ -206,24 +252,45 @@ public class editor {
 														.addGroup(
 																groupLayout
 																		.createSequentialGroup()
-																		.addGap(103)
-																		.addComponent(
-																				btnNewMaze,
-																				GroupLayout.PREFERRED_SIZE,
-																				64,
-																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(71)
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.BASELINE)
+																						.addComponent(
+																								lblOptions)
+																						.addComponent(
+																								lblGridResolution))
 																		.addGap(18)
-																		.addComponent(
-																				btnLoadMaze,
-																				GroupLayout.PREFERRED_SIZE,
-																				64,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(18)
-																		.addComponent(
-																				btnExportMaze,
-																				GroupLayout.PREFERRED_SIZE,
-																				64,
-																				GroupLayout.PREFERRED_SIZE)))
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								resolutionSlider,
+																								GroupLayout.PREFERRED_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addGroup(
+																								groupLayout
+																										.createSequentialGroup()
+																										.addComponent(
+																												btnNewMaze,
+																												GroupLayout.PREFERRED_SIZE,
+																												64,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addGap(18)
+																										.addComponent(
+																												btnLoadMaze,
+																												GroupLayout.PREFERRED_SIZE,
+																												64,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addGap(18)
+																										.addComponent(
+																												btnExportMaze,
+																												GroupLayout.PREFERRED_SIZE,
+																												64,
+																												GroupLayout.PREFERRED_SIZE)))))
 										.addContainerGap(48, Short.MAX_VALUE)));
 		frame.getContentPane().setLayout(groupLayout);
 	}
@@ -255,16 +322,22 @@ public class editor {
 		}
 
 		private void newMaze() {
-			int resolution = 30;
-			editor.this.editorPanel.setResolution(resolution);
-			editor.this.editorPanel.setDrawGridListener(true);
+			int resolution = editor.this.resolutionSlider.getValue();
+			if (resolution != 0) {
+				editor.this.editorPanel.setResolution(resolution);
+				editor.this.editorPanel.setDrawGridListener(true);
 
-			World emptyMap = new World(null); // we pass null instead of a path,
-												// that's fine
+				World emptyMap = new World(null); // we pass null instead of a
+													// path,
+													// that's fine
 
-			editor.this.editorPanel.setMaze(emptyMap
-					.getZeroesMatrix(resolution));
-			editor.this.drawMap(true);
+				editor.this.editorPanel.setMaze(emptyMap
+						.getZeroesMatrix(resolution));
+				editor.this.drawMap(true);
+			} else {
+				JOptionPane.showMessageDialog(frame,
+						"0 is not a valid grid size!");
+			}
 		}
 
 		private void exportMaze() {
@@ -286,13 +359,15 @@ public class editor {
 				bw.close();
 
 			} catch (IOException e) {
-				System.out.println("Could not write to file!");
-				e.printStackTrace();
+
+				JOptionPane
+						.showMessageDialog(frame, "Could not write to file!");
+				System.out.println(e.getMessage());
 			} catch (NullPointerException e) {
-				System.out
-						.println("Could not export map, null pointer exception has been thrown");
-				System.out
-						.println("Maze is probably empty or not square (how did you pull that off?)");
+				JOptionPane
+						.showMessageDialog(frame,
+								"Error exporting map. Either the maze is not square or is empty");
+				System.out.println(e.getMessage());
 			}
 		}
 
@@ -309,7 +384,8 @@ public class editor {
 					editor.this.editorPanel.setMaze(world.getMap());
 					editor.this.drawMap(true);
 				} catch (IllegalArgumentException e) {
-					System.out.println(e.getMessage());
+					JOptionPane.showMessageDialog(frame,
+							"Failed loading maze with error: " + e.getMessage());
 				}
 			}
 		}

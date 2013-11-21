@@ -156,12 +156,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		// Draw the Map
 		drawMap(gl);
 
-		// Draw the buttons.
-		// drawButtons(gl);
-
-		// Draw a figure based on the current draw mode and user input
-		drawFigure(gl);
-
 		// Flush the OpenGL buffer, outputting the result to the screen.
 		gl.glFlush();
 	}
@@ -257,6 +251,50 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		return i * this.screenWidth / this.resolution;
 	}
 
+	
+	/**
+	 * Toggle the value of the tile
+	 * @param points2 
+	 */
+
+	private void changeTile() {
+		if (this.drawMap) {
+
+			int i = 0;
+			// Look for the x Coordinate of the tile
+			boolean tileXFound = false;
+			int tileX = 0;
+			while (!tileXFound) {
+				if (points.get(0).x > i * boxSize
+						&& points.get(0).x <= (i + 1) * boxSize) {
+					tileX = i;
+					tileXFound = true;
+				} else {
+					i++;
+				}
+			}
+
+			// Look for the y Coordinate of the tile
+			boolean tileYFound = false;
+			int tileY = 0;
+			i = 0;
+			while (!tileYFound) {
+				if (points.get(0).y > i * boxSize
+						&& points.get(0).y <= (i + 1) * boxSize) {
+					tileY = i;
+					tileYFound = true;
+				} else {
+					i++;
+				}
+			}
+			System.out.println((this.maze.size() - 1 - tileY) + " " + tileX);
+			this.maze.get(this.maze.size() - 1 - tileY).set(tileX,
+					1 - this.maze.get(this.maze.size() - 1 - tileY).get(tileX));
+		}
+
+	}
+
+	
 	/**
 	 * Sets the map listener so the map starts drawing
 	 * 
@@ -279,140 +317,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		this.drawGrid = draw;
 	}
 
-	/**
-	 * A method that draws the top left buttons on the screen.
-	 * 
-	 * @param gl
-	 */
-	private void drawButtons(GL gl) {
-		// Draw the background boxes
-		gl.glColor3f(0, 0.5f, 0f);
-		boxOnScreen(gl, 0.0f, screenHeight - buttonSize, buttonSize);
-
-		gl.glColor3f(0, 0, 0.5f);
-		boxOnScreen(gl, buttonSize, screenHeight - buttonSize, buttonSize);
-
-		gl.glColor3f(0.5f, 0, 0);
-		boxOnScreen(gl, 2 * buttonSize, screenHeight - buttonSize, buttonSize);
-
-		// Draw a point on top of the first box
-		gl.glPointSize(5.0f);
-		gl.glColor3f(1.0f, 1.0f, 1.0f);
-		pointOnScreen(gl, buttonSize / 2.0f, screenHeight - buttonSize / 2.0f);
-
-		// Draw a line on top of the second box.
-		gl.glLineWidth(3);
-		gl.glColor3f(1.0f, 1.0f, 1.0f);
-		lineOnScreen(gl, buttonSize + 4.0f, screenHeight - 4.0f,
-				2 * buttonSize - 4.0f, screenHeight - buttonSize + 4.0f);
-
-		// Draw a triangle on top of the third box.
-		gl.glLineWidth(2);
-		gl.glColor3f(1.0f, 1.0f, 1.0f);
-		triangleOnScreen(gl, buttonSize * 2.5f, screenHeight - 4.0f,
-				3 * buttonSize - 4.0f, screenHeight - buttonSize + 4.0f,
-				2 * buttonSize + 4.0f, screenHeight - buttonSize + 4.0f);
-	}
-
-	private void triangleOnScreen(GL gl, float x1, float y1, float x2,
-			float y2, float x3, float y3) {
-		gl.glBegin(GL.GL_LINE_LOOP);
-		gl.glVertex2f(x1, y1);
-		gl.glVertex2f(x2, y2);
-		gl.glVertex2f(x3, y3);
-		gl.glEnd();
-
-	}
-
-	/**
-	 * A method that draws a figure, when the user has inputted enough points
-	 * for the current draw mode.
-	 * 
-	 * @param gl
-	 */
-	private void drawFigure(GL gl) {
-		// Set line and point size, and set color to black.
-		gl.glLineWidth(3);
-		gl.glPointSize(10.0f);
-		gl.glColor3f(1.0f, 1.0f, 1.0f);
-
-		Point2D.Float p1, p2, p3;
-		switch (drawMode) {
-		case DM_POINT:
-			if (points.size() >= 1) {
-				// If the draw mode is "point" and the user has supplied at
-				// least one point, draw that point.
-				p1 = points.get(0);
-				pointOnScreen(gl, p1.x, p1.y);
-			}
-		case DM_LINE:
-			if (points.size() >= 2) {
-				// If the draw mode is "line" and the user has supplied at least
-				// two points, draw a line between those points
-				p1 = points.get(0);
-				p2 = points.get(1);
-				lineOnScreen(gl, p1.x, p1.y, p2.x, p2.y);
-			}
-		case DM_KOCH:
-			if (points.size() >= 3) {
-				p1 = points.get(0);
-				p2 = points.get(1);
-				p3 = points.get(2);
-
-				gl.glBegin(GL.GL_LINE_LOOP);
-				gl.glVertex2d(p1.getX(), p1.getY());
-				gl.glVertex2d(p2.getX(), p2.getY());
-				gl.glVertex2d(p3.getX(), p3.getY());
-				gl.glEnd();
-
-				double x1 = p1.getX();
-				double y1 = p1.getY();
-
-				double x2 = p2.getX();
-				double y2 = p2.getY();
-
-				double x3 = p3.getX();
-				double y3 = p3.getY();
-
-				// triangleOnScreen(gl, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
-				drawKoch(gl, x1, y1, x2, y2, 4);
-				drawKoch(gl, x2, y2, x3, y3, 4);
-				drawKoch(gl, x3, y3, x1, y1, 4);
-			}
-			break;
-		}
-	}
-
-	/**
-	 * Method which draws the KOCH figure after three points have been selected
-	 */
-
-	public void drawKoch(GL gl, double x1, double y1, double x2, double y2,
-			int n) {
-		if (n <= 0) {
-			gl.glBegin(GL.GL_LINES);
-			gl.glVertex2d(x1, y1);
-			gl.glVertex2d(x2, y2);
-			gl.glEnd();
-		} else {
-			// The new level
-			int level = n - 1;
-			double u1 = (x2 - x1) / 3 + x1;
-			double v1 = (y2 - y1) / 3 + y1;
-			double u3 = (x2 - x1) * 2 / 3 + x1;
-			double v3 = (y2 - y1) * 2 / 3 + y1;
-			double u2 = (u3 - u1) * Math.cos(Math.toRadians(-60)) - (v3 - v1)
-					* Math.sin(Math.toRadians(-60)) + u1;
-			double v2 = (u3 - u1) * Math.sin(Math.toRadians(-60)) + (v3 - v1)
-					* Math.cos(Math.toRadians(-60)) + v1;
-
-			drawKoch(gl, x1, y1, u1, v1, level);
-			drawKoch(gl, u1, v1, u2, v2, level);
-			drawKoch(gl, u2, v2, u3, v3, level);
-			drawKoch(gl, u3, v3, x2, y2, level);
-
-		}
-	}
 
 	/**
 	 * Help method that uses GL calls to draw a point.
@@ -524,49 +428,12 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 
 		// Add a new point to the points list.
 		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
-		this.changeTile(points);
+		this.changeTile();
 
 		// Clear points after tile has been set
 		points.clear();
 
 		// System.out.println(me.getX() + " " + (screenHeight - me.getY()));
-
-	}
-
-	private void changeTile(ArrayList<Float> points2) {
-		if (this.drawMap) {
-
-			int i = 0;
-			// Look for the x Coordinate of the tile
-			boolean tileXFound = false;
-			int tileX = 0;
-			while (!tileXFound) {
-				if (points.get(0).x > i * boxSize
-						&& points.get(0).x <= (i + 1) * boxSize) {
-					tileX = i;
-					tileXFound = true;
-				} else {
-					i++;
-				}
-			}
-
-			// Look for the y Coordinate of the tile
-			boolean tileYFound = false;
-			int tileY = 0;
-			i = 0;
-			while (!tileYFound) {
-				if (points.get(0).y > i * boxSize
-						&& points.get(0).y <= (i + 1) * boxSize) {
-					tileY = i;
-					tileYFound = true;
-				} else {
-					i++;
-				}
-			}
-			System.out.println((this.maze.size() - 1 - tileY) + " " + tileX);
-			this.maze.get(this.maze.size() - 1 - tileY).set(tileX,
-					1 - this.maze.get(this.maze.size() - 1 - tileY).get(tileX));
-		}
 
 	}
 
