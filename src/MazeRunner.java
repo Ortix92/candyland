@@ -33,7 +33,7 @@ public class MazeRunner extends Frame implements GLEventListener {
  */
 	private GLCanvas canvas;
 
-	private int screenWidth = 600, screenHeight = 600;		// Screen size.
+	private int screenWidth = 1024, screenHeight = 768;		// Screen size.
 	private ArrayList<VisibleObject> visibleObjects;		// A list of objects that will be displayed on screen.
 	private Player player;									// The player object.
 	private Camera camera;									// The camera object.
@@ -57,11 +57,11 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 */
 	public MazeRunner() {
 		// Make a new window.
-		super("MazeRunner");
+		super("MazeRunner - Game");
 		
 		// Let's change the window to our liking.
 		setSize( screenWidth, screenHeight);
-		setBackground( Color.white );
+		//setBackground( Color.blue );
 
 		// The window also has to close when we want to.
 		this.addWindowListener( new WindowAdapter()
@@ -72,9 +72,10 @@ public class MazeRunner extends Frame implements GLEventListener {
 			}
 		});
 
-//		initJOGL();							// Initialize JOGL.
-//		initObjects();						// Initialize all the objects!
-//		
+		
+		initJOGL();							// Initialize JOGL.
+		initObjects();						// Initialize all the objects!
+		
 		// Set the frame to visible. This automatically calls upon OpenGL to prevent a blank screen.
 		setVisible(true);
 	}
@@ -86,7 +87,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * MazeRunner will actually display our screen. To indicate to OpenGL that is has to enter a 
 	 * continuous loop, it uses an Animator, which is part of the JOGL api.
 	 */
-	private void initJOGL()	{
+	void initJOGL()	{
 		// First, we set up JOGL. We start with the default settings.
 		GLCapabilities caps = new GLCapabilities();
 		// Then we make sure that JOGL is hardware accelerated and uses double buffering.
@@ -110,6 +111,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 		anim.start();
 	}
 	
+	
 	/**
 	 * initializeObjects() creates all the objects needed for the game to start normally.
 	 * <p>
@@ -125,7 +127,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * visualObjects list of MazeRunner through the add method, so it will be displayed 
 	 * automagically. 
 	 */
-	private void initObjects()	{
+	 void initObjects()	{
 		// We define an ArrayList of VisibleObjects to store all the objects that need to be
 		// displayed by MazeRunner.
 		visibleObjects = new ArrayList<VisibleObject>();
@@ -304,10 +306,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 				  }
 	 }
 	}		
-		
-		
-		
-		
+	
 	
 
 	/**
@@ -335,7 +334,8 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Create and run MazeRunner.
+				
+		// Create and run MazeRunner
 		new MazeRunner();
 	}
 }

@@ -29,12 +29,12 @@ public class Maze implements VisibleObject {
 	private int[][] maze = 
 	{	{  1,  1,  1,  1,  1,  1,  1,  1,  1,  1 },
 		{  1,  0,  0,  0,  0,  0,  0,  0,  0,  1 },
-		{  1,  0,  0,  0,  0,  0,  1,  1,  1,  1 },
-		{  1,  0,  1,  0,  0,  0,  1,  0,  0,  1 },
-		{  1,  0,  1,  0,  1,  0,  1,  0,  0,  1 },
-		{  1,  0,  1,  0,  1,  0,  1,  0,  0,  1 },
-		{  1,  0,  0,  0,  1,  0,  1,  0,  0,  1 },
-		{  1,  0,  0,  0,  1,  1,  1,  0,  0,  1 },
+		{  1,  0,  1,  1,  1,  1,  1,  1,  0,  1 },
+		{  1,  0,  1,  0,  0,  0,  0,  1,  0,  1 },
+		{  1,  0,  1,  0,  0,  0,  0,  1,  0,  1 },
+		{  1,  0,  1,  0,  0,  0,  0,  1,  0,  1 },
+		{  1,  0,  1,  0,  0,  0,  0,  0,  0,  1 },
+		{  1,  0,  1,  1,  1,  1,  1,  1,  1,  1 },
 		{  1,  0,  0,  0,  0,  0,  0,  0,  0,  1 },
 		{  1,  1,  1,  1,  1,  1,  1,  1,  1,  1 }	};
 
@@ -97,7 +97,7 @@ public class Maze implements VisibleObject {
 		GLUT glut = new GLUT();
 
         // Setting the wall colour and material.
-        float wallColour[] = { 0.5f, 0.0f, 0.7f, 1.0f };				// The walls are purple.
+        float wallColour[] = { (float) Math.random(), (float) Math.random(), (float) Math.random() };				// The walls are random.
         gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);	// Set the materials used by the wall.
 
         // draw the grid with the current material
