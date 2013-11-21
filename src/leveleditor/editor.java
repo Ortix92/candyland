@@ -130,6 +130,8 @@ public class editor {
 
 		// New Maze Button
 		JButton btnNewMaze = new JButton("New Maze");
+		btnNewMaze.setAction(action);
+		btnNewMaze.setText("New Maze");
 
 		// JOGL Panel
 		this.editorPanel = new Painter(editorPanelWidth, editorPanelHeight);
@@ -243,19 +245,54 @@ public class editor {
 				break;
 			case "Export Maze":
 				this.exportMaze();
+				break;
+			case "New Maze":
+				this.newMaze();
+				break;
+
 			}
 
+		}
+
+		private void newMaze() {
+			int resolution = 30;
+			editor.this.editorPanel.setResolution(resolution);
+			editor.this.editorPanel.setDrawGridListener(true);
+
+			World emptyMap = new World(null); // we pass null instead of a path,
+												// that's fine
+
+			editor.this.editorPanel.setMaze(emptyMap
+					.getZeroesMatrix(resolution));
+			editor.this.drawMap(true);
 		}
 
 		private void exportMaze() {
 			ArrayList<ArrayList<Integer>> map = editor.this.editorPanel
 					.getMaze();
+			String filename = "map_export.txt";
 			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter("map.txt"));				
-				
+				BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+				for (int i = 0; i < map.size(); i++) {
+					for (int j = 0; j < map.size(); j++) {
+						bw.write(map.get(i).get(j) + " ");
+					}
+					// prevent new line if end of matrix reached
+					if (i < map.size() - 1) {
+						bw.write("\r\n");
+					}
+				}
+				System.out.println("Exported to file \"" + filename + "\"");
+				bw.close();
+
 			} catch (IOException e) {
 				System.out.println("Could not write to file!");
 				e.printStackTrace();
+			} catch (NullPointerException e) {
+				System.out
+						.println("Could not export map, null pointer exception has been thrown");
+				System.out
+						.println("Maze is probably empty or not square (how did you pull that off?)");
 			}
 		}
 
@@ -268,9 +305,12 @@ public class editor {
 				// Create new World
 				world = new World(chooser.getSelectedFile().getAbsolutePath());
 				world.loadMapFromFile();
-				editor.this.editorPanel.setMaze(world.getMap());
-				editor.this.drawMap(true);
-
+				try {
+					editor.this.editorPanel.setMaze(world.getMap());
+					editor.this.drawMap(true);
+				} catch (IllegalArgumentException e) {
+					System.out.println(e.getMessage());
+				}
 			}
 		}
 	}

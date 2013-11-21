@@ -52,6 +52,8 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 
 	private int boxSize;
 
+	private boolean drawGrid;
+
 	/**
 	 * When instantiating, a GLCanvas is added for us to play with. An animator
 	 * is created to continuously render the canvas.
@@ -170,8 +172,13 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	 * @param resolution
 	 *            simple integer which sets the resolution
 	 */
-	private void setResolution(int resolution) {
-		this.resolution = resolution;
+	public void setResolution(int resolution) throws IllegalArgumentException {
+		if (resolution % 5 == 0) {
+			this.resolution = resolution;
+		} else {
+			throw new IllegalArgumentException(
+					"Maze needs resolution of multiplicity 5");
+		}
 	}
 
 	/**
@@ -197,7 +204,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	private void drawGrid(GL gl) {
 		// size of the grid (how many vertical and horizontal lines)
 		gl.glLineWidth(1);
-		if (this.drawMap) {
+		if (this.drawMap || this.drawGrid) {
 			float x1 = this.screenWidth / this.resolution;
 			float y1 = this.screenHeight / this.resolution;
 			for (int i = 0; i < resolution; i++) {
@@ -259,6 +266,17 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	 */
 	public void setDrawMapListener(boolean draw) {
 		this.drawMap = draw;
+	}
+
+	/**
+	 * Sets the listener of the drawGrid method to either start or stop drawing
+	 * it
+	 * 
+	 * @param draw
+	 *            true will draw the grid. False will stop drawing it
+	 */
+	public void setDrawGridListener(boolean draw) {
+		this.drawGrid = draw;
 	}
 
 	/**
