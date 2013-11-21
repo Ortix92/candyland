@@ -23,7 +23,7 @@ import java.util.Iterator;
  * @author Bruno Scheele, revised by Mattijs Driel
  * 
  */
-public class MazeRunner extends Frame implements GLEventListener {
+public class MazeRunner extends GameState implements GLEventListener {
 	static final long serialVersionUID = 7526471155622776147L;
 
 	/*
@@ -56,28 +56,9 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * to function as the view controller.
 	 */
 	public MazeRunner() {
-		// Make a new window.
-		super("MazeRunner - Game");
-		
-		// Let's change the window to our liking.
-		setSize( screenWidth, screenHeight);
-		//setBackground( Color.blue );
-
-		// The window also has to close when we want to.
-		this.addWindowListener( new WindowAdapter()
-		{
-			public void windowClosing( WindowEvent e )
-			{
-				System.exit(0);
-			}
-		});
-
-		
 		initJOGL();							// Initialize JOGL.
 		initObjects();						// Initialize all the objects!
-		
 		// Set the frame to visible. This automatically calls upon OpenGL to prevent a blank screen.
-		setVisible(true);
 	}
 	
 	/**
@@ -96,7 +77,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 
 		// Now we add the canvas, where OpenGL will actually draw for us. We'll use settings we've just defined. 
 		canvas = new GLCanvas( caps );
-		add( canvas );
+		Game.window.add( canvas );
 		/* We need to add a GLEventListener to interpret OpenGL events for us. Since MazeRunner implements
 		 * GLEventListener, this means that we add the necesary init(), display(), displayChanged() and reshape()
 		 * methods to this class.
@@ -322,6 +303,30 @@ public class MazeRunner extends Frame implements GLEventListener {
 		camera.setVerAngle( player.getVerAngle() );
 		camera.calculateVRP();
 	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void draw() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(int k) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(int k) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 /*
  * **********************************************
@@ -333,9 +338,9 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-				
-		// Create and run MazeRunner
-		new MazeRunner();
-	}
+//	public static void main(String[] args) {
+//				
+//		// Create and run MazeRunner
+//		new MazeRunner();
+//	}
 }

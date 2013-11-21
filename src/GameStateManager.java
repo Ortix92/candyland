@@ -7,6 +7,7 @@ public class GameStateManager {
 	
 	public static final int MENUSTATE = 0;
 	public static final int PLAYSTATE = 1;
+	public static final int MAZESTATE = 2;
 	
 	
 	public GameStateManager() {
@@ -15,6 +16,7 @@ public class GameStateManager {
 		
 		gameStates.add(new MenuState(this));
 		gameStates.add(new PlayState(this));
+		gameStates.add(new MazeState(this));
 		
 		currentState = MENUSTATE;
 		
@@ -22,6 +24,7 @@ public class GameStateManager {
 	
 	public void setCurrentState(int i) {
 		currentState = i;
+		Game.window.removeAll();
 	}
 	
 	public void update() {
@@ -39,5 +42,6 @@ public class GameStateManager {
 	public void keyReleased(int k) {
 		gameStates.get(currentState).keyReleased(k);
 	}
+
 	
 }
