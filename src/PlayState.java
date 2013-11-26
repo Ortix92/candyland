@@ -1,4 +1,4 @@
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
 
 public class PlayState extends GameState {
 
@@ -12,7 +12,6 @@ public class PlayState extends GameState {
 	
 	public void draw() {
 
-        Game.window.setTitle("CandyLand Nycan Slayer - Playing");
 		
 	}
 	

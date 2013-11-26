@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
@@ -11,7 +12,6 @@ public class MenuState extends GameState {
 
 	public MenuState(GameStateManager gsm) {
 
-		Game.window.setTitle("CandyLand Nycan Slayer - Menu");
 		drawMenu();
 		this.gsm = gsm;
 	}
@@ -53,16 +53,14 @@ public class MenuState extends GameState {
 		button_options.setBounds(0, 413, 561, 57);
 		button_exit.setBounds(0, 502, 561, 57);
 
-		menuPanel.add(button_start);
-		menuPanel.add(button_load);
+//		menuPanel.add(button_start);
+//		menuPanel.add(button_load);
 		menuPanel.add(background);
-		menuPanel.add(button_level_editor);
-		menuPanel.add(button_options);
-		menuPanel.add(button_exit);
+//		menuPanel.add(button_level_editor);
+//		menuPanel.add(button_options);
+//		menuPanel.add(button_exit);
 
-		Game.window.add(menuPanel);
-		Game.window.setSize(1024, 768);
-		Game.window.setVisible(true);
+		add(menuPanel);
 
 		final JButton[] knoppen = new JButton[5];
 		knoppen[0] = button_start;
@@ -97,6 +95,7 @@ public class MenuState extends GameState {
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
 					// Sound.play("sounds/sonic_ring.wav");
 
+
 					switch (j) {
 					case 0:
 						GameRunner.StateUpdater(GameRunner.State.GAME);
@@ -118,10 +117,10 @@ public class MenuState extends GameState {
 	}
 
 	public void keyPressed(int k) {
-		if (k == KeyEvent.VK_ENTER) {
-			gsm.setCurrentState(GameStateManager.MAZESTATE);
-	
-		}
+//		if (k == KeyEvent.VK_ENTER) {
+//			gsm.setCurrentState(GameStateManager.MAZESTATE);
+//	
+//		}
 	}
 
 	public void keyReleased(int k) {

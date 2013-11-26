@@ -1,27 +1,23 @@
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
 
 public class MazeState extends GameState {
+	public JButton button;
 
 	public MazeState(GameStateManager gsm) {
-		System.out.println("test2");
-		new MazeRunner();
+
 		this.gsm = gsm;
-	}
-	
-	
-
-	public void play() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void draw() {
+		System.out.println(">> test");
+		MazeRunner mazerunner = new MazeRunner();
+		button = new JButton("test");
+		add(button);
+		add(mazerunner);
 
 	}
 
@@ -35,6 +31,10 @@ public class MazeState extends GameState {
 	public void keyReleased(int k) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void update() {
 	}
 
 }

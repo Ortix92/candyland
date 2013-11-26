@@ -1,7 +1,8 @@
+import javax.swing.JPanel;
 
 
-public abstract class GameState {
 
+public abstract class GameState extends JPanel {
 	protected GameStateManager gsm;
 	
 	public abstract void update();

@@ -6,8 +6,7 @@ public class GameStateManager {
 	private int currentState;
 	
 	public static final int MENUSTATE = 0;
-	public static final int PLAYSTATE = 1;
-	public static final int MAZESTATE = 2;
+	public static final int MAZESTATE = 1;
 	
 	
 	public GameStateManager() {
@@ -15,7 +14,6 @@ public class GameStateManager {
 		gameStates = new ArrayList<GameState>();
 		
 		gameStates.add(new MenuState(this));
-		gameStates.add(new PlayState(this));
 		gameStates.add(new MazeState(this));
 		
 		currentState = MENUSTATE;
@@ -24,7 +22,10 @@ public class GameStateManager {
 	
 	public void setCurrentState(int i) {
 		currentState = i;
-		Game.window.removeAll();
+	}
+	
+	public int getCurrentState() {
+		return currentState;
 	}
 	
 	public void update() {
@@ -36,6 +37,7 @@ public class GameStateManager {
 	}
 	
 	public void keyPressed(int k) {
+		System.out.println("GameStateManager.keyPressed");
 		gameStates.get(currentState).keyPressed(k);
 	}
 	
