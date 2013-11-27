@@ -1,53 +1,38 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class Game extends JFrame implements KeyListener {
-	private GameState currentPanel;
-	private GameStateManager gsm;
+
+	public GameStateManager gsm = new GameStateManager();
+	public MazeRunner mazerunner = new MazeRunner();
+	public Menu menu = new Menu(gsm);
+	public JFrame frame = new JFrame();
 
 	public Game() {
-		gsm = new GameStateManager();
-		gsm.setCurrentState(27);
-		currentPanel = gsm.getCurrentState();
+		frame.add(menu);
 
-		setTitle("CandyLand Nyancat Slayer");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1024, 768);
+		frame.addKeyListener(this);
+		frame.setFocusable(true);
+		frame.setVisible(true);
 
-		add(currentPanel);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
 
-		addKeyListener(this);
-		setFocusable(true);
-		/*
-		 * currentPanel.addKeyListener(this); currentPanel.setFocusable(true);
-		 */
-
-		this.setSize(1024, 768);
-
-		// game.setResizable(true);
-		// window.pack();
-		setVisible(true);
-	}
-
-	/*
-	 * remove(currentPanel); currentPanel = new MazeState(); add(currentPanel);
-	 */
-
-	public static void main(String[] args) {
-		Game game = new Game();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		remove(currentPanel);
-		gsm.setCurrentState(e.getKeyCode());
-		currentPanel = gsm.getCurrentState();
-		add(currentPanel);
-		currentPanel.draw();
-		setVisible(true);
+		System.out.println(e.getKeyCode());
+		gsm.setGameState(e.getKeyCode());
+		
 	}
 
 	@Override

@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,7 +11,7 @@ import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 
 import com.sun.opengl.util.Animator;
 
@@ -30,14 +31,15 @@ import com.sun.opengl.util.Animator;
  * @author Bruno Scheele, revised by Mattijs Driel
  * 
  */
-public class MazeRunner extends JPanel implements GLEventListener {
+public class MazeRunner  implements GLEventListener {
 	static final long serialVersionUID = 7526471155622776147L;
 
 	/*
 	 * **********************************************
 	 * * Local variables * **********************************************
 	 */
-	private GLCanvas canvas;
+	public GLCanvas canvas;
+	private boolean onBoot = true;
 
 	private int screenWidth = 1024, screenHeight = 768; // Screen size.
 	private ArrayList<VisibleObject> visibleObjects; // A list of objects that
@@ -68,13 +70,9 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 * controller.
 	 */
 	public MazeRunner() {
-		// Let's change the window to our liking.
-		setSize(screenWidth, screenHeight);
-		initJOGL(); // Initialize JOGL.
-		initObjects(); // Initialize all the objects!
-		// Set the frame to visible. This automatically calls upon OpenGL to
-		// prevent a blank screen
-		this.setVisible(true);
+        initJOGL();                                                        // Initialize JOGL.
+        initObjects();                                                // Initialize all the objects!
+        
 	}
 
 	/**
@@ -90,7 +88,6 @@ public class MazeRunner extends JPanel implements GLEventListener {
 		caps.setDoubleBuffered(true);
 		caps.setHardwareAccelerated(true);
 		canvas = new GLCanvas(caps);
-		add(canvas);
 		canvas.addGLEventListener(this);
 
 		canvas.setSize(new Dimension(screenWidth, screenHeight));
@@ -248,7 +245,7 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 */
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
 			boolean deviceChanged) {
-		 GL gl = drawable.getGL();
+		 //GL gl = drawable.getGL();
 	}
 
 	/**

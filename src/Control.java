@@ -16,7 +16,7 @@
  * @author Mattijs Driel
  * 
  */
-public abstract class Control extends Game
+public abstract class Control
 {
 	protected boolean forward = false;
 	protected boolean back = false;
