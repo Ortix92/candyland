@@ -11,7 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MenuState extends GameState {
 
 	public MenuState(GameStateManager gsm) {
-
+		System.out.println("constructor");
 		drawMenu();
 		this.gsm = gsm;
 	}

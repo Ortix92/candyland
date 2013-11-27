@@ -11,7 +11,8 @@ public class Game extends JFrame implements KeyListener {
 
 	public Game() {
 		gsm = new GameStateManager();
-		currentPanel = new MenuState(gsm);
+		gsm.setCurrentState(27);
+		currentPanel = gsm.getCurrentState();
 
 		setTitle("CandyLand Nyancat Slayer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,20 +43,11 @@ public class Game extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		remove(currentPanel);
-		//gsm.setCurrentState(1);
-		currentPanel = new MazeState(gsm);
+		gsm.setCurrentState(e.getKeyCode());
+		currentPanel = gsm.getCurrentState();
 		add(currentPanel);
 		currentPanel.draw();
-		
-		
-//		System.out.println(currentPanel.getBackground());
-//		System.out.println(currentPanel);
-		
-//		System.out.println(getComponentCount());
-
 		setVisible(true);
-		// gsm.keyPressed(e.getKeyCode());
-
 	}
 
 	@Override

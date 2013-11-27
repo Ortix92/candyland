@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -67,15 +68,12 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 * controller.
 	 */
 	public MazeRunner() {
-
 		// Let's change the window to our liking.
 		setSize(screenWidth, screenHeight);
-
 		initJOGL(); // Initialize JOGL.
 		initObjects(); // Initialize all the objects!
-
 		// Set the frame to visible. This automatically calls upon OpenGL to
-		// prevent a blank screen.
+		// prevent a blank screen
 		this.setVisible(true);
 	}
 
@@ -88,27 +86,14 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 * Animator, which is part of the JOGL api.
 	 */
 	void initJOGL() {
-		// First, we set up JOGL. We start with the default settings.
 		GLCapabilities caps = new GLCapabilities();
-		// Then we make sure that JOGL is hardware accelerated and uses double
-		// buffering.
 		caps.setDoubleBuffered(true);
 		caps.setHardwareAccelerated(true);
-
-		// Now we add the canvas, where OpenGL will actually draw for us. We'll
-		// use settings we've just defined.
 		canvas = new GLCanvas(caps);
-		// Game.window.add( canvas );
-		/*
-		 * We need to add a GLEventListener to interpret OpenGL events for us.
-		 * Since MazeRunner implements GLEventListener, this means that we add
-		 * the necesary init(), display(), displayChanged() and reshape()
-		 * methods to this class. These will be called when we are ready to
-		 * perform the OpenGL phases of MazeRunner.
-		 */
+		add(canvas);
 		canvas.addGLEventListener(this);
 
-		// canvas.setSize(new Dimension(1024, 768));
+		canvas.setSize(new Dimension(screenWidth, screenHeight));
 
 		/*
 		 * We need to create an internal thread that instructs OpenGL to
@@ -136,11 +121,7 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 * so it will be displayed automagically.
 	 */
 	void initObjects() {
-		// We define an ArrayList of VisibleObjects to store all the objects
-		// that need to be
-		// displayed by MazeRunner.
 		visibleObjects = new ArrayList<VisibleObject>();
-		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add(maze);
 
@@ -153,7 +134,7 @@ public class MazeRunner extends JPanel implements GLEventListener {
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
 				player.getVerAngle());
-
+		
 		input = new UserInput(canvas);
 		player.setControl(input);
 	}
@@ -174,7 +155,6 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 * all in this method.
 	 */
 	public void init(GLAutoDrawable drawable) {
-		System.out.println("init");
 		drawable.setGL(new DebugGL(drawable.getGL())); // We set the OpenGL
 														// pipeline to Debugging
 														// mode.
@@ -228,11 +208,8 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 * reference of the GL context, so it knows where to draw.
 	 */
 	public void display(GLAutoDrawable drawable) {
-		System.out.println("display");
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
-
-		System.out.println(this.getWidth());
 
 		// Calculating time since last frame.
 		Calendar now = Calendar.getInstance();
@@ -271,7 +248,7 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	 */
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
 			boolean deviceChanged) {
-		// GL gl = drawable.getGL();
+		 GL gl = drawable.getGL();
 	}
 
 	/**
@@ -289,8 +266,8 @@ public class MazeRunner extends JPanel implements GLEventListener {
 		GLU glu = new GLU();
 
 		// Setting the new screen size and adjusting the viewport.
-		screenWidth = width;
-		screenHeight = height;
+		screenWidth = 1024;
+		screenHeight = 768;
 		gl.glViewport(0, 0, screenWidth, screenHeight);
 
 		// Set the new projection matrix.
@@ -312,8 +289,6 @@ public class MazeRunner extends JPanel implements GLEventListener {
 	private void updateMovement(int deltaTime) {
 		player.update(deltaTime);
 
-		// TODO: implement collision save position every deltatime, then check
-		// for collision after moving and teleport back to originial position.
 		if (maze.isWall(player.getLocationX(), player.getLocationZ())) {
 			if (input.forward) {
 				input.forward = false;
@@ -368,18 +343,4 @@ public class MazeRunner extends JPanel implements GLEventListener {
 		camera.calculateVRP();
 	}
 
-	/*
-	 * **********************************************
-	 * * Main * **********************************************
-	 */
-	/**
-	 * Program entry point
-	 * 
-	 * @param args
-	 */
-	// public static void main(String[] args) {
-	//
-	// // Create and run MazeRunner
-	// new MazeRunner();
-	// }
 }
