@@ -100,12 +100,12 @@ public class Maze implements VisibleObject {
         float wallColour[] = { 0.5f, 0.0f, 0.7f, 1.0f };				// The walls are purple.
         gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);	// Set the materials used by the wall.
 
-        // draw the grid with the current material
+      //   draw the grid with the current material
 		for( int i = 0; i < MAZE_SIZE; i++ )
 		{
 	        for( int j = 0; j < MAZE_SIZE; j++ )
 			{
-	            gl.glPushMatrix();
+	           gl.glPushMatrix();
 				gl.glTranslated( i * SQUARE_SIZE + SQUARE_SIZE / 2, SQUARE_SIZE / 2, j * SQUARE_SIZE + SQUARE_SIZE / 2 );
 				if ( isWall(i, j) )
 					glut.glutSolidCube( (float) SQUARE_SIZE );
@@ -134,5 +134,9 @@ public class Maze implements VisibleObject {
 	        gl.glVertex3d(size, 0, size);
 	        gl.glVertex3d(size, 0, 0);		
 		gl.glEnd();	
-	}	
+	}
+	
+	public void update(int deltaTime) {
+	}
+	
 }

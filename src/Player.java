@@ -18,6 +18,7 @@
 public class Player extends GameObject {	
 	private double horAngle, verAngle;
 	private double speed;
+	private double health;
 	
 	private Control control = null;
 	
@@ -42,6 +43,7 @@ public class Player extends GameObject {
 		horAngle = h;
 		verAngle = v;
 		speed = 0.2;
+		health = 100;
 	}
 	
 	/**
@@ -111,6 +113,14 @@ public class Player extends GameObject {
 	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
+	
+	public void setHealth(double health) {
+		this.health = health;
+	}
+	
+	public double getHealth() {
+		return health;
+	}
 
 	/**
 	 * Updates the physical location and orientation of the player
@@ -122,11 +132,20 @@ public class Player extends GameObject {
 		{
 			control.update();
 			
-			// TODO: Rotate the player, according to control
+			
 			
 			setHorAngle(getHorAngle() - control.getdX());
 			setVerAngle(getVerAngle() - control.getdY());
 			
+			if (getHorAngle() >= 360) {
+				setHorAngle(getHorAngle() - 360); }
+			if (getHorAngle() <= -360) {
+				setHorAngle(getHorAngle() - 360); }
+			if (getVerAngle() >= 90) {
+				setVerAngle(90); }
+			if (getVerAngle() <= -90) {
+				setVerAngle(-90);	
+			}
 		
 			// TODO: Move the player, according to control
 			
@@ -156,3 +175,4 @@ public class Player extends GameObject {
 		}
 	}
 }
+	

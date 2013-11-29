@@ -33,14 +33,18 @@ public class MazeRunner extends Frame implements GLEventListener {
  */
 	private GLCanvas canvas;
 
-	private int screenWidth = 600, screenHeight = 600;		// Screen size.
+	private int screenWidth = 600, screenHeight = 500;		// Screen size.
 	private ArrayList<VisibleObject> visibleObjects;		// A list of objects that will be displayed on screen.
 	private Player player;									// The player object.
 	private Camera camera;									// The camera object.
 	private UserInput input;								// The user input object that controls the player.
 	private Maze maze; 										// The maze.
-	private long previousTime = Calendar.getInstance().getTimeInMillis(); // Used to calculate elapsed time.
-
+	private long previousTime = Calendar.getInstance().getTimeInMillis();
+	private Guy guy;														// Used to calculate elapsed time.
+	private Weapon weapon;
+	private TestBox box;
+	private jbullet phworld;
+	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 /*
  * **********************************************
  * *		Initialization methods				*
@@ -58,7 +62,6 @@ public class MazeRunner extends Frame implements GLEventListener {
 	public MazeRunner() {
 		// Make a new window.
 		super("MazeRunner");
-		
 		// Let's change the window to our liking.
 		setSize( screenWidth, screenHeight);
 		setBackground( Color.white );
@@ -97,7 +100,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 		canvas = new GLCanvas( caps );
 		add( canvas );
 		/* We need to add a GLEventListener to interpret OpenGL events for us. Since MazeRunner implements
-		 * GLEventListener, this means that we add the necesary init(), display(), displayChanged() and reshape()
+		 * GLEventListener, this means that we add the necessary init(), display(), displayChanged() and reshape()
 		 * methods to this class.
 		 * These will be called when we are ready to perform the OpenGL phases of MazeRunner. 
 		 */
@@ -132,19 +135,75 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add( maze );
+		
+		
 
 		// Initialize the player.
 		player = new Player( 6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, 	// x-position
 							 maze.SQUARE_SIZE / 2,							// y-position
 							 5 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, 	// z-position
 							 90, 0 );										// horizontal and vertical angle
-
 		camera = new Camera( player.getLocationX(), player.getLocationY(), player.getLocationZ(), 
 				             player.getHorAngle(), player.getVerAngle() );
-		
+		guy = new Guy();								// horizontal and vertical angle
+		weapon = new Weapon(10);
+		phworld = new jbullet();
 		input = new UserInput(canvas);
 		player.setControl(input);
-	}
+		weapon.setControl(input);
+		guy.setControl(input);
+		//enemies = new Enemies();
+		//enemies.addNyan(new TestBox(27.5,2.5,27.5));
+		box = new TestBox(27.5,2.5,27.5);
+		phworld.initMaze(maze);
+		phworld.initObjects();
+				}
+	
+public void Orthoview(GL gl) {
+	gl.glMatrixMode(GL.GL_PROJECTION);
+	gl.glPushMatrix();
+	gl.glLoadIdentity();
+	gl.glOrtho(0, screenWidth, screenHeight, 0, -1	, 1);
+    gl.glMatrixMode(GL.GL_MODELVIEW);
+    gl.glPushMatrix();
+	gl.glLoadIdentity();
+}
+
+public void Projectview(GL gl) {
+    gl.glMatrixMode(GL.GL_PROJECTION);
+	gl.glPopMatrix();
+	gl.glMatrixMode(GL.GL_MODELVIEW);
+	gl.glPopMatrix();
+}
+	
+public void DrawHud(GL gl) {
+	
+	gl.glDisable(GL.GL_DEPTH_TEST);
+	gl.glDisable(GL.GL_LIGHTING); 
+	
+	gl.glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
+	gl.glBegin(GL.GL_LINES);
+	    gl.glVertex2d(screenWidth/2.0, screenHeight/2.0 + 20.0);
+	    gl.glVertex2d(screenWidth/2.0, screenHeight/2.0 - 20.0);
+	    gl.glVertex2d(screenWidth/2.0 + 20.0, screenHeight/2.0);
+	    gl.glVertex2d(screenWidth/2.0 - 20.0, screenHeight/2.0);
+	gl.glEnd();
+	
+	gl.glColor4d(1.0,0.0,0.0,0.2);
+	gl.glBegin(GL.GL_QUADS);
+		gl.glVertex2d(screenWidth/100.0 , screenHeight - 10.0);
+		gl.glVertex2d(screenWidth/100.0 + 30.0, screenHeight - 10.0);
+		gl.glVertex2d(screenWidth/100.0 + 30.0, screenHeight - 10.0 - 5*player.getHealth());
+		gl.glVertex2d(screenWidth/100.0 , screenHeight - 10.0 - 5*player.getHealth());
+		
+	gl.glEnd();
+	
+	gl.glEnable(GL.GL_LIGHTING);
+	gl.glEnable(GL.GL_DEPTH_TEST);
+	
+}
+
+
 
 /*
  * **********************************************
@@ -164,7 +223,6 @@ public class MazeRunner extends Frame implements GLEventListener {
 		drawable.setGL( new DebugGL(drawable.getGL() )); // We set the OpenGL pipeline to Debugging mode.
         GL gl = drawable.getGL();
         GLU glu = new GLU();
-        
         gl.glClearColor(0, 0, 0, 0);								// Set the background color.
         
         // Now we set up our viewpoint.
@@ -172,6 +230,8 @@ public class MazeRunner extends Frame implements GLEventListener {
         gl.glLoadIdentity();										// Reset the current matrix.
         glu.gluPerspective( 60, screenWidth, screenHeight, 200);	// Set up the parameters for perspective viewing.
         gl.glMatrixMode( GL.GL_MODELVIEW );
+		
+		
         
         // Enable back-face culling.
         gl.glCullFace( GL.GL_BACK );
@@ -214,18 +274,35 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Update any movement since last frame.
 		updateMovement(deltaTime);
 		updateCamera();
+		updatePhysics();
 		 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
 		gl.glLoadIdentity();
         glu.gluLookAt( camera.getLocationX(), camera.getLocationY(), camera.getLocationZ(), 
- 			   camera.getVrpX(), camera.getVrpY(), camera.getVrpZ(),
+ 			   camera.getVrpX(), camera.getVrpY(), camera.getVrpZ() ,
  			   camera.getVuvX(), camera.getVuvY(), camera.getVuvZ() );
 
         // Display all the visible objects of MazeRunner.
         for( Iterator<VisibleObject> it = visibleObjects.iterator(); it.hasNext(); ) {
         	it.next().display(gl);
         }
+        
+        for (int i = 0; i < bullets.size(); i++) {
+        	phworld.display(gl, i);
+        }
 
+         box.display(gl);
+       // enemies.display(gl);
+        
+        
+    //Has to be displayed after everything else.    
+     //   guy.display(gl, player);
+        weapon.display(gl);
+        
+        Orthoview(gl);
+        DrawHud(gl);
+        Projectview(gl);
+        
         gl.glLoadIdentity();
         // Flush the OpenGL buffer.
         gl.glFlush();
@@ -279,8 +356,35 @@ public class MazeRunner extends Frame implements GLEventListener {
 	{
 		player.update(deltaTime);
 		
+		
+		Bullet bullet = weapon.update(deltaTime, player, camera, phworld);
+		if (bullet != null) {
+			bullets.add(bullet);
+			phworld.CreateBullet((float)camera.getLocationX(),2.5f,(float)camera.getLocationZ(),(float)player.getVerAngle(),(float)player.getHorAngle(), camera);
+		}
+		for( int i = 0; i < bullets.size(); i++) {
+
+			bullets.get(i).update(deltaTime); 
+			Bullet bb = bullets.get(i); 
+//		if (maze.isWall(bb.getLocationX(), bb.getLocationZ()));
+//				bullets.remove(bullets.get(i)); }
+	//		phworld.DestroyBullet(i);
+	//	for (int c = 0; c < enemies.aantal; c++) {
+	//		if (enemies.isNyan(bb.getLocationX(), bb.getLocationZ())) {
+	//			enemies.get(i).setHealth(enemies.get(i).getHealth() - 10);
+			
+			 if (bb.getBulletState() == false) {
+				bullets.remove(bullets.get(i));
+				phworld.DestroyBullet(i);
+			}
+			}
+
+		
+		
+		
 		// TODO: implement collision save position every deltatime, then check for collision after moving and teleport back to originial position.
 		if (maze.isWall(player.getLocationX(),player.getLocationZ())) {
+			player.setHealth(player.getHealth() - 1);
 			if (input.forward) {
 				input.forward = false;
 				player.setLocationX(player.getLocationX() + Math.sin(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
@@ -304,6 +408,8 @@ public class MazeRunner extends Frame implements GLEventListener {
 				  }
 	 }
 	}		
+	
+	
 		
 		
 		
@@ -323,6 +429,12 @@ public class MazeRunner extends Frame implements GLEventListener {
 		camera.setVerAngle( player.getVerAngle() );
 		camera.calculateVRP();
 	}
+	
+	public void updatePhysics() {
+	//	bullets = phworld.update(bullets);
+		box = phworld.update(box);
+	}
+	
 	
 /*
  * **********************************************
