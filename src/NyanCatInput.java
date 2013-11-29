@@ -2,7 +2,7 @@ import javax.media.opengl.GLCanvas;
 
 
 public class NyanCatInput extends Control {
-	private Control control=null;
+	//private Control control=null;
 
 	public NyanCatInput(GLCanvas canvas){
 
@@ -10,12 +10,11 @@ public class NyanCatInput extends Control {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		moveTo(33,33,33);
 	}
 	
-	public void move(){
-		
+	public void moveTo(double X,double Y,double Z){
+	
 	}
 
 	//TODO: give NyanCat a way to get input. 

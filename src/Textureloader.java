@@ -15,6 +15,9 @@ import com.sun.opengl.util.texture.TextureIO;
 public class Textureloader {
 	static Texture PoptartTexture; // remembers the texture of the poptart. 
 	static Texture Nyanface; // remembers the texture of the face
+	static Texture Rainbow; // remembers the texture of the rainbow
+	static Texture purple;
+	static Texture red;
 	static boolean load=false; // boolean so that images are only loaded once
 	
 
@@ -29,8 +32,8 @@ public class Textureloader {
 			PoptartTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR ); 
 			PoptartTexture.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
 			// Put the poptart over the whole cuboid by wrapping repeating it:
-			PoptartTexture.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
-			PoptartTexture.setTexParameteri( GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);			
+		//	PoptartTexture.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+			//PoptartTexture.setTexParameteri( GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);			
 			
 			// Nyans face:
 			BufferedImage image2= ImageIO.read(new File("src/nyanfaceopzij.jpg")); // image loading
@@ -38,7 +41,28 @@ public class Textureloader {
 			// give filter parameters:
 			Nyanface.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
 			Nyanface.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
-			// No wrapping repeat: only one face :)
+			
+			//RainbowTrail
+			BufferedImage image3=ImageIO.read(new File("src/Rainbow segment.jpg"));
+			Rainbow=TextureIO.newTexture(image3,false);
+			Rainbow.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
+			Rainbow.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
+			//Rainbow.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+			//Rainbow.setTexParameteri( GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
+			
+			// Purple 
+			BufferedImage image4=ImageIO.read(new File("src/Purple.jpg"));
+			purple=TextureIO.newTexture(image4,false);
+			purple.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
+			purple.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
+			
+			// Red
+			BufferedImage image6=ImageIO.read(new File("src/red.jpg"));
+			red=TextureIO.newTexture(image6,false);
+			red.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
+			red.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
+			
+			
 			} catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("Trolololol"); 
@@ -75,25 +99,82 @@ public class Textureloader {
 		PoptartTexture.bind(); // bind texture to following object. 
 		 gl.glTranslated(-size/2,-size/2,-size/2); // put the poptart in the right position
 		 gl.glScaled(size, size, size); // make the rib lengths: size. 
-		 drawCube(gl); // make a cube with ribs length 1 and with texture coords.
+		 drawCube(gl,false); // make a cube with ribs length 1 and with texture coords.
 		 gl.glScaled(1/size,1/size,1/size); // unscale so that following objects will not be scaled. 
 		 gl.glTranslated(size/2,size/2,size/2); // translate back. 
 		 PoptartTexture.disable(); // disable texture so that next objects won't have it. 
 	}
 	
-	public static void drawCube(GL gl){
+	public static void Rainbow(GL gl, double size){
+		if(!load){
+			load();
+			load=true;
+		}
+		
+		// set de size van de rainbowblokjes:
+		gl.glScaled(size, size, size);
+		
+		// Plak rainbow texture op de zijden:
+		Rainbow.enable();
+		Rainbow.bind();
+	//	gl.glScaled(2,2,1);	
+		 gl.glTranslated(-size/2,-size/2,-size/2); // put the rainbowcube in the right position
+		drawCube(gl,true);
+		  
+		Rainbow.disable();
+		
+		
+		// Plak paarse texture op de onderkant:
+		purple.enable();
+		purple.bind();
+  
+		    // Square 5:
+	     gl.glBegin(GL.GL_QUADS);
+	        gl.glTexCoord2f(1,0);
+	        gl.glVertex3f(1, 0, 1);
+	        gl.glTexCoord2f(1,1);
+	        gl.glVertex3f(0, 0, 1);
+	        gl.glTexCoord2f(0, 1);
+	        gl.glVertex3f(0, 0, 0);
+	        gl.glTexCoord2f(0, 0);
+	        gl.glVertex3f(1, 0, 0);
+	    gl.glEnd();	    
+	    purple.disable();
+	    
+	    // plak rode texture op de bovenkant:
+	    red.enable();
+	    red.bind();
+	    // Square 3:
+	    gl.glBegin(GL.GL_QUADS);
+	    	gl.glTexCoord2f(1,0);
+	        gl.glVertex3f(0, 1, 1);
+	        gl.glTexCoord2f(1, 1);
+	        gl.glVertex3f(1, 1, 1);
+	        gl.glTexCoord2f(0, 1);
+	        gl.glVertex3f(1, 1, 0);
+	        gl.glTexCoord2f(0, 0);
+	        gl.glVertex3f(0, 1, 0);
+	     gl.glEnd();
+	     red.disable();
+	     gl.glScaled(1/size,1/size,1/size); // unscale so that following objects will not be scaled. 
+	    
+	     gl.glTranslated(size/2,size/2,size/2); // translate back.
+	   //  gl.glScaled(1/2,1/2,1);	
+	}
+	
+	
+	public static void drawCube(GL gl,boolean rainbow){
 		// draws a cube with texture coordinates.
 		// The length of the ribs are 1. 
-		
 		// Square 1:
 		gl.glBegin(GL.GL_QUADS);
-	        gl.glTexCoord2f(0, 1);
-	        gl.glVertex3f(0, 1, 0);
 	        gl.glTexCoord2f(1, 1);
+	        gl.glVertex3f(0, 1, 0);
+	        gl.glTexCoord2f(0, 1);
 	        gl.glVertex3f(1, 1, 0);
-	        gl.glTexCoord2f(1, 0);
-	        gl.glVertex3f(1, 0, 0);
 	        gl.glTexCoord2f(0, 0);
+	        gl.glVertex3f(1, 0, 0);
+	        gl.glTexCoord2f(1, 0);
 	        gl.glVertex3f(0, 0, 0);
 	    gl.glEnd();
 
@@ -110,6 +191,7 @@ public class Textureloader {
 	        gl.glVertex3f(0, 0, 0);
 	    gl.glEnd();
 
+	    if(!rainbow){ // Omdat rainbow blokjes geen boven en onderkant moeten hebben met dezelfde textuur. 
 	    // Square 3:
 	    gl.glBegin(GL.GL_QUADS);
 	    	gl.glTexCoord2f(1,0);
@@ -121,19 +203,22 @@ public class Textureloader {
 	        gl.glTexCoord2f(0, 0);
 	        gl.glVertex3f(0, 1, 0);
 	     gl.glEnd();
-
+	    }
+	     
 	      // Square 4:
 	    gl.glBegin(GL.GL_QUADS);
-	        gl.glTexCoord2f(1,0);
-	        gl.glVertex3f(1, 1, 1);
-	        gl.glTexCoord2f(1,1);
-	        gl.glVertex3f(1, 0, 1);
 	        gl.glTexCoord2f(0,1);
-	        gl.glVertex3f(1, 0, 0);
+	        gl.glVertex3f(1, 1, 1);
 	        gl.glTexCoord2f(0,0);
+	        gl.glVertex3f(1, 0, 1);
+	        gl.glTexCoord2f(1,0);
+	        gl.glVertex3f(1, 0, 0);
+	        gl.glTexCoord2f(1,1);
 	        gl.glVertex3f(1, 1, 0);
 	    gl.glEnd();
 
+	    if(!rainbow){
+	    	// Omdat rainbow blokjes geen boven en onderkant moeten hebben met dezelfde textuur. 
 	    // Square 5:
 	     gl.glBegin(GL.GL_QUADS);
 	        gl.glTexCoord2f(1,0);
@@ -145,19 +230,20 @@ public class Textureloader {
 	        gl.glTexCoord2f(0, 0);
 	        gl.glVertex3f(1, 0, 0);
 	    gl.glEnd();
+	    }
 	    
 	    //Square 6:
 	     gl.glBegin(GL.GL_QUADS);
-	     gl.glTexCoord2f(1,0);
+	     gl.glTexCoord2f(0,0);
 	        gl.glVertex3f(0, 0, 1);
-	        gl.glTexCoord2f(1,1);
+	        gl.glTexCoord2f(1,0);
 	        gl.glVertex3f(1, 0, 1);
-	        gl.glTexCoord2f(0,1);
+	        gl.glTexCoord2f(1,1);
 	        gl.glVertex3f(1, 1, 1);
-	        gl.glTexCoord2f(0, 0);
+	        gl.glTexCoord2f(0, 1);
 	        gl.glVertex3f(0, 1, 1);
 	      gl.glEnd();
-	
+		
 	}
 			
 }
