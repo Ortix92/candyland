@@ -46,8 +46,11 @@ public class MazeRunner  implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
+	private int amountofNyans=50; // The amount of NyanCats.
+	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
 	private UserInput input; // The user input object that controls the player.
+	private NyanCatInput NyanInput;  //  the input that controls Nyan (yet to be determined)
 	private Maze maze; // The maze.
 	private long previousTime = Calendar.getInstance().getTimeInMillis(); // Used
 																			// to
@@ -122,12 +125,35 @@ public class MazeRunner  implements GLEventListener {
 		maze = new Maze();
 		visibleObjects.add(maze);
 
+		 
+		NyanInput=new NyanCatInput(canvas);
+	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
 		// Initialize the player.
 		player = new Player(6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, // x-position
 				maze.SQUARE_SIZE / 2, // y-position
 				5 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, // z-position
 				90, 0); // horizontal and vertical angle
 
+		// initialize the NyanCat. 
+		for(int i=0;i<amountofNyans;i++){
+			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
+			double Z=Math.random()*100+
+					3* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+			while(maze.isWall(X, Z)){
+				X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
+				Z=Math.random()*100+3* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+			}	
+				Nyan[i]=new NyanCat(X,
+						maze.SQUARE_SIZE/4, // y-position
+						Z,
+						Math.random()*360,
+						// horizontal angle
+						player,
+						maze);
+			
+			visibleObjects.add(Nyan[i]); // make Nyan visible.
+			//Nyan[i].setControl(NyanInput);
+		}
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
 				player.getVerAngle());
@@ -285,6 +311,47 @@ public class MazeRunner  implements GLEventListener {
 	 */
 	private void updateMovement(int deltaTime) {
 		player.update(deltaTime);
+		for(int i=0;i<amountofNyans;i++){
+			if(Nyan[i].getHP()>-1){
+			Nyan[i].update(deltaTime);
+			}
+		}
+	}
+		
+		
+		//TODO: don't let Nyan walk through walls. However: walls will disappear thus this might not be
+		//necessary. 
+		/*
+		
+		if (maze.isWall(
+				player.getLocationX()
+						- Math.sin(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed(),
+				player.getLocationZ()
+						- Math.cos(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed())) {
+
+			player.update(-deltaTime);
+		}
+
+		if (maze.isWall(
+				player.getLocationX()
+						+ Math.sin(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime, player.getLocationZ()
+						+ Math.cos(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime)) {
+
+			player.update(-deltaTime);
+		}
+
+		if (maze.isWall(
+				player.getLocationX()
+						- Math.sin(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime, player.getLocationZ()
+						+ Math.cos(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime)) {
+			player.update(-deltaTime);
+		}
 
 		if (maze.isWall(player.getLocationX(), player.getLocationZ())) {
 			if (input.forward) {
