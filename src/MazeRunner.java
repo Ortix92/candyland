@@ -292,11 +292,11 @@ public void DrawHud(GL gl) {
         }
 
          box.display(gl);
-       // enemies.display(gl);
+       //enemies.display(gl);
         
         
     //Has to be displayed after everything else.    
-     //   guy.display(gl, player);
+     // guy.display(gl, player);
         weapon.display(gl);
         
         Orthoview(gl);

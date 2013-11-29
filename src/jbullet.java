@@ -21,14 +21,11 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import com.bulletphysics.*;
 import com.sun.opengl.util.GLUT;
 
 import javax.media.opengl.GL;
 import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 
 public class jbullet {
 
@@ -56,12 +53,8 @@ public jbullet() {
 	dynamicworld.setGravity(new Vector3f(0f,-10f,0f));
 }
 
-/*
- * init de grond
- */
-
 public void initObjects() {
-	CollisionShape groundshape = new StaticPlaneShape(new Vector3f(0,0.01f,0),1);
+	CollisionShape groundshape = new StaticPlaneShape(new Vector3f(0,1,0),0);
 	Transform t = new Transform();
 	t.setRotation(new Quat4f(0,0,0,1));
 	t.transform(new Vector3f(0,-1,0));
@@ -71,12 +64,12 @@ public void initObjects() {
 	
 	dynamicworld.addRigidBody(groundbody);
 	
-	CollisionShape boxshape = new BoxShape(new Vector3f(0.5f,0.5f,0.5f));
+	CollisionShape boxshape = new BoxShape(new Vector3f(1.25f,1.25f,1.25f));
 	Transform p = new Transform();
 	p.setRotation(new Quat4f(0,0,0,1));
 	p.origin.set(27.5f, 5f, 27.5f);
 	MotionState boxMotionState = new DefaultMotionState(p);
-	float mass = 40;
+	float mass = 20;
     Vector3f Inertia = new Vector3f(0,0,0); 
     boxshape.calculateLocalInertia(mass, Inertia);
     RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(mass, boxMotionState , boxshape , Inertia);
@@ -92,14 +85,15 @@ public void initMaze(Maze maze) {
 	{
        for( int j = 0; j < 10; j++ )
 		{
-        	if (maze.isWall(i, j)) {
+          if (maze.isWall(i, j)) {
 			CollisionShape mazeshape = new BoxShape(new Vector3f(2.5f,2.5f,2.5f));
         	Transform t = new Transform();
-        	t.origin.set(i*5 + 2.5f, 2.5f, j*5 + 2.5f);
+        	t.origin.set((float)(i*maze.SQUARE_SIZE + maze.SQUARE_SIZE/2f),(float)(maze.SQUARE_SIZE/2f),(float)(j*maze.SQUARE_SIZE + maze.SQUARE_SIZE/2f));
 			DefaultMotionState mazeMotionState = new DefaultMotionState(t);
-			Vector3f Inertia = new Vector3f(0f,0f,0f);
-			RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(9999999, mazeMotionState, mazeshape, Inertia);
+			Vector3f Inertia = new Vector3f(0,0,0);
+			RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(0, mazeMotionState, mazeshape, Inertia);
 			RigidBody mazebody = new RigidBody(mazeinfo);
+			mazebody.setFriction(0f);
 			dynamicworld.addRigidBody(mazebody);
 			}
 		}
@@ -113,18 +107,17 @@ public void CreateBullet(float x, float y, float z, float verAngle, float horAng
 	p.origin.set(x, y, z);
 	DefaultMotionState bulletmotion = new DefaultMotionState();
 	bulletmotion.setWorldTransform(p);
-	float mass = 1000;
+	float mass = 1;
     Vector3f Inertia = new Vector3f(0,0,0); 
     bulletshape.calculateLocalInertia(mass, Inertia);
     RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(mass, bulletmotion , bulletshape , Inertia);
 	RigidBody bullet = new RigidBody(boxRigidBodyInfo);
 	bullet.setLinearVelocity(
-			new Vector3f(30*(-(float)Math.sin(Math.toRadians(horAngle))),30*(float)Math.sin(Math.toRadians(verAngle)), 30*(-(float)Math.cos(Math.toRadians(horAngle)))));	
+			new Vector3f(50*(-(float)Math.sin(Math.toRadians(horAngle))),(float)Math.sin(Math.toRadians(verAngle)), 50*(-(float)Math.cos(Math.toRadians(horAngle)))));	
  //   bullet.applyForce(new Vector3f(-10,0,0), new Vector3f((float)camera.getVrpX(),(float)camera.getVrpY(),(float)camera.getVrpZ()));
  //   bullet.applyForce(new Vector3f(-10,0,0), new Vector3f(27.5f , 2.5f, 27.5f));
-    //	bullet.setCollisionFlags(bullet.getCollisionFlags() | CollisionFlags.KINEMATIC_OBJECT);
+ //	bullet.setCollisionFlags(bullet.getCollisionFlags() | CollisionFlags.KINEMATIC_OBJECT);
 //	bullet.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-	System.out.println((float)Math.sin(Math.toRadians(horAngle)));
 	dynamicworld.addRigidBody(bullet);
 	bullets.add(bullet);
 }
