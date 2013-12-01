@@ -40,6 +40,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 	private UserInput input;								// The user input object that controls the player.
 	private Maze maze; 										// The maze.
 	private long previousTime = Calendar.getInstance().getTimeInMillis(); // Used to calculate elapsed time.
+	private SkyBox skybox;
 
 /*
  * **********************************************
@@ -132,6 +133,8 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add( maze );
+		skybox=new SkyBox();
+		visibleObjects.add(skybox);
 
 		// Initialize the player.
 		player = new Player( 6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, 	// x-position
@@ -185,6 +188,14 @@ public class MazeRunner extends Frame implements GLEventListener {
         float lightColour[] = { 1.0f, 1.0f, 1.0f, 0.0f };				// White light!
         gl.glLightfv( GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0 );	// Note that we're setting Light0.
         gl.glLightfv( GL.GL_LIGHT0, GL.GL_AMBIENT, lightColour, 0);
+        gl.glEnable( GL.GL_LIGHTING );
+        gl.glEnable( GL.GL_LIGHT0 );
+        
+        
+        float lightPosition2[] = { 0.0f, 1.0f, 0.0f, 1.0f }; 			// High up in the sky!
+        float lightColour2[] = { 1.0f, 1.0f, 1.0f, 0.0f };				// White light!
+        gl.glLightfv( GL.GL_LIGHT0, GL.GL_POSITION, lightPosition2, 0 );	// Note that we're setting Light0.
+        gl.glLightfv( GL.GL_LIGHT0, GL.GL_DIFFUSE, lightColour2, 0);
         gl.glEnable( GL.GL_LIGHTING );
         gl.glEnable( GL.GL_LIGHT0 );
         
@@ -280,29 +291,43 @@ public class MazeRunner extends Frame implements GLEventListener {
 		player.update(deltaTime);
 		
 		// TODO: implement collision save position every deltatime, then check for collision after moving and teleport back to originial position.
-		if (maze.isWall(player.getLocationX(),player.getLocationZ())) {
-			if (input.forward) {
-				input.forward = false;
-				player.setLocationX(player.getLocationX() + Math.sin(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				player.setLocationZ(player.getLocationZ() + Math.cos(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				}
-			 else if (input.back) {
-				 input.back = false;
-				 player.setLocationX(player.getLocationX() - Math.sin(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				 player.setLocationZ(player.getLocationZ() - Math.cos(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-			 }
-			 else if (input.right) {
-				 input.right = false;
-				 player.setLocationX(player.getLocationX() - Math.cos(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				 player.setLocationZ(player.getLocationZ() + Math.sin(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				  }
-			 
-			 else if (input.left) {
-				 input.left = false;
-				 player.setLocationX(player.getLocationX() + Math.cos(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				 player.setLocationZ(player.getLocationZ() - Math.sin(Math.toRadians(player.getHorAngle()))*(player.getSpeed()));
-				  }
-	 }
+//		if (maze.isWall(player.getLocationX(), player.getLocationZ())) {
+//			if (input.forward) {
+//				input.forward = false;
+//				player.setLocationX(player.getLocationX()
+//						+ Math.sin(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//				player.setLocationZ(player.getLocationZ()
+//						+ Math.cos(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//			} else if (input.back) {
+//				input.back = false;
+//				player.setLocationX(player.getLocationX()
+//						- Math.sin(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//				player.setLocationZ(player.getLocationZ()
+//						- Math.cos(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//			} else if (input.right) {
+//				input.right = false;
+//				player.setLocationX(player.getLocationX()
+//						- Math.cos(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//				player.setLocationZ(player.getLocationZ()
+//						+ Math.sin(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//			}
+//
+//			else if (input.left) {
+//				input.left = false;
+//				player.setLocationX(player.getLocationX()
+//						+ Math.cos(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//				player.setLocationZ(player.getLocationZ()
+//						- Math.sin(Math.toRadians(player.getHorAngle()))
+//						* (player.getSpeed()));
+//			}
+	 //}
 	}		
 		
 		
