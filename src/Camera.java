@@ -39,7 +39,7 @@ public class Camera extends GameObject {
 	 * of the camera. This makes it easy to create a first-person view setting, since it 
 	 * always looks in front of the player.
 	 */
-	public void calculateVRP() {
+	public void calculateVRP() {	
 		vrpX = locationX + -Math.sin( Math.PI * horAngle / 180 ) * Math.cos( Math.PI * verAngle / 180 );
 		vrpY = locationY + Math.sin( Math.PI * verAngle / 180 );
 		vrpZ = locationZ + -Math.cos( Math.PI * horAngle / 180 ) * Math.cos( Math.PI * verAngle / 180 );

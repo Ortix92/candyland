@@ -41,6 +41,7 @@ public class UserInput extends Control
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 		canvas.addKeyListener(this);
+		
 	}
 	
 	/*
@@ -53,11 +54,11 @@ public class UserInput extends Control
 	public void update()
 	{
 		// TODO: Set dX and dY to values corresponding to mouse movement	
-			dX = X - x;
-			dY = Y - y;
+			dX = X-x;
+			dY = y-Y; 
 			x = X;
 			y = Y;
-			
+			 
 			}
 			
 	
@@ -83,14 +84,12 @@ public class UserInput extends Control
 
 	@Override
 	public void mouseDragged(MouseEvent event)
-	{		
-		// TODO: Detect mouse movement while the mouse button is down
+	{	
 		if (SwingUtilities.isLeftMouseButton(event)) {
-			x = X;
-			y = Y;
-		 X = event.getX();
-		 Y = event.getY();
-		}
+		x = X;
+		y = Y;
+	 X = event.getX();
+	 Y = event.getY();}
 	}
 
 	@Override
@@ -106,6 +105,10 @@ public class UserInput extends Control
 			 left = true;}
 			else if (event.getKeyCode() == KeyEvent.VK_D){
 			 right = true;}
+			else if (event.getKeyCode() == KeyEvent.VK_F){
+			shoot = true;
+				
+			}
 		
 		}
 	
@@ -121,6 +124,8 @@ public class UserInput extends Control
 		 left = false; }
 		else if (event.getKeyCode() == KeyEvent.VK_D){
 		 right = false; }
+		else if (event.getKeyCode() == KeyEvent.VK_F){
+			shoot = false; }
 		
 	}
 
@@ -132,7 +137,11 @@ public class UserInput extends Control
 	
 	@Override
 	public void mouseMoved(MouseEvent event)
-	{
+	{	
+		//	x = X;
+	//		y = Y;
+	//	 X = event.getX();
+	//	 Y = event.getY();
 	}
 
 	@Override
@@ -141,12 +150,13 @@ public class UserInput extends Control
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent event)
+	public void mouseEntered(MouseEvent event)
 	{
+		
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent event)
+	public void mouseClicked(MouseEvent event)
 	{
 	}
 

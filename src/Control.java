@@ -22,6 +22,7 @@ public abstract class Control
 	protected boolean back = false;
 	protected boolean left = false;
 	protected boolean right = false;
+	protected boolean shoot = false;
 	
 	protected int dX = 0;
 	protected int dY = 0;
@@ -74,6 +75,11 @@ public abstract class Control
 	public int getdY()
 	{
 		return dY;
+	}
+	
+	public boolean getShoot() 
+	{
+		return shoot;
 	}
 	
 	/**
