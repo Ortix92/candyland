@@ -1,4 +1,9 @@
+import java.io.FileNotFoundException;
+
 import javax.media.opengl.GL;
+
+import leveleditor.World;
+
 import com.sun.opengl.util.GLUT;
 
 /**
@@ -24,15 +29,34 @@ import com.sun.opengl.util.GLUT;
  */
 public class Maze implements VisibleObject {
 
-	public final double MAZE_SIZE = 10;
-	public final double SQUARE_SIZE = 5;
+	public double MAZE_SIZE = 10;
+	public double SQUARE_SIZE = 5;
 
-	private int[][] maze = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-			{ 1, 0, 1, 0, 0, 0, 1, 0, 0, 1 }, { 1, 0, 1, 0, 1, 0, 1, 0, 0, 1 },
-			{ 1, 0, 1, 0, 1, 0, 1, 0, 0, 1 }, { 1, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
-			{ 1, 0, 0, 0, 1, 1, 1, 0, 0, 1 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
+	private int[][] maze;
+
+	public Maze() {
+		World world = new World("map_export.txt");
+		try {
+			world.loadMapFromFile();
+			MAZE_SIZE = world.getMap().size();
+			maze = world.convertMapToArray();
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			System.out.println("Falling back to default map due to error");
+			int[][] intMaze = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+					{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+					{ 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+					{ 1, 0, 1, 0, 0, 0, 1, 0, 0, 1 },
+					{ 1, 0, 1, 0, 1, 0, 1, 0, 0, 1 },
+					{ 1, 0, 1, 0, 1, 0, 1, 0, 0, 1 },
+					{ 1, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+					{ 1, 0, 0, 0, 1, 1, 1, 0, 0, 1 },
+					{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+					{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
+			maze = intMaze;
+		}
+
+	}
 
 	/**
 	 * isWall(int x, int z) checks for a wall.

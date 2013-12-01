@@ -39,6 +39,7 @@ import javax.swing.Action;
 
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -379,13 +380,16 @@ public class editor {
 						+ chooser.getSelectedFile().getAbsolutePath());
 				// Create new World
 				world = new World(chooser.getSelectedFile().getAbsolutePath());
-				world.loadMapFromFile();
 				try {
+					world.loadMapFromFile();
 					editor.this.editorPanel.setMaze(world.getMap());
 					editor.this.drawMap(true);
-				} catch (IllegalArgumentException e) {
-					JOptionPane.showMessageDialog(frame,
-							"Failed loading maze with error: " + e.getMessage());
+				} catch (IllegalArgumentException | FileNotFoundException e) {
+					JOptionPane
+							.showMessageDialog(
+									frame,
+									"Failed loading maze with error: "
+											+ e.getMessage());
 				}
 			}
 		}
