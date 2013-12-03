@@ -40,7 +40,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
-	private int amountofNyans=50; // The amount of NyanCats.
+	private int amountofNyans=5; // The amount of NyanCats.
 	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
 	private UserInput input; // The user input object that controls the player.
@@ -159,6 +159,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add(maze);
+		phworld = new jbullet();
 
 		 
 		NyanInput=new NyanCatInput(canvas);
@@ -193,14 +194,24 @@ public class MazeRunner extends Frame implements GLEventListener {
 						maze);
 			
 			visibleObjects.add(Nyan[i]); // make Nyan visible.
+			
 			//Nyan[i].setControl(NyanInput);
+			NyanCat nyan = new NyanCat(X,
+					maze.SQUARE_SIZE/4, // y-position
+					Z,
+					Math.random()*360,
+					// horizontal angle
+					player,
+					maze);
+	     System.out.println(nyan.toString());
+	     phworld.initNyan(nyan);
 		}
+		
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
 				player.getVerAngle());
 		guy = new Guy();								
 		weapon = new Weapon(10);
-		phworld = new jbullet();
 		input = new UserInput(canvas);
 		player.setControl(input);
 		weapon.setControl(input);
@@ -341,10 +352,11 @@ public class MazeRunner extends Frame implements GLEventListener {
 		previousTime = currentTime;
 
 		// Update any movement since last frame.
+		updatePhysics(deltaTime);
 		updateMovement(deltaTime);
 		//Nyan.update(deltaTime);
 		updateCamera();
-		updatePhysics();
+		
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
@@ -521,9 +533,12 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * Updates the physics world simulation.
 	 */
 	
-	public void updatePhysics() {
+	public void updatePhysics(int deltaTime) {
 		//	bullets = phworld.update(bullets);
-			box = phworld.update(box);
+		for(int i=0; i< amountofNyans; i++) {
+			box = phworld.update(deltaTime, box, amountofNyans, Nyan[i]);
+		}
+			
 		}
 	/*
 	 * **********************************************

@@ -36,6 +36,9 @@ public class jbullet {
 		private ConstraintSolver solver;
 		private DefaultCollisionConfiguration collisionConfiguration;		
 		
+		private ObjectArrayList<RigidBody> nyanies = new ObjectArrayList<RigidBody>();
+		private ArrayList<NyanCat> nyans = new ArrayList<NyanCat>();
+		
 		private RigidBody boxRigidBody;
 		private ObjectArrayList<RigidBody> bullets = new ObjectArrayList<RigidBody>();
 	    private RigidBody groundbody;
@@ -91,7 +94,7 @@ public void initMaze(Maze maze) {
         	t.origin.set((float)(i*maze.SQUARE_SIZE + maze.SQUARE_SIZE/2f),(float)(maze.SQUARE_SIZE/2f),(float)(j*maze.SQUARE_SIZE + maze.SQUARE_SIZE/2f));
 			DefaultMotionState mazeMotionState = new DefaultMotionState(t);
 			Vector3f Inertia = new Vector3f(0,0,0);
-			RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(0, mazeMotionState, mazeshape, Inertia);
+			RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(1000, mazeMotionState, mazeshape, Inertia);
 			RigidBody mazebody = new RigidBody(mazeinfo);
 			mazebody.setFriction(0f);
 			dynamicworld.addRigidBody(mazebody);
@@ -99,6 +102,25 @@ public void initMaze(Maze maze) {
 		}
 	}
 }	
+
+public void initNyan(NyanCat nyancat) {
+	nyans.add(nyancat);
+	CollisionShape nyanshape = new BoxShape(new Vector3f(0.5f,1f,1.5f));
+	Transform nyan = new Transform();
+	nyan.setRotation(new Quat4f((float)nyancat.getHorAngle(),0f,0f,1f));
+	nyan.origin.set((float)nyancat.getLocationX(),(float)nyancat.getLocationY(),(float)nyancat.getLocationZ());
+	KinematicMotionState nyanstate = new KinematicMotionState();
+	nyanstate.setWorldTransform(nyan);
+	System.out.println(nyanstate.getWorldTransform(nyan));
+	Vector3f Inertia = new Vector3f(0,0,0);
+	RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(0, nyanstate, nyanshape, Inertia);
+	RigidBody nyanbody = new RigidBody(nyaninfo);
+	nyanbody.setCollisionFlags(nyanbody.getCollisionFlags() | CollisionFlags.KINEMATIC_OBJECT);
+	nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
+	dynamicworld.addRigidBody(nyanbody);
+	nyanies.add(nyanbody);
+	
+}
 
 public void CreateBullet(float x, float y, float z, float verAngle, float horAngle, Camera camera) {
 	CollisionShape bulletshape = new SphereShape(0.5f);
@@ -113,19 +135,27 @@ public void CreateBullet(float x, float y, float z, float verAngle, float horAng
     RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(mass, bulletmotion , bulletshape , Inertia);
 	RigidBody bullet = new RigidBody(boxRigidBodyInfo);
 	bullet.setLinearVelocity(
-			new Vector3f(50*(-(float)Math.sin(Math.toRadians(horAngle))),(float)Math.sin(Math.toRadians(verAngle)), 50*(-(float)Math.cos(Math.toRadians(horAngle)))));	
+			new Vector3f(50*(-(float)Math.sin(Math.toRadians(horAngle))),50*(float)Math.sin(Math.toRadians(verAngle)), 50*(-(float)Math.cos(Math.toRadians(horAngle)))));	
  //   bullet.applyForce(new Vector3f(-10,0,0), new Vector3f((float)camera.getVrpX(),(float)camera.getVrpY(),(float)camera.getVrpZ()));
  //   bullet.applyForce(new Vector3f(-10,0,0), new Vector3f(27.5f , 2.5f, 27.5f));
- //	bullet.setCollisionFlags(bullet.getCollisionFlags() | CollisionFlags.KINEMATIC_OBJECT);
-//	bullet.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 	dynamicworld.addRigidBody(bullet);
 	bullets.add(bullet);
 }
 
-public void updateBulletpos(Transform trans, RigidBody bullet) {
-	if (bullet.getBroadphaseHandle() != null) {
-	bullet.setWorldTransform(trans);
-	}
+public void updateNyanpos(int i, NyanCat newnyan) {
+		RigidBody nyan = nyanies.get(i);
+		Transform trans = new Transform();
+		trans.setRotation(new Quat4f((float)newnyan.getHorAngle(),0,0,1));
+		trans.origin.set((float)newnyan.getLocationX(),(float)newnyan.getLocationY(),(float)newnyan.getLocationZ());
+		nyan.setWorldTransform(trans);
+		nyans.remove(nyans.get(i));
+		nyans.add(newnyan);
+		dynamicworld.addRigidBody(nyan);
+		dynamicworld.removeRigidBody(nyanies.get(i));
+		nyanies.remove(i);
+		nyanies.add(nyan);
+		System.out.println(trans.origin);
+    
 }
 
 public void DestroyBullet(int i) {
@@ -167,15 +197,20 @@ gl.glPushMatrix();
 		
 // }
 	
-public TestBox update(TestBox box) {
-	 dynamicworld.stepSimulation(1/120f,10);
+public TestBox update(int deltaTime,TestBox box, int n, NyanCat newnyan) {
+	 
+	updateNyanpos(n,newnyan); 
+	
+	// dynamicworld.stepSimulation(1/60f);
 	 boxRigidBody.applyImpulse(new Vector3f(0,0,0), new Vector3f(1,0,0));
 	 Transform trans = new Transform();
 	 boxRigidBody.getMotionState().getWorldTransform(trans);
 	 box.setLocationX(trans.origin.x);
 	 box.setLocationY(trans.origin.y);
 	 box.setLocationZ(trans.origin.z);
-
+	 
+	 
+	 
 return box;
 }
 
