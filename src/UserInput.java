@@ -55,7 +55,7 @@ public class UserInput extends Control
 	{
 		// TODO: Set dX and dY to values corresponding to mouse movement	
 			dX = X-x;
-			dY = y-Y; 
+			dY = Y-y; 
 			x = X;
 			y = Y;
 			 
