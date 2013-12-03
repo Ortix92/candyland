@@ -133,8 +133,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add( maze );
-		skybox=new SkyBox();
-		visibleObjects.add(skybox);
+		
 
 		// Initialize the player.
 		player = new Player( 6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, 	// x-position
@@ -147,6 +146,8 @@ public class MazeRunner extends Frame implements GLEventListener {
 		
 		input = new UserInput(canvas);
 		player.setControl(input);
+		skybox=new SkyBox(player);
+		visibleObjects.add(skybox);
 	}
 
 /*
@@ -193,7 +194,9 @@ public class MazeRunner extends Frame implements GLEventListener {
         
         
         float lightPosition2[] = { 0.0f, 1.0f, 0.0f, 1.0f }; 			// High up in the sky!
-        float lightColour2[] = { 1.0f, 1.0f, 1.0f, 0.0f };				// White light!
+        float lightColour2[] = { 1.0f, 1.0f, 1.0f, 0.0f };	
+        float[] noAmbient = { 3f, 3f,3f, 1f };     // low ambient light
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, noAmbient, 0);// White light!
         gl.glLightfv( GL.GL_LIGHT0, GL.GL_POSITION, lightPosition2, 0 );	// Note that we're setting Light0.
         gl.glLightfv( GL.GL_LIGHT0, GL.GL_DIFFUSE, lightColour2, 0);
         gl.glEnable( GL.GL_LIGHTING );

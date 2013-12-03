@@ -23,6 +23,8 @@ public class TextureLoader {
 	static Texture SkyBox4; // reserve memory for skybox
 	static Texture SkyBox5; // reserve memory for skybox
 	static Texture SkyBox6; // reserve memory for skybox
+	static Texture CandyWall;
+	static Texture CandyFloor;
 	static boolean load = false; // boolean so that images are only loaded once
 
 	public static void load() {
@@ -35,36 +37,64 @@ public class TextureLoader {
 			SkyBox1 = TextureIO.newTexture(skyboxImage1, false);
 			SkyBox1.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 			SkyBox1.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// make edges less visible:
+		      SkyBox1.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+		      SkyBox1.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE); 
 
 			BufferedImage skyboxImage2 = ImageIO.read(new File(
 					"src/skybox_05.png"));
 			SkyBox2 = TextureIO.newTexture(skyboxImage2, false);
 			SkyBox2.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 			SkyBox2.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// make edges less visible:
+			SkyBox2.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+		      SkyBox2.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE); 
 
 			BufferedImage skyboxImage3 = ImageIO.read(new File(
 					"src/skybox_07.png"));
 			SkyBox3 = TextureIO.newTexture(skyboxImage3, false);
 			SkyBox3.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 			SkyBox3.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// make edges less visible:
+			SkyBox3.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+		      SkyBox3.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE); 
 
 			BufferedImage skyboxImage4 = ImageIO.read(new File(
 					"src/skybox_09.png"));
 			SkyBox4 = TextureIO.newTexture(skyboxImage4, false);
 			SkyBox4.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 			SkyBox4.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// make edges less visible:
+			SkyBox4.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+		      SkyBox4.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE); 
 
 			BufferedImage skyboxImage5 = ImageIO.read(new File(
 					"src/skybox_04.png"));
 			SkyBox5 = TextureIO.newTexture(skyboxImage5, false);
 			SkyBox5.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 			SkyBox5.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-
+			// make edges less visible:
+			SkyBox5.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+		      SkyBox5.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE); 
 			BufferedImage skyboxImage6 = ImageIO.read(new File(
 					"src/skybox_06.png"));
 			SkyBox6 = TextureIO.newTexture(skyboxImage6, false);
 			SkyBox6.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 			SkyBox6.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// make edges less visible:
+			SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+		      SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE); 
+		      
+		      BufferedImage CandyWallImage=ImageIO.read(new File("src/CandyWall.png"));
+		      CandyWall=TextureIO.newTexture(CandyWallImage,true);
+				CandyWall.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+				CandyWall.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+		      
+				BufferedImage CandyFloorImage=ImageIO.read(new File("src/CandyFloor3.png"));
+				CandyFloor=TextureIO.newTexture(CandyFloorImage,false);
+				CandyFloor.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+				CandyFloor.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+		      
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -73,19 +103,53 @@ public class TextureLoader {
 		}
 	}
 
+	public static void Floor(GL gl, double size){
+		if (!load) {
+			load();
+			load = true;
+		}
+		
+		CandyFloor.enable();
+		CandyFloor.bind();
+	    gl.glNormal3d(0, 1, 0);
+			gl.glBegin(GL.GL_QUADS);
+			gl.glTexCoord2f(1,0);
+		        gl.glVertex3d(0, 0, 0);
+		        gl.glTexCoord2f(1,1);
+		        gl.glVertex3d(0, 0, size);
+		        gl.glTexCoord2f(0,1);
+		        gl.glVertex3d(size, 0, size);
+		        gl.glTexCoord2f(0,0);
+		        gl.glVertex3d(size, 0, 0);		
+			gl.glEnd();	
+		CandyFloor.disable();
+	}
+	
+	public static void Wall(GL gl){
+		if (!load) {
+			load();
+			load = true;
+		}
+		CandyWall.enable();
+		CandyWall.bind();
+		drawCube(gl,false);
+		CandyWall.disable();
+	}
+	
+	
 	public static void SkyBox(GL gl) {
 
 		if (!load) {
 			load();
 			load = true;
 		}
+		gl.glDepthMask(false);
 		// draws a cube with texture coordinates.
 		// Set size:
-		gl.glTranslated(0, -1, 0 );
 		gl.glScaled(100, 100, 100);
 		// Square 1:
-		SkyBox2.enable();
-		SkyBox2.bind();
+		SkyBox5.enable();
+		SkyBox5.bind();
 		gl.glBegin(GL.GL_QUADS);
 		gl.glTexCoord2f(1, 0);
 		gl.glVertex3f(0, 0, 0);
@@ -97,7 +161,7 @@ public class TextureLoader {
 		gl.glVertex3f(0, 1, 0);
 
 		gl.glEnd();
-		SkyBox2.disable();
+		SkyBox5.disable();
 
 		// Square 2:
 		SkyBox3.enable();
@@ -133,8 +197,8 @@ public class TextureLoader {
 		SkyBox1.disable();
 
 		// Square 4:
-		SkyBox5.enable();
-		SkyBox5.bind();
+		SkyBox2.enable();
+		SkyBox2.bind();
 		gl.glBegin(GL.GL_QUADS);
 		gl.glTexCoord2f(1, 1);
 		gl.glVertex3f(1, 1, 0);
@@ -146,7 +210,7 @@ public class TextureLoader {
 		gl.glVertex3f(1, 1, 1);
 
 		gl.glEnd();
-		SkyBox5.disable();
+		SkyBox2.disable();
 
 		// Square 5 ONDERKANT:
 		SkyBox4.enable();
@@ -182,6 +246,7 @@ public class TextureLoader {
 		SkyBox6.disable();
 
 		gl.glScaled(1 / 100, 1 / 100, 1 / 100);
+		gl.glDepthMask(true);
 
 	}
 
