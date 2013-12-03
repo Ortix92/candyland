@@ -46,6 +46,13 @@ public class RainbowBlock extends GameObject implements VisibleObject {
 		}
 		
 	}
+
+
+	@Override
+	public void update(int deltaTime) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
