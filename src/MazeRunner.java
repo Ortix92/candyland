@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 
+import loader.Model;
+import loader.OBJLoader;
+
 /**
  * MazeRunner is the base class of the game, functioning as the view controller
  * and game logic manager.
@@ -55,7 +58,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 																			// calculate
 																			// elapsed
 																			// time.
-
+	private Model teapot;
 	private Guy guy;
 	private Weapon weapon;
 	private TestBox box;
@@ -211,6 +214,14 @@ public class MazeRunner extends Frame implements GLEventListener {
 		pause = new PauseMenu();
 		phworld.initMaze(maze);
 		phworld.initObjects();
+		
+		try {
+			teapot = OBJLoader.loadModel(new File("src/assets/Halo_3_SPARTAN.obj"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(teapot);
 
 	}
 
@@ -399,10 +410,10 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Has to be displayed after everything else.
 		// guy.display(gl, player);
 		weapon.display(gl);
-
+		teapot.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
-		pause.display(gl);
+		//pause.display(gl);
 		Projectview(gl);
 		
 		gl.glLoadIdentity();
