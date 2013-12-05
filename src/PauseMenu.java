@@ -12,14 +12,6 @@ public class PauseMenu {
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
 
-		gl.glColor4f(1.0f, 1.0f, 1.0f, 0.75f);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex2d(screenWidth  / 2.0, screenHeight  / 2.0 + 20.0);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
-		gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
-		gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
-		gl.glEnd();
-
 		gl.glColor4d(1.0, 1.0, 1.0, 0.2);
 		gl.glBegin(GL.GL_QUADS);
 		gl.glVertex2d(screenWidth / 100.0, screenHeight - 10.0);

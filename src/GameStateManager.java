@@ -16,6 +16,7 @@ public class GameStateManager {
 	public JFrame setGameState(int state, JFrame frame) {
 		this.gameState = state;
 		frame.add(mazerunner.canvas);
+		System.out.println(mazerunner.canvas);
 		return frame;
 		
 	}

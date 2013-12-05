@@ -31,7 +31,7 @@ import loader.OBJLoader;
  * @author Bruno Scheele, revised by Mattijs Driel
  * 
  */
-public class MazeRunner extends Frame implements GLEventListener {
+public class MazeRunner implements GLEventListener {
 	static final long serialVersionUID = 7526471155622776147L;
 
 	/*
@@ -40,7 +40,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 */
 	public GLCanvas canvas;
 
-	private int screenWidth = 600, screenHeight = 600; // Screen size.
+	private int screenWidth = 1024, screenHeight = 768; // Screen size.
 	private ArrayList<VisibleObject> visibleObjects; // A list of objects that
 														// will be displayed on
 														// screen.
@@ -82,26 +82,10 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * controller.
 	 */
 	public MazeRunner() {
-		// Make a new window.
-		super("MazeRunner");
-
-		// Let's change the window to our liking.
-		setSize(screenWidth, screenHeight);
-		setBackground(Color.white);
-
-		// The window also has to close when we want to.
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
 
 		initJOGL(); // Initialize JOGL.
 		initObjects(); // Initialize all the objects!
 
-		// Set the frame to visible. This automatically calls upon OpenGL to
-		// prevent a blank screen.
-		setVisible(true);
 	}
 
 	/**
@@ -123,7 +107,6 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Now we add the canvas, where OpenGL will actually draw for us. We'll
 		// use settings we've just defined.
 		canvas = new GLCanvas(caps);
-		add(canvas);
 		/*
 		 * We need to add a GLEventListener to interpret OpenGL events for us.
 		 * Since MazeRunner implements GLEventListener, this means that we add
@@ -132,7 +115,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 		 * perform the OpenGL phases of MazeRunner.
 		 */
 		canvas.addGLEventListener(this);
-
+        canvas.setSize(screenWidth, screenHeight);
 		/*
 		 * We need to create an internal thread that instructs OpenGL to
 		 * continuously repaint itself. The Animator class handles that for
@@ -215,13 +198,13 @@ public class MazeRunner extends Frame implements GLEventListener {
 		phworld.initMaze(maze);
 		phworld.initObjects();
 		
-		try {
-			teapot = OBJLoader.loadModel(new File("src/assets/Halo_3_SPARTAN.obj"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(teapot);
+//		try {
+//			teapot = OBJLoader.loadModel(new File("src/assets/Halo_3_SPARTAN.obj"));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println(teapot);
 
 	}
 
@@ -410,10 +393,10 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Has to be displayed after everything else.
 		// guy.display(gl, player);
 		weapon.display(gl);
-		teapot.display(gl);
+		//teapot.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
-		//pause.display(gl);
+		pause.display(gl);
 		Projectview(gl);
 		
 		gl.glLoadIdentity();
@@ -565,8 +548,8 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		// Create and run MazeRunner.
-		new MazeRunner();
-	}
+//	public static void main(String[] args) {
+//		// Create and run MazeRunner.
+//		new MazeRunner();
+//	}
 }

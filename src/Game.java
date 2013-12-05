@@ -28,8 +28,8 @@ public class Game extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println(e.getKeyCode());
 		frame = gsm.setGameState(e.getKeyCode(), frame);
+		System.out.println(frame.getComponentCount());
 
 	}
 
