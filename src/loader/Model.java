@@ -1,89 +1,188 @@
 package loader;
 
+/*
+ * Copyright (c) 2013, Oskar Veerhoek
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are those
+ * of the authors and should not be interpreted as representing official policies,
+ * either expressed or implied, of the FreeBSD Project.
+ */
+
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.media.opengl.GL;
-import javax.vecmath.Vector2d;
-import javax.vecmath.Vector3d;
 
+import com.sun.opengl.util.texture.Texture;
+
+/** @author Oskar */
 public class Model {
-	public ArrayList<Vector3d> vertices = new ArrayList<Vector3d>();
-	public ArrayList<Vector3d> normals = new ArrayList<Vector3d>();
-	public ArrayList<Vector2d> textureCoordinates = new ArrayList<Vector2d>();
-	public ArrayList<Face> faces = new ArrayList<Face>();
+	private final List<ModelPart> parts = new ArrayList<ModelPart>();
+	private int[] verticesOffsetArray;
+	private int[] normalOffsetArray;
+	private int[] numberOfFaces;
 
-	public Model() {
-	}
+	private final List<Point3D> vertices = new ArrayList<Point3D>();
+	private final List<Point2D.Float> textureCoordinates = new ArrayList<Point2D.Float>();
+	private final List<Point3D> normals = new ArrayList<Point3D>();
+	private final List<Face> faces = new ArrayList<Face>();
+	private final HashMap<String, Material> materials = new HashMap<String, Material>();
+	private boolean enableSmoothShading = true;
+	private GL gl;
 
-	public void display(GL gl) {
-		float pferdkleur[] = { 0.5f, 0.0f, 0.7f, 1.0f }; // The walls are
-		// random.
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, pferdkleur, 0);
-		gl.glBegin(GL.GL_TRIANGLES);
-		for (Face face : this.getFaces()) {
-			Vector3d n1 = this.getNormals().get(face.getNormalIndices()[0] - 1);
-			gl.glNormal3d(n1.x, n1.y, n1.z);
-			if (face.hasTextureCoordinates()) {
-				Vector2d t1 = this.getTextureCoordinates().get(
-						face.getTextureCoordinateIndices()[0] - 1);
-				gl.glTexCoord2d(t1.x, t1.y);
-			}
-			Vector3d v1 = this.getVertices()
-					.get(face.getVertexIndices()[0] - 1);
-			gl.glVertex3d(v1.x, v1.y, v1.z);
-			Vector3d n2 = this.getNormals().get(face.getNormalIndices()[1] - 1);
-			gl.glNormal3d(n2.x, n2.y, n2.z);
-			if (face.hasTextureCoordinates()) {
-				Vector2d t2 = this.getTextureCoordinates().get(
-						face.getTextureCoordinateIndices()[1] - 1);
-				gl.glTexCoord2d(t2.x, t2.y);
-			}
-			Vector3d v2 = this.getVertices()
-					.get(face.getVertexIndices()[1] - 1);
-			gl.glVertex3d(v2.x, v2.y, v2.z);
-			Vector3d n3 = this.getNormals().get(face.getNormalIndices()[2] - 1);
-			gl.glNormal3d(n3.x, n3.y, n3.z);
-			if (face.hasTextureCoordinates()) {
-				Vector2d t3 = this.getTextureCoordinates().get(
-						face.getTextureCoordinateIndices()[2] - 1);
-				gl.glTexCoord2d(t3.x, t3.y);
-			}
-			Vector3d v3 = this.getVertices()
-					.get(face.getVertexIndices()[2] - 1);
-			gl.glVertex3d(v3.x, v3.y, v3.z);
+	public void enableStates() {
+
+		if (hasTextureCoordinates()) {
+			gl.glEnable(GL.GL_TEXTURE_2D);
 		}
-		gl.glEnd();
+
+		if (isSmoothShadingEnabled()) {
+			gl.glShadeModel(GL.GL_SMOOTH);
+		} else {
+			gl.glShadeModel(GL.GL_FLAT);
+		}
 	}
 
-	public boolean hasNormals() {
-		return getNormals().size() > 0;
+	public void addModelPart(ModelPart p) {
+		parts.add(p);
+	}
+
+	public List<ModelPart> getModelParts() {
+		return parts;
+	}
+
+	public int[] getVerticesOffsetArray() {
+		return verticesOffsetArray;
+	}
+
+	public void setVerticesOffsetArrayForPart(int offset, int part) {
+		verticesOffsetArray[part] = offset;
+	}
+
+	public int[] getNormalsOffsetArray() {
+		return normalOffsetArray;
+	}
+
+	public void setNormalOffsetArrayForPart(int offset, int part) {
+		normalOffsetArray[part] = offset;
+	}
+
+	public void setNumberOfFaces(int[] numberOfF) {
+		numberOfFaces = numberOfF;
+	}
+
+	public void initiliazeArrays() {
+		verticesOffsetArray = new int[parts.size()];
+		normalOffsetArray = new int[parts.size()];
+		numberOfFaces = new int[parts.size()];
 	}
 
 	public boolean hasTextureCoordinates() {
 		return getTextureCoordinates().size() > 0;
 	}
 
-	public ArrayList<Face> getFaces() {
-		return faces;
+	public boolean hasNormals() {
+		return getNormals().size() > 0;
 	}
 
-	public ArrayList<Vector3d> getNormals() {
-		return normals;
-	}
-
-	public ArrayList<Vector3d> getVertices() {
+	public List<Point3D> getVertices() {
 		return vertices;
 	}
 
-	public ArrayList<Vector2d> getTextureCoordinates() {
+	public List<Point2D.Float> getTextureCoordinates() {
 		return textureCoordinates;
 	}
 
+	public List<Point3D> getNormals() {
+		return normals;
+	}
+
+	public List<Face> getFaces() {
+		return faces;
+	}
+
+	public boolean isSmoothShadingEnabled() {
+		return enableSmoothShading;
+	}
+
+	public void setSmoothShadingEnabled(boolean smoothShadingEnabled) {
+		this.enableSmoothShading = smoothShadingEnabled;
+	}
+
+	public HashMap<String, Material> getMaterials() {
+		return materials;
+	}
+
+	public static class Material {
+
+		@Override
+		public String toString() {
+			return "Material{" + "specularCoefficient=" + specularCoefficient
+					+ ", ambientColour=" + ambientColour + ", diffuseColour="
+					+ diffuseColour + ", specularColour=" + specularColour
+					+ '}';
+		}
+
+		/** Between 0 and 1000. */
+		public float specularCoefficient = 100;
+		public float[] ambientColour = { 0.2f, 0.2f, 0.2f };
+		public float[] diffuseColour = { 0.3f, 1, 1 };
+		public float[] specularColour = { 1, 1, 1 };
+		public Texture texture = null;
+		public String texturePath = "";
+
+		public boolean hasTexture() {
+			if (texture != null) {
+				return true;
+			}
+			return false;
+		}
+
+		public Texture getTexture() {
+			return texture;
+		}
+
+		public void loadTexture(GL gl) {
+			if (!texturePath.equals("")) {
+				texture = TextureLoader.loadTexture(texturePath);
+			}
+		}
+	}
+
+	/** @author Oskar */
 	public static class Face {
 
 		private final int[] vertexIndices = { -1, -1, -1 };
 		private final int[] normalIndices = { -1, -1, -1 };
 		private final int[] textureCoordinateIndices = { -1, -1, -1 };
+		private Material material;
+
+		public Material getMaterial() {
+			return material;
+		}
 
 		public boolean hasNormals() {
 			return normalIndices[0] != -1;
@@ -121,16 +220,17 @@ public class Model {
 		}
 
 		public Face(int[] vertexIndices, int[] normalIndices,
-				int[] textureCoordinateIndices) {
+				int[] textureCoordinateIndices, Material material) {
 			this.vertexIndices[0] = vertexIndices[0];
 			this.vertexIndices[1] = vertexIndices[1];
 			this.vertexIndices[2] = vertexIndices[2];
-			this.normalIndices[0] = normalIndices[0];
-			this.normalIndices[1] = normalIndices[1];
-			this.normalIndices[2] = normalIndices[2];
 			this.textureCoordinateIndices[0] = textureCoordinateIndices[0];
 			this.textureCoordinateIndices[1] = textureCoordinateIndices[1];
 			this.textureCoordinateIndices[2] = textureCoordinateIndices[2];
+			this.normalIndices[0] = normalIndices[0];
+			this.normalIndices[1] = normalIndices[1];
+			this.normalIndices[2] = normalIndices[2];
+			this.material = material;
 		}
 	}
 }

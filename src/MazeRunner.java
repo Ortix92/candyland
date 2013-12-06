@@ -1,19 +1,21 @@
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-
-import javax.media.opengl.*;
-import javax.media.opengl.glu.*;
-
-import com.sun.opengl.util.*;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 
-import loader.Model;
+import javax.media.opengl.DebugGL;
+import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.glu.GLU;
+
+import loader.Model2;
 import loader.OBJLoader;
+
+import com.sun.opengl.util.Animator;
 
 /**
  * MazeRunner is the base class of the game, functioning as the view controller
@@ -58,7 +60,7 @@ public class MazeRunner implements GLEventListener {
 																			// calculate
 																			// elapsed
 																			// time.
-	private Model teapot;
+	private Monster teapot;
 	private Guy guy;
 	private Weapon weapon;
 	private TestBox box;
@@ -115,7 +117,7 @@ public class MazeRunner implements GLEventListener {
 		 * perform the OpenGL phases of MazeRunner.
 		 */
 		canvas.addGLEventListener(this);
-        canvas.setSize(screenWidth, screenHeight);
+		canvas.setSize(screenWidth, screenHeight);
 		/*
 		 * We need to create an internal thread that instructs OpenGL to
 		 * continuously repaint itself. The Animator class handles that for
@@ -197,14 +199,6 @@ public class MazeRunner implements GLEventListener {
 		pause = new PauseMenu();
 		phworld.initMaze(maze);
 		phworld.initObjects();
-		
-//		try {
-//			teapot = OBJLoader.loadModel(new File("src/assets/Halo_3_SPARTAN.obj"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println(teapot);
 
 	}
 
@@ -230,7 +224,7 @@ public class MazeRunner implements GLEventListener {
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glPopMatrix();
 	}
-	
+
 	public void drawPause(GL gl) {
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
@@ -344,6 +338,8 @@ public class MazeRunner implements GLEventListener {
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glShadeModel(GL.GL_SMOOTH);
 
+		teapot = new Monster(0, 0 ,0);
+		teapot.createVBO(gl);
 	}
 
 	/**
@@ -390,15 +386,15 @@ public class MazeRunner implements GLEventListener {
 		}
 
 		box.display(gl);
-		// Has to be displayed after everything else.
-		// guy.display(gl, player);
 		weapon.display(gl);
-		//teapot.display(gl);
+		teapot.display(gl);
+
+		// Orthogonal projection on screen (2D)
 		Orthoview(gl);
 		DrawHud(gl);
 		pause.display(gl);
 		Projectview(gl);
-		
+
 		gl.glLoadIdentity();
 		// Flush the OpenGL buffer.
 		gl.glFlush();
@@ -548,8 +544,8 @@ public class MazeRunner implements GLEventListener {
 	 * 
 	 * @param args
 	 */
-//	public static void main(String[] args) {
-//		// Create and run MazeRunner.
-//		new MazeRunner();
-//	}
+	// public static void main(String[] args) {
+	// // Create and run MazeRunner.
+	// new MazeRunner();
+	// }
 }
