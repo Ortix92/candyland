@@ -13,9 +13,8 @@ class Menu extends JPanel {
 	private GameStateManager gsm;
 
 	public Menu(GameStateManager gsm) {
-
+ 
 		this.gsm = gsm;
-		
 		
 		JButton button_start = new JButton(new ImageIcon(
 				"images/menu/button_start.png"));
@@ -82,6 +81,7 @@ class Menu extends JPanel {
 
 					switch (j) {
 					case 0:
+						Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
 					case 1:
 						break;
 					case 2:

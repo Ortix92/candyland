@@ -27,6 +27,7 @@ public class UserInput extends Control
 	private int y;
 	private int X;
 	private int Y;
+	public static boolean pause = false;
 	
 	/**
 	 * UserInput constructor.
@@ -42,7 +43,7 @@ public class UserInput extends Control
 		canvas.addMouseMotionListener(this);
 		canvas.addKeyListener(this);
 		
-	}
+	} 
 	
 	/*
 	 * **********************************************
@@ -106,10 +107,16 @@ public class UserInput extends Control
 			else if (event.getKeyCode() == KeyEvent.VK_D){
 			 right = true;}
 			else if (event.getKeyCode() == KeyEvent.VK_F){
-			shoot = true;
-				
+			shoot = true; }
+			else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == false) {
+				pause = true; }
+			else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true) {
+				pause = false; }
+			else if (event.getKeyCode() == KeyEvent.VK_ENTER && UserInput.pause == true) {
+				Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
+				pause = false;	
 			}
-		
+			
 		}
 	
 	@Override

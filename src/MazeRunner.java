@@ -85,7 +85,7 @@ public class MazeRunner implements GLEventListener {
 
 		initJOGL(); // Initialize JOGL.
 		initObjects(); // Initialize all the objects!
-
+		
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class MazeRunner implements GLEventListener {
 	 * <li>the Camera
 	 * <li>the User input
 	 * </ul>
-	 * <p>
+	 * <p>F
 	 * Remember that every object that should be visible on the screen, should
 	 * be added to the visualObjects list of MazeRunner through the add method,
 	 * so it will be displayed automagically.
@@ -367,11 +367,16 @@ public class MazeRunner implements GLEventListener {
 		previousTime = currentTime;
 
 		// Update any movement since last frame.
-		updateMovement(deltaTime);
+		
 		// Nyan.update(deltaTime);
-		updateCamera();
-		updatePhysics();
-
+		
+		if(!input.pause) {
+			updateMovement(deltaTime);
+			updateCamera();
+			updatePhysics();
+		}
+	
+		
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
@@ -396,7 +401,10 @@ public class MazeRunner implements GLEventListener {
 		//teapot.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
+		 
+		if(input.pause) {
 		pause.display(gl);
+		}
 		Projectview(gl);
 		
 		gl.glLoadIdentity();
@@ -540,7 +548,7 @@ public class MazeRunner implements GLEventListener {
 	}
 
 	/*
-	 * **********************************************
+	 * ****************************************
 	 * * Main * **********************************************
 	 */
 	/**

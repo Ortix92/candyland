@@ -6,10 +6,11 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 public class Game extends JFrame implements KeyListener {
-	public GameStateManager gsm;
+	public static GameStateManager gsm;
 
-	public JFrame frame = new JFrame();
-
+	public static JFrame frame = new JFrame();
+	
+	
 	public Game() {
 		gsm = new GameStateManager();
 		frame.add(gsm.menu);
@@ -17,30 +18,28 @@ public class Game extends JFrame implements KeyListener {
 		frame.addKeyListener(this);
 		frame.setFocusable(true);
 		frame.setVisible(true);
-
+		UserInput input;
+		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
-
+		
+		}
+ 
+	@Override
+	public void keyPressed(KeyEvent event) {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		frame = gsm.setGameState(e.getKeyCode(), frame);
-		System.out.println(frame.getComponentCount());
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
+	public void keyReleased(KeyEvent event) {
+		
+	
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 
 	}
-
 }
