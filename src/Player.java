@@ -19,6 +19,7 @@ public class Player extends GameObject {
 	private double horAngle, verAngle;
 	private double speed;
 	private double health;
+	private jbullet phworld;
 	
 	private Control control = null;
 	
@@ -37,7 +38,7 @@ public class Player extends GameObject {
 	 * @param h		the horizontal angle of the orientation in degrees
 	 * @param v		the vertical angle of the orientation in degrees
 	 */
-	public Player( double x, double y, double z, double h, double v ) {
+	public Player( double x, double y, double z, double h, double v) {
 		// Set the initial position and viewing direction of the player.
 		super( x, y, z );
 		horAngle = h;
@@ -150,24 +151,24 @@ public class Player extends GameObject {
 			// TODO: Move the player, according to control
 			
 			if (control.getForward()) {
-				setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
-				setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+				//phworld.Forward(getHorAngle());
 				
 			}
 			if (control.getBack()){
-				setLocationX(getLocationX() + Math.sin(Math.toRadians(getHorAngle()))*speed);
-				setLocationZ(getLocationZ() + Math.cos(Math.toRadians(getHorAngle()))*speed);
-				
+			//	setLocationX(getLocationX() + Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() + Math.cos(Math.toRadians(getHorAngle()))*speed);
 			}
 			if (control.getRight()){
-				setLocationX(getLocationX() + Math.cos(Math.toRadians(getHorAngle()))*speed);
-				setLocationZ(getLocationZ() - Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationX(getLocationX() + Math.cos(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() - Math.sin(Math.toRadians(getHorAngle()))*speed);
 				
 				
 			}
 			if (control.getLeft()){
-				setLocationX(getLocationX() - Math.cos(Math.toRadians(getHorAngle()))*speed);
-				setLocationZ(getLocationZ() + Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationX(getLocationX() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() + Math.sin(Math.toRadians(getHorAngle()))*speed);
 				
 				
 			}
