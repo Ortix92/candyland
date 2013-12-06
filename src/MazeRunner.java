@@ -164,7 +164,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add(maze);
-		phworld = new jbullet(amountofNyans, control);
+		phworld = new jbullet(amountofNyans);
 	
 		 
 		NyanInput=new NyanCatInput(canvas);
@@ -183,12 +183,12 @@ public class MazeRunner extends Frame implements GLEventListener {
 
 		// initialize the NyanCat. 
 		for(int i=0;i<amountofNyans;i++){
-			double X=Math.random()*10+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
-			double Z=Math.random()*10+
+			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
+			double Z=Math.random()*100+
 					3* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
 			while(maze.isWall(X, Z)){
-				X=Math.random()*10+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
-				Z=Math.random()*10+3* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+				X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
+				Z=Math.random()*100+3* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
 			}	
 				Nyan.add(new NyanCat(X,
 						maze.SQUARE_SIZE/4, // y-position
@@ -462,14 +462,14 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * This includes rudimentary collision checking and collision reaction.
 	 */
 	private void updateMovement(int deltaTime) {
-		
+		phworld.update(player);
 		player.update(deltaTime);
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
 		Nyan.get(j).update(deltaTime);
 		if (phworld.updateNyanhealth(j)) {
 			Nyan.remove(j);
-			score = score + 8008135;
+			score = score + 1000;
 			
 		}
 	}

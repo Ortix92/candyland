@@ -19,7 +19,6 @@ public class Player extends GameObject {
 	private double horAngle, verAngle;
 	private double speed;
 	private double health;
-	private jbullet phworld;
 	
 	private Control control = null;
 	

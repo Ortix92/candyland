@@ -60,12 +60,10 @@ public class jbullet {
 		private RigidBody boxRigidBody;
 		private ObjectArrayList<RigidBody> bullets;
 	    private RigidBody groundbody;
-	    private KinematicCharacterController player;
 	    private RigidBody playar;
 
-	    private Control control = null;
 
-public jbullet(int n, Control control) {
+public jbullet(int n) {
 	Bullets = new ArrayList<Bullet>();
 	nyanies =  new ObjectArrayList<RigidBody>();
 	bullets = new ObjectArrayList<RigidBody>();
@@ -81,7 +79,6 @@ public jbullet(int n, Control control) {
 	dynamicworld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 	dynamicworld.setGravity(new Vector3f(0f,-10f,0f));
 	
-	this.control = control;
 }
 
 /*
@@ -157,7 +154,7 @@ public void CreateBullet(float x, float y, float z, float verAngle, float horAng
 	p.origin.set(x, y, z);
 	DefaultMotionState bulletmotion = new DefaultMotionState();
 	bulletmotion.setWorldTransform(p);
-	float mass = 20f;
+	float mass = 0.002f;
     Vector3f Inertia = new Vector3f(100,100,100); 
     bulletshape.calculateLocalInertia(mass, Inertia);
     RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(mass, bulletmotion , bulletshape , Inertia);
@@ -179,18 +176,18 @@ public void initPlayer(float x, float y, float z) {
 
  //   PairCachingGhostObject ghostObject = new PairCachingGhostObject();
     DefaultMotionState playerstate = new DefaultMotionState();
-    CollisionShape playershape = new CapsuleShape(1.75f,1.75f);
+    CollisionShape playershape = new CapsuleShape(2f,2f);
    playerstate.setWorldTransform(startTransform);
   // sweepBP.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
 //    ConvexShape capsule = new CapsuleShape(characterWidth, characterHeight);
    // ghostobject.setCollisionShape(capsule);
   //  ghostobject.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
    Vector3f Inertia = new Vector3f(0,0,0);
-RigidBodyConstructionInfo playerRigidBody = new RigidBodyConstructionInfo(10, playerstate, playershape, Inertia);
+RigidBodyConstructionInfo playerRigidBody = new RigidBodyConstructionInfo(2, playerstate, playershape, Inertia);
 playar = new RigidBody(playerRigidBody);
  //   float stepHeight = 0.35f;
  //  player = new KinematicCharacterController(ghostobject, capsule, stepHeight);
-playar.setFriction(0);   
+playar.setFriction(0.7f);   
 playar.setLinearVelocity(new Vector3f(0,0,0));
  //   dynamicworld.addCollisionObject(ghostobject, CollisionFilterGroups.CHARACTER_FILTER, (short)(CollisionFilterGroups.STATIC_FILTER | CollisionFilterGroups.DEFAULT_FILTER));
 dynamicworld.addRigidBody(playar);
@@ -336,6 +333,48 @@ public boolean updateNyanhealth(int i) {
 return false;
 }
 
+public void update(Player play)
+{
+		
+		if (play.getControl().getForward()) {
+			//	setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+		//	dynamicworld.removeRigidBody(playar);
+			System.out.println("ik kom hier aan");
+			playar.applyCentralImpulse(new Vector3f(-(float)Math.sin(Math.toRadians(play.getHorAngle())),0,-(float)Math.cos(Math.toRadians(play.getHorAngle()))));
+		//	dynamicworld.addRigidBody(playar);	
+		}
+		if (play.getControl().getBack()) {
+			//	setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+		//	dynamicworld.removeRigidBody(playar);
+			System.out.println("ik kom hier aan");
+			playar.applyCentralImpulse(new Vector3f((float)Math.sin(Math.toRadians(play.getHorAngle())),0,(float)Math.cos(Math.toRadians(play.getHorAngle()))));
+		//	dynamicworld.addRigidBody(playar);	
+		}
+		if (play.getControl().getLeft()) {
+			//	setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+		//	dynamicworld.removeRigidBody(playar);
+			System.out.println("ik kom hier aan");
+			playar.applyCentralImpulse(new Vector3f(-(float)Math.cos(Math.toRadians(play.getHorAngle())),0,(float)Math.sin(Math.toRadians(play.getHorAngle()))));
+		//	dynamicworld.addRigidBody(playar);	
+		}
+		if (play.getControl().getRight()) {
+			//	setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
+			//	setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
+		//	dynamicworld.removeRigidBody(playar);
+			System.out.println("ik kom hier aan");
+			playar.applyCentralImpulse(new Vector3f((float)Math.cos(Math.toRadians(play.getHorAngle())),0,-(float)Math.sin(Math.toRadians(play.getHorAngle()))));
+		//	dynamicworld.addRigidBody(playar);	
+		}
+	//	else {
+	//		playar.setLinearVelocity(new Vector3f(0,0,0));
+	//	}
+}
+
+
+
 	
 public class KinematicMotionState extends MotionState {
     private Transform worldTransform;
@@ -355,26 +394,6 @@ public class KinematicMotionState extends MotionState {
     public void setWorldTransform(Transform worldTrans) {
         worldTransform.set(worldTrans);
     }
-}
-
-public void update(int deltaTime)
-{
-	if (control != null)
-	{
-		control.update();
-		
-		if (control.getForward()) {
-			//	setLocationX(getLocationX() - Math.sin(Math.toRadians(getHorAngle()))*speed);
-			//	setLocationZ(getLocationZ() - Math.cos(Math.toRadians(getHorAngle()))*speed);
-				Forward(90);
-		}
-	}
-}
-public void Forward(double b) {
-	dynamicworld.removeRigidBody(playar);
-	playar.setLinearVelocity(new Vector3f(-(float)Math.sin(Math.toRadians(b*10f)),0,-(float)Math.cos(Math.toRadians(b*10f))));
-	dynamicworld.addRigidBody(playar);
-	
 }
 
 }
