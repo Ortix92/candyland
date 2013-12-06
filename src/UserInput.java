@@ -1,3 +1,6 @@
+import java.awt.AWTException;
+import java.awt.Canvas;
+import java.awt.Robot;
 import java.awt.event.*;
 
 import javax.media.opengl.GLCanvas;
@@ -27,6 +30,8 @@ public class UserInput extends Control
 	private int y;
 	private int X;
 	private int Y;
+	private int robot=1;
+
 	
 	/**
 	 * UserInput constructor.
@@ -37,8 +42,7 @@ public class UserInput extends Control
 	 * @param canvas The GLCanvas to which to add the listeners.
 	 */
 	public UserInput(GLCanvas canvas)
-	{
-		canvas.addMouseListener(this);
+	{	canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 		canvas.addKeyListener(this);
 		
@@ -52,14 +56,14 @@ public class UserInput extends Control
 
 	@Override
 	public void update()
-	{
-		// TODO: Set dX and dY to values corresponding to mouse movement	
-			dX = X-x;
-			dY = y-Y; 
-			x = X;
-			y = Y;
-			 
-			}
+	{ 		dX = X-MazeRunner.getScreenWidth()/2;
+			dY = Y-MazeRunner.getScreenHeight()/2;
+			System.out.println(dX+" "+dY);			
+						
+		// TODO: Set dX and dY to values corresponding to mouse movement
+			
+					 
+	}
 			
 	
 
@@ -71,7 +75,7 @@ public class UserInput extends Control
 
 	@Override
 	public void mousePressed(MouseEvent event)
-	{
+	{/*
 		// TODO: Detect the location where the mouse has been pressed
 		if (SwingUtilities.isLeftMouseButton(event)) {
 			x =	event.getX();
@@ -79,19 +83,21 @@ public class UserInput extends Control
 			X = x;
 			Y = y;
 		}
-	
+	*/
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent event)
-	{	
-		if (SwingUtilities.isLeftMouseButton(event)) {
+	public void mouseDragged(MouseEvent event){
+		
+	}
+	/*{	
+		//if (SwingUtilities.isLeftMouseButton(event)) {
 		x = X;
 		y = Y;
 	 X = event.getX();
-	 Y = event.getY();}
+	 Y = event.getY();//}
 	}
-
+*/
 	@Override
 	public void keyPressed(KeyEvent event)
 	{
@@ -126,6 +132,9 @@ public class UserInput extends Control
 		 right = false; }
 		else if (event.getKeyCode() == KeyEvent.VK_F){
 			shoot = false; }
+		else if(event.getKeyCode()==KeyEvent.VK_ESCAPE){
+			// iets...
+		}
 		
 	}
 
@@ -137,11 +146,16 @@ public class UserInput extends Control
 	
 	@Override
 	public void mouseMoved(MouseEvent event)
-	{	
-		//	x = X;
-	//		y = Y;
-	//	 X = event.getX();
-	//	 Y = event.getY();
+	{		
+				X = event.getX()+9;
+				Y = event.getY()+36;
+				 try {					 
+						Robot Rob=new Robot();
+						Rob.mouseMove(MazeRunner.getScreenWidth()/2, MazeRunner.getScreenHeight()/2);
+						
+					} catch (AWTException e) {
+						System.out.println("De robot faalt.");
+					}	
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
@@ -35,7 +36,9 @@ public class MazeRunner extends Frame implements GLEventListener {
  */
 	public GLCanvas canvas;
 
-	private int screenWidth = 600, screenHeight = 600; // Screen size.
+	private static int screenWidth = 600; // Screen size.
+
+	private static int screenHeight = 600;
 	private ArrayList<VisibleObject> visibleObjects; // A list of objects that
 														// will be displayed on
 														// screen.
@@ -96,6 +99,14 @@ public class MazeRunner extends Frame implements GLEventListener {
 		// prevent a blank screen.
 		setVisible(true);
 	}
+	
+	public static int getScreenHeight(){
+		return screenHeight;
+	}
+	
+	public static int getScreenWidth(){
+		return screenWidth;
+	}
 
 	/**
 	 * initJOGL() sets up JOGL to work properly.
@@ -133,6 +144,13 @@ public class MazeRunner extends Frame implements GLEventListener {
 		 */
 		Animator anim = new Animator(canvas);
 		anim.start();
+		// makes an image of 1 by 1 pixel, type: 
+		//Represents an image with 8-bit RGBA color components packed into integer pixels.
+		Image image=new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		// makes the created 1 by 1 pixel into cursor image, with default location 0,0
+		Cursor cursor=Toolkit.getDefaultToolkit().createCustomCursor(image,new Point(0,0), "name");
+		// sets the cursor in the canvas to the created cursor. 
+		canvas.setCursor(cursor);
 	}
 
 	/**
@@ -403,6 +421,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 */
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
+		System.out.println("Reschape");
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
 
