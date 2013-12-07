@@ -5,184 +5,164 @@ import java.awt.event.*;
 
 import javax.media.opengl.GLCanvas;
 import javax.swing.SwingUtilities;
+
 /**
- * The UserInput class is an extension of the Control class. It also implements three 
- * interfaces, each providing handler methods for the different kinds of user input.
+ * The UserInput class is an extension of the Control class. It also implements
+ * three interfaces, each providing handler methods for the different kinds of
+ * user input.
  * <p>
- * For making the assignment, only some of these handler methods are needed for the 
- * desired functionality. The rest can effectively be left empty (i.e. the methods 
- * under 'Unused event handlers').  
+ * For making the assignment, only some of these handler methods are needed for
+ * the desired functionality. The rest can effectively be left empty (i.e. the
+ * methods under 'Unused event handlers').
  * <p>
- * Note: because of how java is designed, it is not possible for the game window to
- * react to user input if it does not have focus. The user must first click the window 
- * (or alt-tab or something) before further events, such as keyboard presses, will 
- * function.
+ * Note: because of how java is designed, it is not possible for the game window
+ * to react to user input if it does not have focus. The user must first click
+ * the window (or alt-tab or something) before further events, such as keyboard
+ * presses, will function.
  * 
  * @author Mattijs Driel
- *
+ * 
  */
-public class UserInput extends Control 
-		implements MouseListener, MouseMotionListener, KeyListener
-{
+public class UserInput extends Control implements MouseListener,
+		MouseMotionListener, KeyListener {
 	// TODO: Add fields to help calculate mouse movement
 
-	private int x;
-	private int y;
-	private int X;
-	private int Y;
-	private int robot=1;
+	int x = 0;
+	int y = 0;
+	int dx = 0;
+	int dy = 0;
+	int sx = 0;
+	int sy = 0;
+	GLCanvas canvas;
+	private int initX = 200;
+	private int initY = 300;
 
-	
 	/**
 	 * UserInput constructor.
 	 * <p>
-	 * To make the new UserInput instance able to receive input, listeners 
-	 * need to be added to a GLCanvas.
+	 * To make the new UserInput instance able to receive input, listeners need
+	 * to be added to a GLCanvas.
 	 * 
-	 * @param canvas The GLCanvas to which to add the listeners.
+	 * @param canvas
+	 *            The GLCanvas to which to add the listeners.
 	 */
-	public UserInput(GLCanvas canvas)
-	{	canvas.addMouseListener(this);
+	public UserInput(GLCanvas canvas) {
+		this.canvas = canvas;
+		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 		canvas.addKeyListener(this);
-		
-	}
-	
-	/*
-	 * **********************************************
-	 * *				Updating					*
-	 * **********************************************
-	 */
 
-	@Override
-	public void update()
-	{ 		dX = X-MazeRunner.getScreenWidth()/2;
-			dY = Y-MazeRunner.getScreenHeight()/2;
-			System.out.println(dX+" "+dY);			
-						
-		// TODO: Set dX and dY to values corresponding to mouse movement
-			
-					 
 	}
-			
-	
 
 	/*
 	 * **********************************************
-	 * *		Input event handlers				*
-	 * **********************************************
+	 * * Updating * **********************************************
 	 */
 
 	@Override
-	public void mousePressed(MouseEvent event)
-	{/*
-		// TODO: Detect the location where the mouse has been pressed
-		if (SwingUtilities.isLeftMouseButton(event)) {
-			x =	event.getX();
-			y = event.getY();
-			X = x;
-			Y = y;
-		}
-	*/
+	public void update() {
+		dX = dx;
+		dY = dy;
+		dx = 0;
+		dy = 0;
+
+	}
+
+	/*
+	 * **********************************************
+	 * * Input event handlers * **********************************************
+	 */
+
+	@Override
+	public void mousePressed(MouseEvent event) {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent event){
-		
+	public void mouseDragged(MouseEvent event) {
+
 	}
-	/*{	
-		//if (SwingUtilities.isLeftMouseButton(event)) {
-		x = X;
-		y = Y;
-	 X = event.getX();
-	 Y = event.getY();//}
-	}
-*/
+
 	@Override
-	public void keyPressed(KeyEvent event)
-	{
-		// TODO: Set forward, back, left and right to corresponding key presses
-		
+	public void keyPressed(KeyEvent event) {
+
 		if (event.getKeyCode() == KeyEvent.VK_W) {
-			 forward = true; }
-			else if (event.getKeyCode() == KeyEvent.VK_S) { 
-			 back = true;}
-			else if (event.getKeyCode() == KeyEvent.VK_A){
-			 left = true;}
-			else if (event.getKeyCode() == KeyEvent.VK_D){
-			 right = true;}
-			else if (event.getKeyCode() == KeyEvent.VK_F){
+			forward = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_S) {
+			back = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_A) {
+			left = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_D) {
+			right = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_F) {
 			shoot = true;
-				
-			}
-		
+
 		}
-	
+
+	}
+
 	@Override
-	public void keyReleased(KeyEvent event)
-	{
-		// TODO: Set forward, back, left and right to corresponding key presses
+	public void keyReleased(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.VK_W) {
-		 forward = false; }
-		else if (event.getKeyCode() == KeyEvent.VK_S) { 
-		 back = false; }
-		else if (event.getKeyCode() == KeyEvent.VK_A){
-		 left = false; }
-		else if (event.getKeyCode() == KeyEvent.VK_D){
-		 right = false; }
-		else if (event.getKeyCode() == KeyEvent.VK_F){
-			shoot = false; }
-		else if(event.getKeyCode()==KeyEvent.VK_ESCAPE){
-			// iets...
+			forward = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_S) {
+			back = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_A) {
+			left = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_D) {
+			right = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_F) {
+			shoot = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 		}
-		
+
 	}
 
 	/*
 	 * **********************************************
-	 * *		Unused event handlers				*
-	 * **********************************************
+	 * * Unused event handlers * **********************************************
 	 */
-	
+
 	@Override
-	public void mouseMoved(MouseEvent event)
-	{		
-				X = event.getX()+9;
-				Y = event.getY()+36;
-				 try {					 
-						Robot Rob=new Robot();
-						Rob.mouseMove(MazeRunner.getScreenWidth()/2, MazeRunner.getScreenHeight()/2);
-						
-					} catch (AWTException e) {
-						System.out.println("De robot faalt.");
-					}	
+	public void mouseMoved(MouseEvent event) {
+
+		int xOnScreen = event.getXOnScreen();
+		int yOnScreen = event.getYOnScreen();
+
+		dx = xOnScreen - initX;
+		dy = yOnScreen - initY;
+
+		x = initX;
+		y = initY;
+
+		Robot robot = null;
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+		robot.mouseMove(initX, initY);
+
 	}
 
 	@Override
-	public void keyTyped(KeyEvent event)
-	{
+	public void keyTyped(KeyEvent event) {
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent event)
-	{
-		
+	public void mouseEntered(MouseEvent event) {
+
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent event)
-	{
+	public void mouseClicked(MouseEvent event) {
 	}
 
 	@Override
-	public void mouseExited(MouseEvent event)
-	{
+	public void mouseExited(MouseEvent event) {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent event)
-	{
+	public void mouseReleased(MouseEvent event) {
 	}
-
 
 }
