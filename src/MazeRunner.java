@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 
-<<<<<<< HEAD
 import loader.Model;
 import loader.OBJLoader;
 
@@ -55,15 +54,9 @@ public class MazeRunner implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
-<<<<<<< HEAD
 	private int amountofNyans = 1; // The amount of NyanCats.
-	private NyanCat[] Nyan = new NyanCat[amountofNyans]; // The NyanCat object
-															// array.
-=======
-	private int amountofNyans=5; // The amount of NyanCats.
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	//	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
->>>>>>> origin/physicscollision
 	private Camera camera; // The camera object.
 	private UserInput input; // The user input object that controls the player.
 	private NyanCatInput NyanInput; // the input that controls Nyan (yet to be
@@ -181,49 +174,23 @@ public class MazeRunner implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add(maze);
-<<<<<<< HEAD
-
-		NyanInput = new NyanCatInput(canvas);
-		// Zorgt dat Nyan beweegt volgens de input in NyanCatInput
-=======
 		phworld = new jbullet(amountofNyans);
 	
 		 
 		NyanInput=new NyanCatInput(canvas);
 	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
->>>>>>> origin/physicscollision
 		// Initialize the player.
-		player = new Player(6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, // x-position
-				// 100*Math.tan(35*Math.PI/180),
-
+		player = new Player(
+				6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, // x-position
+				//100*Math.tan(35*Math.PI/180),
+				
 				maze.SQUARE_SIZE / 2, // y-position
-				// 100* 1/Math.tan(35*Math.PI/180),
-
-				3 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, // z-position
-
+				//100* 1/Math.tan(35*Math.PI/180),
+				
+				3* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, // z-position
+				
 				0, 0); // horizontal and vertical angle
 
-<<<<<<< HEAD
-		// initialize the NyanCat.
-		for (int i = 0; i < amountofNyans; i++) {
-			double X = Math.random() * 100 + 6 * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // x-position
-			double Z = Math.random() * 100 + 3 * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // z-position
-			while (maze.isWall(X, Z)) {
-				X = Math.random() * 100 + 6 * maze.SQUARE_SIZE
-						+ maze.SQUARE_SIZE / 2; // x-position
-				Z = Math.random() * 100 + 3 * maze.SQUARE_SIZE
-						+ maze.SQUARE_SIZE / 2; // z-position
-			}
-			Nyan[i] = new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
-					Z, Math.random() * 360,
-					// horizontal angle
-					player, maze);
-
-			visibleObjects.add(Nyan[i]); // make Nyan visible.
-			// Nyan[i].setControl(NyanInput);
-=======
 		// initialize the NyanCat. 
 		for(int i=0;i<amountofNyans;i++){
 			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
@@ -253,34 +220,26 @@ public class MazeRunner implements GLEventListener {
 					maze);
 	     System.out.println(nyan.toString());
 	     phworld.initNyan(nyan);
->>>>>>> origin/physicscollision
 		}
 		
 		
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
 				player.getVerAngle());
-		guy = new Guy();
+		guy = new Guy();								
 		weapon = new Weapon(10);
 		input = new UserInput(canvas);
 		player.setControl(input);
 		weapon.setControl(input);
 		guy.setControl(input);
-		box = new TestBox(27.5, 2.5, 27.5);
-		pause = new PauseMenu();
+		box = new TestBox(27.5,2.5,27.5);
 		phworld.initMaze(maze);
 		phworld.initObjects();
 		phworld.initPlayer((float)player.getLocationX(), (float)player.getLocationY(), (float)player.getLocationZ());
 		
-//		try {
-//			teapot = OBJLoader.loadModel(new File("src/assets/Halo_3_SPARTAN.obj"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println(teapot);
 
 	}
+
 
 	/**
 	 * Switches the view to orthogonal projection
@@ -336,11 +295,8 @@ public class MazeRunner implements GLEventListener {
 	 * Draws the Hud on screen.
 	 */
 	public void DrawHud(GL gl) {
-<<<<<<< HEAD
 
-=======
 	 GLUT glut = new GLUT();
->>>>>>> origin/physicscollision
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
 
@@ -362,9 +318,6 @@ public class MazeRunner implements GLEventListener {
 				screenHeight - 10.0 - 5 * player.getHealth());
 
 		gl.glEnd();
-<<<<<<< HEAD
-
-=======
 		
 		
 		gl.glColor3f(1.0f,1.0f,1.0f);
@@ -377,7 +330,6 @@ public class MazeRunner implements GLEventListener {
 		  }
 		
 		
->>>>>>> origin/physicscollision
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_DEPTH_TEST);
 	}
@@ -460,25 +412,22 @@ public class MazeRunner implements GLEventListener {
 		previousTime = currentTime;
 
 		// Update any movement since last frame.
-<<<<<<< HEAD
 		
 		// Nyan.update(deltaTime);
 		
-		if(!input.pause) {
+		if(!UserInput.pause) {
 			updateMovement(deltaTime);
 			updateCamera();
-			updatePhysics();
+			updatePhysics(deltaTime);
 		}
 	
 		
-=======
 		updatePhysics(deltaTime);
 		updateMovement(deltaTime);
 		//Nyan.update(deltaTime);
 		updateCamera();
 		
 
->>>>>>> origin/physicscollision
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
@@ -491,12 +440,10 @@ public class MazeRunner implements GLEventListener {
 				.hasNext();) {
 			it.next().display(gl);
 		}
-<<<<<<< HEAD
 
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
 		}
-=======
 		
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
@@ -517,7 +464,6 @@ public class MazeRunner implements GLEventListener {
         DrawHud(gl);
         Projectview(gl);
         
->>>>>>> origin/physicscollision
 
 		box.display(gl);
 		// Has to be displayed after everything else.
@@ -585,36 +531,12 @@ public class MazeRunner implements GLEventListener {
 	 * updateMovement(int) updates the position of all objects that need moving.
 	 * This includes rudimentary collision checking and collision reaction.
 	 */
+	/**
+	 * updateMovement(int) updates the position of all objects that need moving.
+	 * This includes rudimentary collision checking and collision reaction.
+	 */
 	private void updateMovement(int deltaTime) {
 		player.update(deltaTime);
-<<<<<<< HEAD
-		for (int i = 0; i < amountofNyans; i++) {
-			if (Nyan[i].getHP() > -1) {
-				Nyan[i].update(deltaTime);
-			}
-		}
-
-		Bullet bullet = weapon.update(deltaTime, player, camera, phworld);
-		if (bullet != null) {
-			bullets.add(bullet);
-			phworld.CreateBullet((float) camera.getLocationX(), 2.5f,
-					(float) camera.getLocationZ(),
-					(float) player.getVerAngle(), (float) player.getHorAngle(),
-					camera);
-		}
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).update(deltaTime);
-			Bullet bb = bullets.get(i);
-			// if (maze.isWall(bb.getLocationX(), bb.getLocationZ()));
-			// bullets.remove(bullets.get(i)); }
-			// phworld.DestroyBullet(i);
-			// for (int c = 0; c < enemies.aantal; c++) {
-			// if (enemies.isNyan(bb.getLocationX(), bb.getLocationZ())) {
-			// enemies.get(i).setHealth(enemies.get(i).getHealth() - 10);
-			if (bb.getBulletState() == false) {
-				bullets.remove(bullets.get(i));
-				phworld.DestroyBullet(i);
-=======
 		phworld.update(player);
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
@@ -634,44 +556,43 @@ public class MazeRunner implements GLEventListener {
 		}
 		for( int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).update(deltaTime); 
->>>>>>> origin/physicscollision
 			}
+			}
+		
+		//TODO: don't let Nyan walk through walls. However: walls will disappear thus this might not be
+		//necessary. 
+		/*
+		
+		if (maze.isWall(
+				player.getLocationX()
+						- Math.sin(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed(),
+				player.getLocationZ()
+						- Math.cos(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed())) {
+
+			player.update(-deltaTime);
 		}
 
-<<<<<<< HEAD
-		// TODO: don't let Nyan walk through walls. However: walls will
-		// disappear thus this might not be
-		// necessary.
-		/*
-		 * 
-		 * if (maze.isWall( player.getLocationX() - Math.sin(Math.PI *
-		 * player.getHorAngle() / 180) player.getSpeed(), player.getLocationZ()
-		 * - Math.cos(Math.PI * player.getHorAngle() / 180) player.getSpeed()))
-		 * {
-		 * 
-		 * player.update(-deltaTime); }
-		 * 
-		 * if (maze.isWall( player.getLocationX() + Math.sin(Math.PI *
-		 * player.getHorAngle() / 180) player.getSpeed() * deltaTime,
-		 * player.getLocationZ() + Math.cos(Math.PI * player.getHorAngle() /
-		 * 180) player.getSpeed() * deltaTime)) {
-		 * 
-		 * player.update(-deltaTime); }
-		 * 
-		 * if (maze.isWall( player.getLocationX() - Math.sin(Math.PI *
-		 * player.getHorAngle() / 180) player.getSpeed() * deltaTime,
-		 * player.getLocationZ() + Math.cos(Math.PI * player.getHorAngle() /
-		 * 180) player.getSpeed() * deltaTime)) { player.update(-deltaTime); }
-		 * 
-		 * if (maze.isWall( player.getLocationX() + Math.sin(Math.PI *
-		 * player.getHorAngle() / 180) player.getSpeed(), player.getLocationZ()
-		 * - Math.cos(Math.PI * player.getHorAngle() / 180) player.getSpeed()))
-		 * {
-		 * 
-		 * player.update(-deltaTime); }
-		 */
-	}
-=======
+		if (maze.isWall(
+				player.getLocationX()
+						+ Math.sin(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime, player.getLocationZ()
+						+ Math.cos(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime)) {
+
+			player.update(-deltaTime);
+		}
+
+		if (maze.isWall(
+				player.getLocationX()
+						- Math.sin(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime, player.getLocationZ()
+						+ Math.cos(Math.PI * player.getHorAngle() / 180)
+						* player.getSpeed() * deltaTime)) {
+			player.update(-deltaTime);
+		}
+
 		if (maze.isWall(
 				player.getLocationX()
 						+ Math.sin(Math.PI * player.getHorAngle() / 180)
@@ -682,9 +603,7 @@ public class MazeRunner implements GLEventListener {
 
 			player.update(-deltaTime);
 		}
-*/
 	
->>>>>>> origin/physicscollision
 
 	/**
 	 * updateCamera() updates the camera position and orientation.
@@ -704,22 +623,13 @@ public class MazeRunner implements GLEventListener {
 	/**
 	 * Updates the physics world simulation.
 	 */
-<<<<<<< HEAD
 
-	public void updatePhysics() {
-		// bullets = phworld.update(bullets);
-		box = phworld.update(box);
-	}
-
-=======
-	
 	public void updatePhysics(int deltaTime) {
 			
 			phworld.update(deltaTime, box, Nyan, player);
 			box = phworld.getBox(box);
 			bullets = phworld.getbullets();
 		}
->>>>>>> origin/physicscollision
 	/*
 	 * ****************************************
 	 * * Main * **********************************************

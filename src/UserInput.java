@@ -76,6 +76,16 @@ public class UserInput extends Control implements MouseListener,
 
 	@Override
 	public void mousePressed(MouseEvent event) {
+		if (event.getButton() == 1) {
+			shoot = true;
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+		if (event.getButton() == 1) {
+			shoot = false;
+		}
 	}
 
 	@Override
@@ -95,9 +105,7 @@ public class UserInput extends Control implements MouseListener,
 		} else if (event.getKeyCode() == KeyEvent.VK_D) {
 			right = true;
 		} else if (event.getKeyCode() == KeyEvent.VK_F) {
-			shoot = true;
-
-			shoot = true;
+			// shoot = true;
 		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == false) {
 			pause = true;
 		} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
@@ -124,7 +132,7 @@ public class UserInput extends Control implements MouseListener,
 		} else if (event.getKeyCode() == KeyEvent.VK_D) {
 			right = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_F) {
-			shoot = false;
+			// shoot = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 		}
 
@@ -172,10 +180,6 @@ public class UserInput extends Control implements MouseListener,
 
 	@Override
 	public void mouseExited(MouseEvent event) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent event) {
 	}
 
 }

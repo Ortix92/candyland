@@ -106,64 +106,67 @@ public class NyanCat extends GameObject implements VisibleObject {
 		// this.Nyancontrol.update();// does not do anything yet.
 		// Floating animation:
 		// Fly up 70 times:
-	
-			boolean up = false;
-			if ((i >= 0) && (i < 70)) {
-				setLocationY(getLocationY() + 0.5 * getSpeed());
-				i = i + 1;
-				up = true;
+
+		boolean up = false;
+		if ((i >= 0) && (i < 70)) {
+			setLocationY(getLocationY() + 0.5 * getSpeed());
+			i = i + 1;
+			up = true;
+		}
+		// fly down 70 times:
+		if ((i >= 70) && (!up)) {
+			setLocationY(getLocationY() - 0.5 * getSpeed());
+			j = j + 1;
+			if ((j > 69)) {
+				i = 0;
+				j = 0;
 			}
-			// fly down 70 times:
-			if ((i >= 70) && (!up)) {
-				setLocationY(getLocationY() - 0.5 * getSpeed());
-				j = j + 1;
-				if ((j > 69)) {
-					i = 0;
-					j = 0;
-				}
-			}
-			if (goal) {
-				goal(Math.random() * 100, Math.random() * 100);
-			}
-			if (SeePlayer()) { // checks if player is seen
-				goal(player.getLocationX(), player.getLocationZ()); // if player is
-																	// seen, set
-																	// goal to
-																	// players
-																	// location
-			}
-			if (!goal) {
-				moveTo(goalX, goalZ); // move to goalX,goalZ
-			}
-			// when goal is reached choose randomly a new goal:
-<<<<<<< HEAD
+		}
+		if (goal) {
+			goal(Math.random() * 100, Math.random() * 100);
+		}
+		if (SeePlayer()) { // checks if player is seen
+			goal(player.getLocationX(), player.getLocationZ()); // if player is
+																// seen, set
+																// goal to
+																// players
+																// location
+		}
+		if (!goal) {
+			moveTo(goalX, goalZ); // move to goalX,goalZ
+		}
+		// when goal is reached choose randomly a new goal:
+		if ((Math.abs(getLocationX() - goalX) < speed)
+				&& (Math.abs(getLocationZ() - goalZ) < speed)) {
+			goal = true;
 			if ((Math.abs(getLocationX() - goalX) < speed)
 					&& (Math.abs(getLocationZ() - goalZ) < speed)) {
 				goal = true;
-=======
-		if((Math.abs(getLocationX()-goalX)<speed)&&(Math.abs(getLocationZ()-goalZ)<speed)){ 
-			goal=true;
-		}
-
-		if(!SeePlayer()){ // when player is seen, shoot rainbowblocks. 
-			if((i%10==0)&&(j%10==0)){
-				// projectiles: 
-				RainbowBlock Rainbow=new RainbowBlock(this.getLocationX(),this.getLocationY(), this.getLocationZ(), goalX, this.getLocationY(), goalZ,maze);
-				rainbows.add(Rainbow);
->>>>>>> origin/physicscollision
 			}
-	
-			if (SeePlayer()) { // when player is seen, shoot rainbowblocks.
+
+			if (!SeePlayer()) { // when player is seen, shoot rainbowblocks.
 				if ((i % 10 == 0) && (j % 10 == 0)) {
 					// projectiles:
-					RainbowBlock Rainbow = new RainbowBlock(this.getLocationX(),
-							this.getLocationY(), this.getLocationZ(), goalX,
-							this.getLocationY(), goalZ, maze);
+					RainbowBlock Rainbow = new RainbowBlock(
+							this.getLocationX(), this.getLocationY(),
+							this.getLocationZ(), goalX, this.getLocationY(),
+							goalZ, maze);
 					rainbows.add(Rainbow);
 				}
-	
+
+				if (SeePlayer()) { // when player is seen, shoot rainbowblocks.
+					if ((i % 10 == 0) && (j % 10 == 0)) {
+						// projectiles:
+						RainbowBlock Rainbow = new RainbowBlock(
+								this.getLocationX(), this.getLocationY(),
+								this.getLocationZ(), goalX,
+								this.getLocationY(), goalZ, maze);
+						rainbows.add(Rainbow);
+					}
+				}
+
 			}
-		
+		}
 	}
 
 	public void goal(double X, double Y) {
@@ -424,11 +427,9 @@ public class NyanCat extends GameObject implements VisibleObject {
 			}
 		}
 	}
-	
-public void setHP(int x) {
-	HP = x;
-}
+
+	public void setHP(int x) {
+		HP = x;
+	}
 
 }
-
-
