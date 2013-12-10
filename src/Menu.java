@@ -1,5 +1,6 @@
 import java.io.File;
 
+import javax.media.opengl.GLCanvas;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -10,11 +11,8 @@ import javax.swing.JPanel;
 
 class Menu extends JPanel {
 
-	private GameStateManager gsm;
 
 	public Menu(GameStateManager gsm) {
- 
-		this.gsm = gsm;
 		
 		JButton button_start = new JButton(new ImageIcon(
 				"images/menu/button_start.png"));
@@ -80,18 +78,19 @@ class Menu extends JPanel {
 					Sound.play("sounds/sonic_ring.wav");
 
 					switch (j) {
-					case 0:
-						Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
-					case 1:
-						break;
-					case 2:
-						break;
-					case 3:
-						break;
-					case 4:
-						System.exit(0);
+						case 0:
+							Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
+						case 1:
+							break;
+						case 2:
+							break;
+						case 3:
+							break;
+						case 4:
+							System.exit(0);
 					}
 				}
+				
 			});
 
 		}

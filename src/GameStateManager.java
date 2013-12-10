@@ -19,11 +19,12 @@ public class GameStateManager {
 	public JFrame setGameState(int state) {
 				
 		if(state == MENU_STATE) {	
-			Game.frame.add(menu); 
-			System.out.println("bonjour");
+			Game.frame.remove(mazerunner.canvas);
+			Game.frame.add(Game.gsm.menu);
 			this.gameState = state;
 		}
 		else if(state == MAZE_STATE) {
+			Game.frame.remove(Game.gsm.menu);
 			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
 		}		
