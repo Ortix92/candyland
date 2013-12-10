@@ -115,8 +115,8 @@ public class jbullet {
 	}
 
 	public void initMaze(Maze maze) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < maze.MAZE_SIZE; i++) {
+			for (int j = 0; j < maze.MAZE_SIZE; j++) {
 				if (maze.isWall(i, j)) {
 					CollisionShape mazeshape = new BoxShape(new Vector3f(2.5f,
 							2.5f, 2.5f));
