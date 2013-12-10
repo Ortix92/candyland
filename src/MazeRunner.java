@@ -229,6 +229,7 @@ public class MazeRunner implements GLEventListener {
 		guy = new Guy();								
 		weapon = new Weapon(10);
 		input = new UserInput(canvas);
+		pause = new PauseMenu();
 		player.setControl(input);
 		weapon.setControl(input);
 		guy.setControl(input);
@@ -422,12 +423,6 @@ public class MazeRunner implements GLEventListener {
 		}
 	
 		
-		updatePhysics(deltaTime);
-		updateMovement(deltaTime);
-		//Nyan.update(deltaTime);
-		updateCamera();
-		
-
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
@@ -448,32 +443,13 @@ public class MazeRunner implements GLEventListener {
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
 		}
-		
-		for (int i = 0; i < bullets.size(); i++) {
-        	phworld.display(gl, i);
-        }
-
-         box.display(gl);
-        
-        
-    //Has to be displayed after everything else.    
-       //guy.display(gl, player);
-        weapon.display(gl);
-        
-        Orthoview(gl);
-        DrawHud(gl);
-        Projectview(gl);
-        
 
 		box.display(gl);
-		// Has to be displayed after everything else.
-		// guy.display(gl, player);
 		weapon.display(gl);
-		//teapot.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
 		 
-		if(input.pause) {
+		if(UserInput.pause) {
 		pause.display(gl);
 		}
 		Projectview(gl);

@@ -34,7 +34,7 @@ public class UserInput extends Control implements MouseListener,
 	int sx = 0;
 	int sy = 0;
 	GLCanvas canvas;
-	private int initX = 200;
+	private int initX = 500;
 	private int initY = 300;
 	public static boolean pause = false;
 
