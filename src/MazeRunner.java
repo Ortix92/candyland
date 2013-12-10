@@ -430,7 +430,21 @@ public class MazeRunner extends Frame implements GLEventListener {
 	private void updateMovement(int deltaTime) {
 		player.update(deltaTime);
 		for(int i=0;i<amountofNyans;i++){
-			if(Nyan[i].getHP()>-1){
+			if(Nyan[i].getHP()>-1){ 
+				if(Nyan[i].SeePlayer()){
+					for(int j=0; j<amountofNyans;j++){
+						double deltaX=(player.getLocationX()-Nyan[j].getLocationX())/Math.sqrt(Math.pow(player.getLocationX()-Nyan[j].getLocationX(),2)+Math.pow(player.getLocationZ()-Nyan[j].getLocationZ(), 2));
+						double deltaZ=(player.getLocationZ()-Nyan[j].getLocationZ())/Math.sqrt(Math.pow(player.getLocationX()-Nyan[j].getLocationX(),2)+Math.pow(player.getLocationZ()-Nyan[j].getLocationZ(), 2));
+							for (double k=0;k<Math.abs(player.getLocationX()-Nyan[j].getLocationX());k=k+maze.SQUARE_SIZE/3){
+								for (double l=0;l<Math.abs(player.getLocationX()-Nyan[j].getLocationX());l=l+maze.SQUARE_SIZE/3){
+									if(!maze.isWall(Nyan[j].getLocationX()+k*deltaX,Nyan[j].getLocationZ()+l*deltaZ)){
+										Nyan[j].goal(player.getLocationX(),player.getLocationZ());
+									}
+								}
+						}
+					
+					}
+				}
 			Nyan[i].update(deltaTime);
 			}
 		}
