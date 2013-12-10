@@ -10,7 +10,10 @@ import java.util.Scanner;
 public class World {
 	private String worldFile;
 	private ArrayList<ArrayList<Integer>> map = new ArrayList<ArrayList<Integer>>();
+<<<<<<< HEAD
 	private int[][] mapArray;
+=======
+>>>>>>> remove
 
 	public World(String absolutePath) {
 		this.worldFile = absolutePath;
@@ -28,12 +31,17 @@ public class World {
 		return maze;
 	}
 
+<<<<<<< HEAD
 	public void loadMapFromFile() throws FileNotFoundException {
+=======
+	public void loadMapFromFile() {
+>>>>>>> remove
 		try {
 			Scanner sc = new Scanner(new File(this.worldFile));
 			sc.useDelimiter("\\s");
 
 			ArrayList<Integer> row;
+<<<<<<< HEAD
 			while (sc.hasNextLine()) {
 
 				String line = sc.nextLine();
@@ -52,12 +60,47 @@ public class World {
 				System.out.println("");
 			}
 		
+=======
+			int i = 0;
+			while (sc.hasNextLine()) {
+				row = new ArrayList<Integer>();
+				int j = 0;
+				while (sc.hasNextInt()) {
+
+					row.add(sc.nextInt());
+					System.out.print(" " + row.get(j));
+					j++;
+				}
+
+				// Add row to array
+				// Only if all vectors are same size (equal to first)
+				// if (map.get(0).size() == map.get(i).size()) {
+				// System.out.println(map.get(0).size());
+				map.add(row);
+				// } else {
+				// // TODO Catch the exception
+				// throw new IllegalArgumentException(
+				// "Array not square! File incompatible");
+				// }
+
+				// Check if end of file
+				if (sc.hasNext()) {
+					System.out.println(sc.next());
+				}
+				i++;
+			}
+			System.out.println("");
+		} catch (FileNotFoundException e) {
+			// TODO afhandelen!
+			e.printStackTrace();
+>>>>>>> remove
 		} catch (InputMismatchException e) {
 			throw new IllegalArgumentException("Array corrupt");
 
 		}
 	}
 
+<<<<<<< HEAD
 	public int[][] convertMapToArray() {
 
 		mapArray = new int[map.size()][map.size()];
@@ -70,6 +113,8 @@ public class World {
 		return mapArray;
 	}
 
+=======
+>>>>>>> remove
 	public ArrayList<ArrayList<Integer>> getMap() {
 		return map;
 	}

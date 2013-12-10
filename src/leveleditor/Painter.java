@@ -31,11 +31,23 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 
 	// Screen size.
 	private int screenWidth, screenHeight;
+<<<<<<< HEAD
+=======
+	private float buttonSize = screenHeight / 10.0f;
+>>>>>>> remove
 
 	// A GLCanvas is a component that can be added to a frame. The drawing
 	// happens on this component.
 	private GLCanvas canvas;
 
+<<<<<<< HEAD
+=======
+	private static final byte DM_POINT = 0;
+	private static final byte DM_LINE = 1;
+	private static final byte DM_KOCH = 2;
+	private byte drawMode = DM_POINT;
+
+>>>>>>> remove
 	private ArrayList<Point2D.Float> points;
 
 	private int resolution;
@@ -313,6 +325,18 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Help method that uses GL calls to draw a point.
+	 */
+	private void pointOnScreen(GL gl, float x, float y) {
+		gl.glBegin(GL.GL_POINTS);
+		gl.glVertex2f(x, y);
+		gl.glEnd();
+	}
+
+	/**
+>>>>>>> remove
 	 * Help method that uses GL calls to draw a line.
 	 */
 	private void lineOnScreen(GL gl, float x1, float y1, float x2, float y2) {
@@ -355,6 +379,10 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		// Set the new screen size and adjusting the viewport
 		screenWidth = width;
 		screenHeight = height;
+<<<<<<< HEAD
+=======
+		buttonSize = height / 10.0f;
+>>>>>>> remove
 		gl.glViewport(0, 0, screenWidth, screenHeight);
 
 		// Update the projection to an orthogonal projection using the new
@@ -369,6 +397,50 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	 * A function defined in MouseListener. Is called when the pointer is in the GLCanvas, and a mouse button is released.
 	 */
 	public void mouseReleased(MouseEvent me) {
+<<<<<<< HEAD
+=======
+		// Check if the coordinates correspond to any of the top left buttons
+		// boolean buttonPressed = false;
+		// if (me.getY() < buttonSize) {
+		// if (me.getX() < buttonSize) {
+		// // The first button is clicked
+		// points.clear();
+		// drawMode = DM_POINT;
+		// System.out.println("Draw mode: DRAW_POINT");
+		// buttonPressed = true;
+		// } else if (me.getX() < 2 * buttonSize) {
+		// // The second button is clicked
+		// points.clear();
+		// drawMode = DM_LINE;
+		// System.out.println("Draw mode: DRAW_LINE");
+		// buttonPressed = true;
+		// } else if (me.getX() < 3 * buttonSize) {
+		// // The Third button is clicked
+		// points.clear();
+		// drawMode = DM_KOCH;
+		// System.out.println("Draw mode: DRAW_KOCH");
+		// buttonPressed = true;
+		// }
+		// }
+
+		// Only register a new point, if the click did not hit any button
+		// if (!buttonPressed) {
+		//
+		// if (drawMode == DM_POINT && points.size() >= 1) {
+		// // If we're drawing points and one point was stored, reset the
+		// // points list
+		// points.clear();
+		// } else if (drawMode == DM_LINE && points.size() >= 2) {
+		// // If we're drawing lines and two points were already stored,
+		// // reset the points list
+		// points.clear();
+		// } else if (drawMode == DM_KOCH && points.size() >= 3) {
+		// // If we're drawing lines and three points were already stored,
+		// // reset the points list
+		// points.clear();
+		// }
+
+>>>>>>> remove
 		// Add a new point to the points list.
 		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
 		this.changeTile();
