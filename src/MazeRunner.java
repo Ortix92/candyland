@@ -423,7 +423,7 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 */
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
 			boolean deviceChanged) {
-		// GL gl = drawable.getGL();
+		 GL gl = drawable.getGL();
 	}
 
 	/**
@@ -462,8 +462,8 @@ public class MazeRunner extends Frame implements GLEventListener {
 	 * This includes rudimentary collision checking and collision reaction.
 	 */
 	private void updateMovement(int deltaTime) {
-		phworld.update(player);
 		player.update(deltaTime);
+		phworld.update(player);
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
 		Nyan.get(j).update(deltaTime);
