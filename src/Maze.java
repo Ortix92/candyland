@@ -40,7 +40,7 @@ public class Maze implements VisibleObject {
 			world.loadMapFromFile();
 			MAZE_SIZE = world.getMap().size();
 			maze = world.convertMapToArray();
-			System.out.println(maze);
+			System.out.println(MAZE_SIZE);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Falling back to default map due to error");

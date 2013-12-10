@@ -80,12 +80,7 @@ public class UserInput extends Control implements MouseListener,
 			shoot = true;
 		}
 
-		if (SwingUtilities.isLeftMouseButton(event)) {
-			initX = event.getX();
-			initY = event.getY();
-			x = initX;
-			y = initY;
-		}
+		
 
 	}
 
@@ -98,10 +93,7 @@ public class UserInput extends Control implements MouseListener,
 
 	@Override
 	public void mouseDragged(MouseEvent event) {
-		if (SwingUtilities.isLeftMouseButton(event)) {
-			dx = event.getX() - x;
-			dy = event.getY() - y;
-		}
+		mouseMoved(event);
 
 	}
 
