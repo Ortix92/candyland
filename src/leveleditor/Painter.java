@@ -31,23 +31,15 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 
 	// Screen size.
 	private int screenWidth, screenHeight;
-<<<<<<< HEAD
-=======
 	private float buttonSize = screenHeight / 10.0f;
->>>>>>> remove
-
 	// A GLCanvas is a component that can be added to a frame. The drawing
 	// happens on this component.
 	private GLCanvas canvas;
 
-<<<<<<< HEAD
-=======
 	private static final byte DM_POINT = 0;
 	private static final byte DM_LINE = 1;
 	private static final byte DM_KOCH = 2;
 	private byte drawMode = DM_POINT;
-
->>>>>>> remove
 	private ArrayList<Point2D.Float> points;
 
 	private int resolution;
@@ -379,10 +371,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		// Set the new screen size and adjusting the viewport
 		screenWidth = width;
 		screenHeight = height;
-<<<<<<< HEAD
-=======
 		buttonSize = height / 10.0f;
->>>>>>> remove
 		gl.glViewport(0, 0, screenWidth, screenHeight);
 
 		// Update the projection to an orthogonal projection using the new
@@ -397,8 +386,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	 * A function defined in MouseListener. Is called when the pointer is in the GLCanvas, and a mouse button is released.
 	 */
 	public void mouseReleased(MouseEvent me) {
-<<<<<<< HEAD
-=======
 		// Check if the coordinates correspond to any of the top left buttons
 		// boolean buttonPressed = false;
 		// if (me.getY() < buttonSize) {
@@ -440,7 +427,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		// points.clear();
 		// }
 
->>>>>>> remove
 		// Add a new point to the points list.
 		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
 		this.changeTile();

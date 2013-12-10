@@ -10,11 +10,7 @@ import java.util.Scanner;
 public class World {
 	private String worldFile;
 	private ArrayList<ArrayList<Integer>> map = new ArrayList<ArrayList<Integer>>();
-<<<<<<< HEAD
 	private int[][] mapArray;
-=======
->>>>>>> remove
-
 	public World(String absolutePath) {
 		this.worldFile = absolutePath;
 	}
@@ -31,17 +27,12 @@ public class World {
 		return maze;
 	}
 
-<<<<<<< HEAD
 	public void loadMapFromFile() throws FileNotFoundException {
-=======
-	public void loadMapFromFile() {
->>>>>>> remove
 		try {
 			Scanner sc = new Scanner(new File(this.worldFile));
 			sc.useDelimiter("\\s");
 
 			ArrayList<Integer> row;
-<<<<<<< HEAD
 			while (sc.hasNextLine()) {
 
 				String line = sc.nextLine();
@@ -60,7 +51,6 @@ public class World {
 				System.out.println("");
 			}
 		
-=======
 			int i = 0;
 			while (sc.hasNextLine()) {
 				row = new ArrayList<Integer>();
@@ -93,18 +83,17 @@ public class World {
 		} catch (FileNotFoundException e) {
 			// TODO afhandelen!
 			e.printStackTrace();
->>>>>>> remove
 		} catch (InputMismatchException e) {
 			throw new IllegalArgumentException("Array corrupt");
 
 		}
 	}
 
-<<<<<<< HEAD
 	public int[][] convertMapToArray() {
 
 		mapArray = new int[map.size()][map.size()];
-
+		System.out.println(map.size());
+		System.out.println(map);
 		for (int i = 0; i < map.size(); i++) {
 			for (int j = 0; j < map.size(); j++) {
 				mapArray[i][j] = map.get(i).get(j);
@@ -113,8 +102,6 @@ public class World {
 		return mapArray;
 	}
 
-=======
->>>>>>> remove
 	public ArrayList<ArrayList<Integer>> getMap() {
 		return map;
 	}
