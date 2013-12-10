@@ -390,14 +390,14 @@ public class MazeRunner implements GLEventListener {
 			it.next().display(gl);
 		}
 
-		for (int i = 0; i < bullets.size(); i++) {
-			phworld.display(gl, i);
-		}
+		//for (int i = 0; i < bullets.size(); i++) {
+		//	phworld.display(gl, i);
+		
 
-		box.display(gl);
+		//box.display(gl);
 		// Has to be displayed after everything else.
 		// guy.display(gl, player);
-		weapon.display(gl);
+		//weapon.display(gl);
 		//teapot.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);

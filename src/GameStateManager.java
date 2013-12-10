@@ -18,14 +18,19 @@ public class GameStateManager {
 
 	public JFrame setGameState(int state) {
 				
-		if(state == MENU_STATE) {	
-			Game.frame.remove(mazerunner.canvas);
+		if(state == MENU_STATE) {
+			if(this.gameState == MAZE_STATE){
+				Game.frame.remove(mazerunner.canvas);
+			}
 			Game.frame.add(Game.gsm.menu);
 			this.gameState = state;
 		}
 		else if(state == MAZE_STATE) {
-			Game.frame.remove(Game.gsm.menu);
+			if(this.gameState == MENU_STATE) {
+				Game.frame.remove(Game.gsm.menu);
+			}
 			Game.frame.add(mazerunner.canvas); 
+			mazerunner.canvas.setFocusable(true);
 			this.gameState = state;	
 		}		
 		else if(state == LOAD_STATE) {
