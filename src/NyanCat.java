@@ -136,9 +136,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 				moveTo(goalX, goalZ); // move to goalX,goalZ
 			}
 			// when goal is reached choose randomly a new goal:
+<<<<<<< HEAD
 			if ((Math.abs(getLocationX() - goalX) < speed)
 					&& (Math.abs(getLocationZ() - goalZ) < speed)) {
 				goal = true;
+=======
+		if((Math.abs(getLocationX()-goalX)<speed)&&(Math.abs(getLocationZ()-goalZ)<speed)){ 
+			goal=true;
+		}
+
+		if(!SeePlayer()){ // when player is seen, shoot rainbowblocks. 
+			if((i%10==0)&&(j%10==0)){
+				// projectiles: 
+				RainbowBlock Rainbow=new RainbowBlock(this.getLocationX(),this.getLocationY(), this.getLocationZ(), goalX, this.getLocationY(), goalZ,maze);
+				rainbows.add(Rainbow);
+>>>>>>> origin/physicscollision
 			}
 	
 			if (SeePlayer()) { // when player is seen, shoot rainbowblocks.
@@ -412,5 +424,11 @@ public class NyanCat extends GameObject implements VisibleObject {
 			}
 		}
 	}
+	
+public void setHP(int x) {
+	HP = x;
+}
 
 }
+
+

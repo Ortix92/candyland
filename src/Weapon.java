@@ -17,7 +17,7 @@ public class Weapon extends GameObject {
 	private int firecounter = 0;
 
 	public Weapon(int rateoffire) {
-		this.rateoffire = rateoffire;
+		this.rateoffire = 25;
 	}
 
 	public void setshooting(boolean state) {
@@ -211,24 +211,21 @@ public class Weapon extends GameObject {
 		}
 	}
 
-	public Bullet update(int deltaTime, Player player, Camera camera, jbullet phworld) {
+	public boolean update(int deltaTime, Player player, Camera camera, jbullet phworld) {
 		if (control != null) {
 			control.update();
 
 			Weaponsway();
 
 			if (control.getShoot()) {
-				if (Canshoot()) {
-					//phworld.CreateBullet((float)player.getLocationX(), (float)player.getLocationY(), (float)player.getLocationZ());
-						
-				return new Bullet(camera.getVrpX(), camera.getVrpY(),
-					camera.getVrpZ(), player.getHorAngle(),
-					player.getVerAngle());
+				
+				if (Canshoot()) {						
+				return true;
 					}
 				
 			}
 			
 		}
-		return null;
+		return false;
 	}
 }

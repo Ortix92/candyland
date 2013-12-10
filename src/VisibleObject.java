@@ -27,5 +27,5 @@ public interface VisibleObject {
 	 */
 	void display(GL gl);
 
-	void update(int deltaTime);
+	//void update(int deltaTime);
 }
