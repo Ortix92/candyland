@@ -19,18 +19,20 @@ public class RainbowBlock extends GameObject implements VisibleObject {
 	
 	
 	public void update(){
-		// genormaliseerde richtingsvector:
-		double deltaX=(X2-getLocationX())/Math.sqrt(Math.pow(X2-getLocationX(),2)+Math.pow(Z2-getLocationZ(), 2));
-		double deltaZ=(Z2-getLocationZ())/Math.sqrt(Math.pow(X2-getLocationX(),2)+Math.pow(Z2-getLocationZ(), 2));
-		
-		if(maze.isWall(this.getLocationX()+deltaX,this.getLocationZ()+deltaZ)){
-			X2=this.getLocationX()+deltaX;
-			Z2=this.getLocationZ()+deltaZ;
-		}
-		else{
-			this.setLocationX(getLocationX()+deltaX*speed);
-			this.setLocationZ(getLocationZ()+deltaZ*speed);
-			//System.out.println("Updated");
+		if(!UserInput.pause) {
+			// genormaliseerde richtingsvector:
+			double deltaX=(X2-getLocationX())/Math.sqrt(Math.pow(X2-getLocationX(),2)+Math.pow(Z2-getLocationZ(), 2));
+			double deltaZ=(Z2-getLocationZ())/Math.sqrt(Math.pow(X2-getLocationX(),2)+Math.pow(Z2-getLocationZ(), 2));
+			
+			if(maze.isWall(this.getLocationX()+deltaX,this.getLocationZ()+deltaZ)){
+				X2=this.getLocationX()+deltaX;
+				Z2=this.getLocationZ()+deltaZ;
+			}
+			else{
+				this.setLocationX(getLocationX()+deltaX*speed);
+				this.setLocationZ(getLocationZ()+deltaZ*speed);
+				//System.out.println("Updated");
+			}
 		}
 	}
 	

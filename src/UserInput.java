@@ -36,6 +36,7 @@ public class UserInput extends Control implements MouseListener,
 	GLCanvas canvas;
 	private int initX = 200;
 	private int initY = 300;
+	public static boolean pause = false;
 
 	/**
 	 * UserInput constructor.
@@ -96,7 +97,19 @@ public class UserInput extends Control implements MouseListener,
 		} else if (event.getKeyCode() == KeyEvent.VK_F) {
 			shoot = true;
 
+			shoot = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == false) {
+			pause = true;
+		} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
+				|| (event.getKeyCode() == KeyEvent.VK_P && pause == true)) {
+			pause = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_ENTER
+				&& UserInput.pause == true) {
+			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
+			pause = false;
 		}
+
+		System.out.println(Game.gsm.getGameState());
 
 	}
 
