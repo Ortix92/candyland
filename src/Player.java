@@ -146,8 +146,8 @@ public class Player extends GameObject {
 		if (control != null) {
 			control.update();
 
-			setHorAngle(getHorAngle() - control.getdX());
-			setVerAngle(getVerAngle() - control.getdY());
+			setHorAngle(getHorAngle() - control.getdX()*0.5);
+			setVerAngle(getVerAngle() - control.getdY()*0.5);
 
 			if (getHorAngle() >= 360) {
 				setHorAngle(getHorAngle() - 360);
