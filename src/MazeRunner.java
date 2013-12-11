@@ -435,7 +435,7 @@ public class MazeRunner implements GLEventListener {
 				.hasNext();) {
 			it.next().display(gl);
 		}
-
+		phworld.displaymaze(gl);
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
 		}

@@ -17,7 +17,7 @@ public class Weapon extends GameObject {
 	private int firecounter = 0;
 
 	public Weapon(int rateoffire) {
-		this.rateoffire = 25;
+		this.rateoffire = 0;
 	}
 
 	public void setshooting(boolean state) {
