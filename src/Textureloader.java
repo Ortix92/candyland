@@ -26,6 +26,7 @@ public class Textureloader {
     static Texture SkyBox6; // reserve memory for skybox
     static Texture CandyWall;
     static Texture CandyFloor;
+    static Texture PickUp;
 	static boolean load=false; // boolean so that images are only loaded once
 	
 
@@ -69,6 +70,12 @@ public class Textureloader {
 			red=TextureIO.newTexture(image6,false);
 			red.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
 			red.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
+			
+			// Pick Up
+			BufferedImage image7=ImageIO.read(new File("src/PickUp.png"));
+			PickUp=TextureIO.newTexture(image7,false);
+			PickUp.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
+			PickUp.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
 			
 			 // Skybox
             BufferedImage skyboxImage1 = ImageIO.read(new File(
@@ -357,9 +364,9 @@ public static void SkyBox(GL gl) {
                 load = true;
         }
        
-        gl.glPushAttrib(GL.GL_ENABLE_BIT);
+        //gl.glPushAttrib(GL.GL_ENABLE_BIT);
        //gl.glDisable(GL.GL_DEPTH_TEST);
-        gl.glDisable(GL.GL_LIGHTING);
+       // gl.glDisable(GL.GL_LIGHTING);
       //  gl.glDisable(GL.GL_BLEND);
         gl.glDepthMask(false);
         // draws a cube with texture coordinates.
@@ -465,8 +472,8 @@ public static void SkyBox(GL gl) {
 
         gl.glScaled(1 / 100, 1 / 100, 1 / 100);
         gl.glDepthMask(true);
-        gl.glPopAttrib();
-        gl.glEnable(GL.GL_DEPTH_TEST);
+      //  gl.glPopAttrib();
+      //  gl.glEnable(GL.GL_DEPTH_TEST);
 
 }
 			

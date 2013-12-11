@@ -278,8 +278,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 			float size = 1; // measure for the size of Nyan
 			float scalefactor = 2; // measure for scaling of the poptart
 
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, NyanColor, 0); // Nyan
-																		// material.
+			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, NyanColor, 0); // Nyan													// material.
 
 			// POPTART:
 			gl.glScaled(scalefactor, scalefactor, 1); // making the poptart cube

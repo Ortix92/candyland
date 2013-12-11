@@ -70,7 +70,7 @@ public class MazeRunner implements GLEventListener {
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
 	private SkyBox skybox;
-
+	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
 	/*
 	 * **********************************************
 	 * * Initialization methods * **********************************************
@@ -185,10 +185,10 @@ public class MazeRunner implements GLEventListener {
 				
 				0, 0); // horizontal and vertical angle
 
-		
 		    skybox=new SkyBox(player);
 
-		   visibleObjects.add(skybox);
+		//   visibleObjects.add(skybox);
+		  
 		// initialize the NyanCat. 
 		for(int i=0;i<amountofNyans;i++){
 			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
@@ -442,6 +442,7 @@ public class MazeRunner implements GLEventListener {
 				.hasNext();) {
 			it.next().display(gl);
 		}
+		skybox.display(gl);
 		box.display(gl);
 		weapon.display(gl);
 		Orthoview(gl);
@@ -511,13 +512,27 @@ public class MazeRunner implements GLEventListener {
 	 */
 	private void updateMovement(int deltaTime) {
 		player.update(deltaTime);
+		for(int i=0;i<pickup.size();i++){
+			if(!pickup.get(i).getPickup()){
+				pickup.get(i).update(deltaTime);
+				if(pickup.get(i).getPickup()){
+					score=score*2;
+					player.setHealth(player.getHealth()+20);
+				}
+			}
+		}
+	
 		phworld.update(player);
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
 		Nyan.get(j).update(deltaTime);
 		if (phworld.updateNyanhealth(j)) {
+			PickUp pickupnieuw=new PickUp(Nyan.get(j).getLocationX(),Nyan.get(j).getLocationZ(),player);
+			visibleObjects.add(pickupnieuw);
+			pickup.add(pickupnieuw);
 			Nyan.remove(j);
 			score = score + 1000;
+			
 			
 		}
 	}
