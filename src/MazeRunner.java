@@ -54,7 +54,7 @@ public class MazeRunner implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
-	private int amountofNyans = 1; // The amount of NyanCats.
+	private int amountofNyans = 10; // The amount of NyanCats.
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	//	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
@@ -76,6 +76,7 @@ public class MazeRunner implements GLEventListener {
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private Control control = null;
 	private int score = 0;
+	private SkyBox skybox;
 
 	/*
 	 * **********************************************
@@ -191,6 +192,10 @@ public class MazeRunner implements GLEventListener {
 				
 				0, 0); // horizontal and vertical angle
 
+		
+		    skybox=new SkyBox(player);
+
+		   visibleObjects.add(skybox);
 		// initialize the NyanCat. 
 		for(int i=0;i<amountofNyans;i++){
 			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
@@ -431,10 +436,7 @@ public class MazeRunner implements GLEventListener {
 				camera.getVuvZ());
 
 		// Display all the visible objects of MazeRunner.
-		for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
-				.hasNext();) {
-			it.next().display(gl);
-		}
+		
 
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
@@ -443,7 +445,10 @@ public class MazeRunner implements GLEventListener {
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
 		}
-
+		for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
+				.hasNext();) {
+			it.next().display(gl);
+		}
 		box.display(gl);
 		weapon.display(gl);
 		Orthoview(gl);
