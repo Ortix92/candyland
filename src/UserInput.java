@@ -123,7 +123,6 @@ public class UserInput extends Control implements MouseListener,
 			pause = false;
 		}
 
-		System.out.println(Game.gsm.getGameState());
 
 	}
 

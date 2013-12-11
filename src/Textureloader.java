@@ -69,70 +69,88 @@ public class Textureloader {
 			red=TextureIO.newTexture(image6,false);
 			red.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
 			red.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
-			
-			 // Skybox
-            BufferedImage skyboxImage1 = ImageIO.read(new File(
-                            "src/skybox_02.png"));
-            SkyBox1 = TextureIO.newTexture(skyboxImage1, false);
-            SkyBox1.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            SkyBox1.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            // make edges less visible:
-     SkyBox1.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-     SkyBox1.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-
-            BufferedImage skyboxImage2 = ImageIO.read(new File(
-                            "src/skybox_05.png"));
-            SkyBox2 = TextureIO.newTexture(skyboxImage2, false);
-            SkyBox2.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            SkyBox2.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            // make edges less visible:
-            SkyBox2.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-     SkyBox2.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-
-            BufferedImage skyboxImage3 = ImageIO.read(new File(
-                            "src/skybox_07.png"));
-            SkyBox3 = TextureIO.newTexture(skyboxImage3, false);
-            SkyBox3.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            SkyBox3.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            // make edges less visible:
-            SkyBox3.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-     SkyBox3.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-
-            BufferedImage skyboxImage4 = ImageIO.read(new File(
-                            "src/skybox_09.png"));
-            SkyBox4 = TextureIO.newTexture(skyboxImage4, false);
-            SkyBox4.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            SkyBox4.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            // make edges less visible:
-            SkyBox4.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-     SkyBox4.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-
-            BufferedImage skyboxImage5 = ImageIO.read(new File(
-                            "src/skybox_04.png"));
-            SkyBox5 = TextureIO.newTexture(skyboxImage5, false);
-            SkyBox5.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            SkyBox5.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            // make edges less visible:
-            SkyBox5.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-     SkyBox5.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-            BufferedImage skyboxImage6 = ImageIO.read(new File(
-                            "src/skybox_06.png"));
-            SkyBox6 = TextureIO.newTexture(skyboxImage6, false);
-            SkyBox6.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            SkyBox6.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            // make edges less visible:
-            SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-     SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-    
-     BufferedImage CandyWallImage=ImageIO.read(new File("src/CandyWall.png"));
-     CandyWall=TextureIO.newTexture(CandyWallImage,true);
-                    CandyWall.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-                    CandyWall.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-    
-                    BufferedImage CandyFloorImage=ImageIO.read(new File("src/CandyFloor3.png"));
-                    CandyFloor=TextureIO.newTexture(CandyFloorImage,false);
-                    CandyFloor.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-                    CandyFloor.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			//
+			// // Skybox
+			// BufferedImage skyboxImage1 = ImageIO.read(new File(
+			// "src/skybox_02.png"));
+			// SkyBox1 = TextureIO.newTexture(skyboxImage1, false);
+			// SkyBox1.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			// SkyBox1.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// // make edges less visible:
+			// SkyBox1.setTexParameteri(GL.GL_TEXTURE_WRAP_S,
+			// GL.GL_CLAMP_TO_EDGE);
+			// SkyBox1.setTexParameteri(GL.GL_TEXTURE_WRAP_T,
+			// GL.GL_CLAMP_TO_EDGE);
+			//
+			// BufferedImage skyboxImage2 = ImageIO.read(new File(
+			// "src/skybox_05.png"));
+			// SkyBox2 = TextureIO.newTexture(skyboxImage2, false);
+			// SkyBox2.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			// SkyBox2.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// // make edges less visible:
+			// SkyBox2.setTexParameteri(GL.GL_TEXTURE_WRAP_S,
+			// GL.GL_CLAMP_TO_EDGE);
+			// SkyBox2.setTexParameteri(GL.GL_TEXTURE_WRAP_T,
+			// GL.GL_CLAMP_TO_EDGE);
+			//
+			// BufferedImage skyboxImage3 = ImageIO.read(new File(
+			// "src/skybox_07.png"));
+			// SkyBox3 = TextureIO.newTexture(skyboxImage3, false);
+			// SkyBox3.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			// SkyBox3.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// // make edges less visible:
+			// SkyBox3.setTexParameteri(GL.GL_TEXTURE_WRAP_S,
+			// GL.GL_CLAMP_TO_EDGE);
+			// SkyBox3.setTexParameteri(GL.GL_TEXTURE_WRAP_T,
+			// GL.GL_CLAMP_TO_EDGE);
+			//
+			// BufferedImage skyboxImage4 = ImageIO.read(new File(
+			// "src/skybox_09.png"));
+			// SkyBox4 = TextureIO.newTexture(skyboxImage4, false);
+			// SkyBox4.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			// SkyBox4.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// // make edges less visible:
+			// SkyBox4.setTexParameteri(GL.GL_TEXTURE_WRAP_S,
+			// GL.GL_CLAMP_TO_EDGE);
+			// SkyBox4.setTexParameteri(GL.GL_TEXTURE_WRAP_T,
+			// GL.GL_CLAMP_TO_EDGE);
+			//
+			// BufferedImage skyboxImage5 = ImageIO.read(new File(
+			// "src/skybox_04.png"));
+			// SkyBox5 = TextureIO.newTexture(skyboxImage5, false);
+			// SkyBox5.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			// SkyBox5.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// // make edges less visible:
+			// SkyBox5.setTexParameteri(GL.GL_TEXTURE_WRAP_S,
+			// GL.GL_CLAMP_TO_EDGE);
+			// SkyBox5.setTexParameteri(GL.GL_TEXTURE_WRAP_T,
+			// GL.GL_CLAMP_TO_EDGE);
+			// BufferedImage skyboxImage6 = ImageIO.read(new File(
+			// "src/skybox_06.png"));
+			// SkyBox6 = TextureIO.newTexture(skyboxImage6, false);
+			// SkyBox6.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			// SkyBox6.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+			// // make edges less visible:
+			// SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_S,
+			// GL.GL_CLAMP_TO_EDGE);
+			// SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_T,
+			// GL.GL_CLAMP_TO_EDGE);
+			//
+			// BufferedImage CandyWallImage=ImageIO.read(new
+			// File("src/CandyWall.png"));
+			// CandyWall=TextureIO.newTexture(CandyWallImage,true);
+			// CandyWall.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER,
+			// GL.GL_LINEAR);
+			// CandyWall.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER,
+			// GL.GL_LINEAR);
+			//
+			// BufferedImage CandyFloorImage=ImageIO.read(new
+			// File("src/CandyFloor3.png"));
+			// CandyFloor=TextureIO.newTexture(CandyFloorImage,false);
+			// CandyFloor.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER,
+			// GL.GL_LINEAR);
+			// CandyFloor.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER,
+			// GL.GL_LINEAR);
 			} catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("Trolololol"); 
@@ -317,156 +335,156 @@ public class Textureloader {
 	}
 	
 	public static void Floor(GL gl, double size){
-        if (!load) {
-                load();
-                load = true;
-        }
-        
-        CandyFloor.enable();
-        CandyFloor.bind();
- gl.glNormal3d(0, 1, 0);
-                gl.glBegin(GL.GL_QUADS);
-                gl.glTexCoord2f(1,0);
-         gl.glVertex3d(0, 0, 0);
-         gl.glTexCoord2f(1,1);
-         gl.glVertex3d(0, 0, size);
-         gl.glTexCoord2f(0,1);
-         gl.glVertex3d(size, 0, size);
-         gl.glTexCoord2f(0,0);
-         gl.glVertex3d(size, 0, 0);                
-                gl.glEnd();        
-        CandyFloor.disable();
+//        if (!load) {
+//                load();
+//                load = true;
+//        }
+//        
+//        CandyFloor.enable();
+//        CandyFloor.bind();
+// gl.glNormal3d(0, 1, 0);
+//                gl.glBegin(GL.GL_QUADS);
+//                gl.glTexCoord2f(1,0);
+//         gl.glVertex3d(0, 0, 0);
+//         gl.glTexCoord2f(1,1);
+//         gl.glVertex3d(0, 0, size);
+//         gl.glTexCoord2f(0,1);
+//         gl.glVertex3d(size, 0, size);
+//         gl.glTexCoord2f(0,0);
+//         gl.glVertex3d(size, 0, 0);                
+//                gl.glEnd();        
+//        CandyFloor.disable();
 }
 
 public static void Wall(GL gl){
-        if (!load) {
-                load();
-                load = true;
-        }
-        CandyWall.enable();
-        CandyWall.bind();
-        drawCube(gl,false);
-        CandyWall.disable();
+//        if (!load) {
+//                load();
+//                load = true;
+//        }
+//        CandyWall.enable();
+//        CandyWall.bind();
+//        drawCube(gl,false);
+//        CandyWall.disable();
 }
 
 
 public static void SkyBox(GL gl) {
-
-        if (!load) {
-                load();
-                load = true;
-        }
-       
-        gl.glPushAttrib(GL.GL_ENABLE_BIT);
-       //gl.glDisable(GL.GL_DEPTH_TEST);
-        gl.glDisable(GL.GL_LIGHTING);
-      //  gl.glDisable(GL.GL_BLEND);
-        gl.glDepthMask(false);
-        // draws a cube with texture coordinates.
-        // Set size:
-        gl.glScaled(100, 100, 100);
-        // Square 1:
-        SkyBox5.enable();
-        SkyBox5.bind();
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(0, 0, 0);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(1, 0, 0);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(1, 1, 0);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(0, 1, 0);
-
-        gl.glEnd();
-        SkyBox5.disable();
-
-        // Square 2:
-        SkyBox3.enable();
-        SkyBox3.bind();
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(0, 0, 0);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(0, 1, 0);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(0, 1, 1);
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(0, 0, 1);
-
-        gl.glEnd();
-        SkyBox3.disable();
-        // Square 3 BOVENKANT:
-        SkyBox1.enable();
-        SkyBox1.bind();
-
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(0, 1, 0);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(1, 1, 0);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(1, 1, 1);
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(0, 1, 1);
-
-        gl.glEnd();
-
-        SkyBox1.disable();
-
-        // Square 4:
-        SkyBox2.enable();
-        SkyBox2.bind();
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(1, 1, 0);
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(1, 0, 0);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(1, 0, 1);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(1, 1, 1);
-
-        gl.glEnd();
-        SkyBox2.disable();
-
-        // Square 5 ONDERKANT:
-        SkyBox4.enable();
-        SkyBox4.bind();
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(1, 0, 0);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(0, 0, 0);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(0, 0, 1);
-
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(1, 0, 1);
-
-        gl.glEnd();
-        SkyBox4.disable();
-
-        // Square 6:
-        SkyBox6.enable();
-        SkyBox6.bind();
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(0, 1, 1);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(1, 1, 1);
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(1, 0, 1);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(0, 0, 1);
-
-        gl.glEnd();
-        SkyBox6.disable();
-
-        gl.glScaled(1 / 100, 1 / 100, 1 / 100);
-        gl.glDepthMask(true);
-        gl.glPopAttrib();
-        gl.glEnable(GL.GL_DEPTH_TEST);
+//
+//        if (!load) {
+//                load();
+//                load = true;
+//        }
+//       
+//        gl.glPushAttrib(GL.GL_ENABLE_BIT);
+//       //gl.glDisable(GL.GL_DEPTH_TEST);
+//        gl.glDisable(GL.GL_LIGHTING);
+//      //  gl.glDisable(GL.GL_BLEND);
+//        gl.glDepthMask(false);
+//        // draws a cube with texture coordinates.
+//        // Set size:
+//        gl.glScaled(100, 100, 100);
+//        // Square 1:
+//        SkyBox5.enable();
+//        SkyBox5.bind();
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glTexCoord2f(1, 0);
+//        gl.glVertex3f(0, 0, 0);
+//        gl.glTexCoord2f(0, 0);
+//        gl.glVertex3f(1, 0, 0);
+//        gl.glTexCoord2f(0, 1);
+//        gl.glVertex3f(1, 1, 0);
+//        gl.glTexCoord2f(1, 1);
+//        gl.glVertex3f(0, 1, 0);
+//
+//        gl.glEnd();
+//        SkyBox5.disable();
+//
+//        // Square 2:
+//        SkyBox3.enable();
+//        SkyBox3.bind();
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glTexCoord2f(0, 0);
+//        gl.glVertex3f(0, 0, 0);
+//        gl.glTexCoord2f(0, 1);
+//        gl.glVertex3f(0, 1, 0);
+//        gl.glTexCoord2f(1, 1);
+//        gl.glVertex3f(0, 1, 1);
+//        gl.glTexCoord2f(1, 0);
+//        gl.glVertex3f(0, 0, 1);
+//
+//        gl.glEnd();
+//        SkyBox3.disable();
+//        // Square 3 BOVENKANT:
+//        SkyBox1.enable();
+//        SkyBox1.bind();
+//
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glTexCoord2f(0, 0);
+//        gl.glVertex3f(0, 1, 0);
+//        gl.glTexCoord2f(0, 1);
+//        gl.glVertex3f(1, 1, 0);
+//        gl.glTexCoord2f(1, 1);
+//        gl.glVertex3f(1, 1, 1);
+//        gl.glTexCoord2f(1, 0);
+//        gl.glVertex3f(0, 1, 1);
+//
+//        gl.glEnd();
+//
+//        SkyBox1.disable();
+//
+//        // Square 4:
+//        SkyBox2.enable();
+//        SkyBox2.bind();
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glTexCoord2f(1, 1);
+//        gl.glVertex3f(1, 1, 0);
+//        gl.glTexCoord2f(1, 0);
+//        gl.glVertex3f(1, 0, 0);
+//        gl.glTexCoord2f(0, 0);
+//        gl.glVertex3f(1, 0, 1);
+//        gl.glTexCoord2f(0, 1);
+//        gl.glVertex3f(1, 1, 1);
+//
+//        gl.glEnd();
+//        SkyBox2.disable();
+//
+//        // Square 5 ONDERKANT:
+//        SkyBox4.enable();
+//        SkyBox4.bind();
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glTexCoord2f(0, 0);
+//        gl.glVertex3f(1, 0, 0);
+//        gl.glTexCoord2f(0, 1);
+//        gl.glVertex3f(0, 0, 0);
+//        gl.glTexCoord2f(1, 1);
+//        gl.glVertex3f(0, 0, 1);
+//
+//        gl.glTexCoord2f(1, 0);
+//        gl.glVertex3f(1, 0, 1);
+//
+//        gl.glEnd();
+//        SkyBox4.disable();
+//
+//        // Square 6:
+//        SkyBox6.enable();
+//        SkyBox6.bind();
+//        gl.glBegin(GL.GL_QUADS);
+//        gl.glTexCoord2f(0, 1);
+//        gl.glVertex3f(0, 1, 1);
+//        gl.glTexCoord2f(1, 1);
+//        gl.glVertex3f(1, 1, 1);
+//        gl.glTexCoord2f(1, 0);
+//        gl.glVertex3f(1, 0, 1);
+//        gl.glTexCoord2f(0, 0);
+//        gl.glVertex3f(0, 0, 1);
+//
+//        gl.glEnd();
+//        SkyBox6.disable();
+//
+//        gl.glScaled(1 / 100, 1 / 100, 1 / 100);
+//        gl.glDepthMask(true);
+//        gl.glPopAttrib();
+//        gl.glEnable(GL.GL_DEPTH_TEST);
 
 }
 			

@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.media.opengl.GL;
 
@@ -28,6 +30,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
 	private Maze maze;
+	private TimerTask timertask;
+	private Timer timer = new Timer();
 
 	// makes a NyanCat on the location x, y , z, looking in direction h
 	public NyanCat(double x, double y, double z, double h, Player play, Maze m) {
@@ -143,18 +147,31 @@ public class NyanCat extends GameObject implements VisibleObject {
 					&& (Math.abs(getLocationZ() - goalZ) < speed)) {
 				goal = true;
 			}
+		}
 
-			if (SeePlayer()) { // when player is seen, shoot rainbowblocks
-				if ((i % 10 == 0) && (j % 10 == 0)) {
-					// projectiles:
+		fireRainbow(10);
+
+	}
+
+	private void fireRainbow(int rof) {
+
+		if (SeePlayer()) { // when player is seen, shoot rainbowblocks.
+			if (timertask != null)
+				return;
+
+			timertask = new TimerTask() {
+				@Override
+				public void run() {
 					RainbowBlock Rainbow = new RainbowBlock(
-							this.getLocationX(), this.getLocationY(),
-							this.getLocationZ(), goalX, this.getLocationY(),
-							goalZ, maze);
+							NyanCat.this.getLocationX(),
+							NyanCat.this.getLocationY(),
+							NyanCat.this.getLocationZ(), goalX,
+							NyanCat.this.getLocationY(), goalZ, maze);
 					rainbows.add(Rainbow);
 				}
+			};
 
-			}
+			timer.scheduleAtFixedRate(timertask, 0, 1000);
 		}
 	}
 
