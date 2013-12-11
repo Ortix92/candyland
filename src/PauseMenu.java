@@ -1,9 +1,6 @@
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GLCanvas;
-
 import com.sun.opengl.util.j2d.TextRenderer;
 
 public class PauseMenu {

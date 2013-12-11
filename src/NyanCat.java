@@ -101,6 +101,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 	 * @param deltaTime
 	 *            The time in milliseconds since the last update.
 	 */
+	@Override
 	public void update(int deltaTime) {
 		// update Nyans movement.
 		// this.Nyancontrol.update();// does not do anything yet.
@@ -284,7 +285,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 			Textureloader.poptart(gl, size); // texturized cube
 
 			// HEAD:
-			gl.glScaled((float) 1 / (scalefactor), (float) 1 / scalefactor, 1); // unscale
+			gl.glScaled(1 / (scalefactor), 1 / scalefactor, 1); // unscale
 																				// the
 																				// head
 			gl.glScaled(1, 1, (float) 1.5); // scale the head
@@ -293,7 +294,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 			Textureloader.head(gl, glut, size, roundness);
 
 			// EARS:
-			gl.glScaled(1, 1, (float) 1 / 1.5); // unscale ears.
+			gl.glScaled(1, 1, 1 / 1.5); // unscale ears.
 			gl.glTranslated(0, 0.25 * size, 0.25 * size); // location of ear 1
 															// with respect to
 															// head

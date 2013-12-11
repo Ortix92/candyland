@@ -1,10 +1,8 @@
 import java.awt.AWTException;
-import java.awt.Canvas;
 import java.awt.Robot;
 import java.awt.event.*;
 
 import javax.media.opengl.GLCanvas;
-import javax.swing.SwingUtilities;
 
 /**
  * The UserInput class is an extension of the Control class. It also implements

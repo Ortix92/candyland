@@ -1,9 +1,10 @@
-package leveleditor;
+
 
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
@@ -26,7 +27,8 @@ import com.sun.opengl.util.Animator;
  * @author Kang
  * 
  */
-public class Painter extends JPanel implements GLEventListener, MouseListener {
+public class Painter extends JPanel implements GLEventListener, MouseListener,
+		MouseMotionListener {
 	static final long serialVersionUID = 7526471155622776147L;
 
 	// Screen size.
@@ -87,6 +89,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		// Also add this class as mouse listener, allowing this class to react
 		// to mouse events that happen inside the GLCanvas.
 		canvas.addMouseListener(this);
+		canvas.addMouseMotionListener(this);
 
 		// An Animator is a JOGL help class that can be used to make sure our
 		// GLCanvas is continuously being re-rendered. The animator is run on a
@@ -249,13 +252,13 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		return i * this.screenWidth / this.resolution;
 	}
 
-	
 	/**
 	 * Toggle the value of the tile
-	 * @param points2 
+	 * 
+	 * @param points2
 	 */
 
-	private void changeTile() {
+	private void changeTile(boolean isDragged) {
 		if (this.drawMap) {
 
 			int i = 0;
@@ -267,6 +270,9 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 						&& points.get(0).x <= (i + 1) * boxSize) {
 					tileX = i;
 					tileXFound = true;
+				} else if (i > resolution) {
+					System.out.println("Error processing tile change in X");
+					break;
 				} else {
 					i++;
 				}
@@ -281,6 +287,9 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 						&& points.get(0).y <= (i + 1) * boxSize) {
 					tileY = i;
 					tileYFound = true;
+				} else if (i > resolution) {
+					System.out.println("Error processing tile change in Y");
+					break;
 				} else {
 					i++;
 				}
@@ -292,7 +301,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 
 	}
 
-	
 	/**
 	 * Sets the map listener so the map starts drawing
 	 * 
@@ -315,10 +323,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 		this.drawGrid = draw;
 	}
 
-
 	/**
-<<<<<<< HEAD
-=======
 	 * Help method that uses GL calls to draw a point.
 	 */
 	private void pointOnScreen(GL gl, float x, float y) {
@@ -328,7 +333,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	}
 
 	/**
->>>>>>> remove
 	 * Help method that uses GL calls to draw a line.
 	 */
 	private void lineOnScreen(GL gl, float x1, float y1, float x2, float y2) {
@@ -386,50 +390,10 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	 * A function defined in MouseListener. Is called when the pointer is in the GLCanvas, and a mouse button is released.
 	 */
 	public void mouseReleased(MouseEvent me) {
-		// Check if the coordinates correspond to any of the top left buttons
-		// boolean buttonPressed = false;
-		// if (me.getY() < buttonSize) {
-		// if (me.getX() < buttonSize) {
-		// // The first button is clicked
-		// points.clear();
-		// drawMode = DM_POINT;
-		// System.out.println("Draw mode: DRAW_POINT");
-		// buttonPressed = true;
-		// } else if (me.getX() < 2 * buttonSize) {
-		// // The second button is clicked
-		// points.clear();
-		// drawMode = DM_LINE;
-		// System.out.println("Draw mode: DRAW_LINE");
-		// buttonPressed = true;
-		// } else if (me.getX() < 3 * buttonSize) {
-		// // The Third button is clicked
-		// points.clear();
-		// drawMode = DM_KOCH;
-		// System.out.println("Draw mode: DRAW_KOCH");
-		// buttonPressed = true;
-		// }
-		// }
-
-		// Only register a new point, if the click did not hit any button
-		// if (!buttonPressed) {
-		//
-		// if (drawMode == DM_POINT && points.size() >= 1) {
-		// // If we're drawing points and one point was stored, reset the
-		// // points list
-		// points.clear();
-		// } else if (drawMode == DM_LINE && points.size() >= 2) {
-		// // If we're drawing lines and two points were already stored,
-		// // reset the points list
-		// points.clear();
-		// } else if (drawMode == DM_KOCH && points.size() >= 3) {
-		// // If we're drawing lines and three points were already stored,
-		// // reset the points list
-		// points.clear();
-		// }
 
 		// Add a new point to the points list.
 		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
-		this.changeTile();
+		this.changeTile(false);
 
 		// Clear points after tile has been set
 		points.clear();
@@ -459,5 +423,18 @@ public class Painter extends JPanel implements GLEventListener, MouseListener {
 	public void mousePressed(MouseEvent arg0) {
 		// Not needed.
 
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent event) {
+		points.add(new Point2D.Float(event.getX(), screenHeight - event.getY()));
+		this.changeTile(true);
+
+		// Clear points after tile has been set
+		points.clear();
 	}
 }

@@ -21,6 +21,7 @@ public class Game extends JFrame implements KeyListener {
 		UserInput input;
 		
 		frame.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}

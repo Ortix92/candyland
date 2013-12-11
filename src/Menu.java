@@ -1,6 +1,5 @@
 import java.io.File;
 
-import javax.media.opengl.GLCanvas;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -62,28 +61,31 @@ class Menu extends JPanel {
 
 			final int j = i;
 			knoppen[i].addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
 				public void mouseEntered(java.awt.event.MouseEvent evt) {
 					String name = knopnamen[j];
 					String imageplace = "images/menu/" + name + "_active.png";
 					knoppen[j].setIcon(new ImageIcon(imageplace));
 				}
 
+				@Override
 				public void mouseExited(java.awt.event.MouseEvent evt) {
 					String name = knopnamen[j];
 					String imageplace = "images/menu/" + name + ".png";
 					knoppen[j].setIcon(new ImageIcon(imageplace));
 				}
 
+				@Override
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
 					Sound.play("sounds/sonic_ring.wav");
 
 					switch (j) {
 						case 0:
-							Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
+							Game.frame = Game.gsm.setGameState(GameStateManager.MAZE_STATE);
 						case 1:
 							break;
 						case 2:
-							break;
+							Game.frame = Game.gsm.setGameState(GameStateManager.EDITOR_STATE);
 						case 3:
 							break;
 						case 4:
@@ -100,6 +102,7 @@ class Menu extends JPanel {
 		public static synchronized void play(final String fileName) {
 
 			new Thread(new Runnable() {
+				@Override
 				public void run() {
 					try {
 						Clip clip = AudioSystem.getClip();

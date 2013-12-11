@@ -2,8 +2,6 @@ import java.io.FileNotFoundException;
 
 import javax.media.opengl.GL;
 
-import leveleditor.World;
-
 import com.sun.opengl.util.GLUT;
 
 /**
@@ -118,6 +116,7 @@ public class Maze implements VisibleObject {
 		return (int) Math.floor(z / SQUARE_SIZE);
 	}
 
+	@Override
 	public void display(GL gl) {
 		GLUT glut = new GLUT();
 
@@ -170,6 +169,7 @@ public class Maze implements VisibleObject {
 		gl.glEnd();
 	}
 
+	@Override
 	public void update(int deltaTime) {
 	}
 

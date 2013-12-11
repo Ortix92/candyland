@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
@@ -13,7 +10,6 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 import loader.Model;
-import loader.OBJLoader;
 
 /**
  * MazeRunner is the base class of the game, functioning as the view controller
@@ -321,6 +317,7 @@ public class MazeRunner implements GLEventListener {
 	 * It is <b>very important</b> to realize that there should be no drawing at
 	 * all in this method.
 	 */
+	@Override
 	public void init(GLAutoDrawable drawable) {
 		drawable.setGL(new DebugGL(drawable.getGL())); // We set the OpenGL
 														// pipeline to Debugging
@@ -373,6 +370,7 @@ public class MazeRunner implements GLEventListener {
 	 * specifies how that object should be drawn. The object is passed a
 	 * reference of the GL context, so it knows where to draw.
 	 */
+	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
@@ -387,7 +385,7 @@ public class MazeRunner implements GLEventListener {
 		
 		// Nyan.update(deltaTime);
 		
-		if(!input.pause) {
+		if(!UserInput.pause) {
 			updateMovement(deltaTime);
 			updateCamera();
 			updatePhysics();
@@ -419,7 +417,7 @@ public class MazeRunner implements GLEventListener {
 		Orthoview(gl);
 		DrawHud(gl);
 		 
-		if(input.pause) {
+		if(UserInput.pause) {
 		pause.display(gl);
 		}
 		Projectview(gl);
@@ -436,6 +434,7 @@ public class MazeRunner implements GLEventListener {
 	 * Implemented through GLEventListener. Seeing as this does not happen very
 	 * often, we leave this unimplemented.
 	 */
+	@Override
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
 			boolean deviceChanged) {
 		// GL gl = drawable.getGL();
@@ -450,6 +449,7 @@ public class MazeRunner implements GLEventListener {
 	 * associates with it). It adjust the projection matrix to accomodate the
 	 * new shape.
 	 */
+	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
 		System.out.println("Reschape");

@@ -1,11 +1,6 @@
-import java.util.ArrayList;
-
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
-import com.bulletphysics.collision.dispatch.CollisionFlags;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -202,7 +197,8 @@ public class KinematicMotionState extends MotionState {
     }
 
    
-    public void setWorldTransform(Transform worldTrans) {
+    @Override
+	public void setWorldTransform(Transform worldTrans) {
         worldTransform.set(worldTrans);
     }
 }
