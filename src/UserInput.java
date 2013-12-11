@@ -34,8 +34,8 @@ public class UserInput extends Control implements MouseListener,
 	int sx = 0;
 	int sy = 0;
 	GLCanvas canvas;
-	private int initX = 500;
-	private int initY = 300;
+	private int initX;
+	private int initY;
 	public static boolean pause = false;
 
 	/**
@@ -49,6 +49,8 @@ public class UserInput extends Control implements MouseListener,
 	 */
 	public UserInput(GLCanvas canvas) {
 		this.canvas = canvas;
+		initX = canvas.getWidth()/2;
+		initY = canvas.getHeight()/2;
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 		canvas.addKeyListener(this);

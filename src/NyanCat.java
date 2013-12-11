@@ -144,7 +144,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 				goal = true;
 			}
 
-			if (!SeePlayer()) { // when player is seen, shoot rainbowblocks.
+			if (SeePlayer()) { // when player is seen, shoot rainbowblocks
 				if ((i % 10 == 0) && (j % 10 == 0)) {
 					// projectiles:
 					RainbowBlock Rainbow = new RainbowBlock(
@@ -152,17 +152,6 @@ public class NyanCat extends GameObject implements VisibleObject {
 							this.getLocationZ(), goalX, this.getLocationY(),
 							goalZ, maze);
 					rainbows.add(Rainbow);
-				}
-
-				if (SeePlayer()) { // when player is seen, shoot rainbowblocks.
-					if ((i % 10 == 0) && (j % 10 == 0)) {
-						// projectiles:
-						RainbowBlock Rainbow = new RainbowBlock(
-								this.getLocationX(), this.getLocationY(),
-								this.getLocationZ(), goalX,
-								this.getLocationY(), goalZ, maze);
-						rainbows.add(Rainbow);
-					}
 				}
 
 			}

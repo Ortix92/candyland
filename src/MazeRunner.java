@@ -54,28 +54,22 @@ public class MazeRunner implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
-	private int amountofNyans = 1; // The amount of NyanCats.
+	private int amountofNyans = 10; // The amount of NyanCats.
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	//	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
 	private UserInput input; // The user input object that controls the player.
-	private NyanCatInput NyanInput; // the input that controls Nyan (yet to be
-									// determined)
+	// determined)
 	private Maze maze; // The maze.
 	private long previousTime = Calendar.getInstance().getTimeInMillis(); // Used
-																			// to
-																			// calculate
-																			// elapsed
-																			// time.
-	private Model teapot;
-	private Guy guy;
+																			private Guy guy;
 	private Weapon weapon;
 	private TestBox box;
 	private PauseMenu pause;
 	private jbullet phworld;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private Control control = null;
 	private int score = 0;
+	private SkyBox skybox;
 
 	/*
 	 * **********************************************
@@ -177,7 +171,7 @@ public class MazeRunner implements GLEventListener {
 		phworld = new jbullet(amountofNyans);
 	
 		 
-		NyanInput=new NyanCatInput(canvas);
+		new NyanCatInput(canvas);
 	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
 		// Initialize the player.
 		player = new Player(
@@ -191,6 +185,10 @@ public class MazeRunner implements GLEventListener {
 				
 				0, 0); // horizontal and vertical angle
 
+		
+		    skybox=new SkyBox(player);
+
+		   visibleObjects.add(skybox);
 		// initialize the NyanCat. 
 		for(int i=0;i<amountofNyans;i++){
 			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
@@ -431,10 +429,7 @@ public class MazeRunner implements GLEventListener {
 				camera.getVuvZ());
 
 		// Display all the visible objects of MazeRunner.
-		for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
-				.hasNext();) {
-			it.next().display(gl);
-		}
+		
 
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
@@ -443,7 +438,10 @@ public class MazeRunner implements GLEventListener {
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
 		}
-
+		for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
+				.hasNext();) {
+			it.next().display(gl);
+		}
 		box.display(gl);
 		weapon.display(gl);
 		Orthoview(gl);
@@ -468,7 +466,7 @@ public class MazeRunner implements GLEventListener {
 	 */
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
 			boolean deviceChanged) {
-		 GL gl = drawable.getGL();
+		 drawable.getGL();
 	}
 
 	/**

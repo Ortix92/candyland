@@ -24,6 +24,7 @@ import javax.swing.JSlider;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.JPanel;
 
 public class editor {
 
@@ -34,6 +35,7 @@ public class editor {
 	private int editorPanelHeight = 600;
 	private Painter editorPanel;
 	private JSlider resolutionSlider;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -105,27 +107,46 @@ public class editor {
 		JMenuItem mntmNyangroep = new JMenuItem("NYANGROEP8");
 		mnAbout.add(mntmNyangroep);
 
-		// Load maze button
-		JButton btnLoadMaze = new JButton("Load Maze");
-		btnLoadMaze.setAction(action);
-		btnLoadMaze.setText("Load Maze");
+		panel = new JPanel();
 
-		JLabel lblVisualEditor = new JLabel("Visual Editor");
+		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
+				Alignment.TRAILING).addGroup(
+				Alignment.LEADING,
+				groupLayout
+						.createSequentialGroup()
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 1062,
+								GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(60, Short.MAX_VALUE)));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
+				Alignment.LEADING).addComponent(panel,
+				GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE));
+		panel.setLayout(null);
 
 		// New Maze Button
 		JButton btnNewMaze = new JButton("New Maze");
+		btnNewMaze.setBounds(47, 173, 126, 45);
+		panel.add(btnNewMaze);
 		btnNewMaze.setAction(action);
 		btnNewMaze.setText("New Maze");
 
-		// JOGL Panel
-		this.editorPanel = new Painter(editorPanelWidth, editorPanelHeight);
+		// Load maze button
+		JButton btnLoadMaze = new JButton("Load Maze");
+		btnLoadMaze.setBounds(47, 229, 126, 41);
+		panel.add(btnLoadMaze);
+		btnLoadMaze.setAction(action);
+		btnLoadMaze.setText("Load Maze");
 
 		// Export the maze
 		JButton btnExportMaze = new JButton("Export Maze");
+		btnExportMaze.setBounds(47, 281, 126, 53);
+		panel.add(btnExportMaze);
 		btnExportMaze.setAction(action);
 		btnExportMaze.setText("Export Maze");
 
 		resolutionSlider = new JSlider();
+		resolutionSlider.setBounds(242, 148, 43, 200);
+		panel.add(resolutionSlider);
 		resolutionSlider.setOrientation(SwingConstants.VERTICAL);
 		resolutionSlider.setMaximum(50);
 		resolutionSlider.setToolTipText("Select the resolution of the grid. ");
@@ -137,136 +158,21 @@ public class editor {
 		resolutionSlider.setMajorTickSpacing(20);
 
 		JLabel lblOptions = new JLabel("Options");
+		lblOptions.setBounds(70, 148, 37, 14);
+		panel.add(lblOptions);
 
 		JLabel lblGridResolution = new JLabel("Grid Resolution");
+		lblGridResolution.setBounds(217, 123, 72, 14);
+		panel.add(lblGridResolution);
 
-		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(23)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								btnNewMaze,
-																								GroupLayout.PREFERRED_SIZE,
-																								120,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								btnLoadMaze,
-																								GroupLayout.PREFERRED_SIZE,
-																								120,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								btnExportMaze,
-																								GroupLayout.PREFERRED_SIZE,
-																								120,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addGap(18)
-																		.addComponent(
-																				resolutionSlider,
-																				GroupLayout.PREFERRED_SIZE,
-																				212,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(58)
-																		.addComponent(
-																				lblOptions)
-																		.addGap(119)
-																		.addComponent(
-																				lblGridResolution)))
-										.addPreferredGap(
-												ComponentPlacement.RELATED, 53,
-												Short.MAX_VALUE)
-										.addComponent(editorPanel,
-												GroupLayout.PREFERRED_SIZE,
-												600, GroupLayout.PREFERRED_SIZE)
-										.addGap(38))
-						.addGroup(
-								groupLayout.createSequentialGroup()
-										.addContainerGap(695, Short.MAX_VALUE)
-										.addComponent(lblVisualEditor)
-										.addGap(311)));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(23)
-																		.addComponent(
-																				lblVisualEditor)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				editorPanel,
-																				GroupLayout.PREFERRED_SIZE,
-																				600,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(71)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.BASELINE)
-																						.addComponent(
-																								lblOptions)
-																						.addComponent(
-																								lblGridResolution))
-																		.addGap(18)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								resolutionSlider,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												btnNewMaze,
-																												GroupLayout.PREFERRED_SIZE,
-																												64,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addGap(18)
-																										.addComponent(
-																												btnLoadMaze,
-																												GroupLayout.PREFERRED_SIZE,
-																												64,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addGap(18)
-																										.addComponent(
-																												btnExportMaze,
-																												GroupLayout.PREFERRED_SIZE,
-																												64,
-																												GroupLayout.PREFERRED_SIZE)))))
-										.addContainerGap(48, Short.MAX_VALUE)));
+		// JOGL Panel
+		this.editorPanel = new Painter(editorPanelWidth, editorPanelHeight);
+		editorPanel.setBounds(430, 44, 610, 610);
+		panel.add(editorPanel);
+
+		JLabel lblVisualEditor = new JLabel("Visual Editor");
+		lblVisualEditor.setBounds(717, 19, 58, 14);
+		panel.add(lblVisualEditor);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
