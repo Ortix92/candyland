@@ -59,22 +59,15 @@ public class MazeRunner implements GLEventListener {
 	//	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
 	private UserInput input; // The user input object that controls the player.
-	private NyanCatInput NyanInput; // the input that controls Nyan (yet to be
-									// determined)
+	// determined)
 	private Maze maze; // The maze.
 	private long previousTime = Calendar.getInstance().getTimeInMillis(); // Used
-																			// to
-																			// calculate
-																			// elapsed
-																			// time.
-	private Model teapot;
-	private Guy guy;
+																			private Guy guy;
 	private Weapon weapon;
 	private TestBox box;
 	private PauseMenu pause;
 	private jbullet phworld;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private Control control = null;
 	private int score = 0;
 	private SkyBox skybox;
 
@@ -178,7 +171,7 @@ public class MazeRunner implements GLEventListener {
 		phworld = new jbullet(amountofNyans);
 	
 		 
-		NyanInput=new NyanCatInput(canvas);
+		new NyanCatInput(canvas);
 	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
 		// Initialize the player.
 		player = new Player(
@@ -473,7 +466,7 @@ public class MazeRunner implements GLEventListener {
 	 */
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
 			boolean deviceChanged) {
-		 GL gl = drawable.getGL();
+		 drawable.getGL();
 	}
 
 	/**
