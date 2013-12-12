@@ -149,10 +149,10 @@ public class jbullet {
 		nyanstate.setWorldTransform(nyan);
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(
-				4000, nyanstate, nyanshape, Inertia);
+				5, nyanstate, nyanshape, Inertia);
 		RigidBody nyanbody = new RigidBody(nyaninfo);
-		nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
-				| CollisionFlags.KINEMATIC_OBJECT);
+//		nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
+//				| CollisionFlags.KINEMATIC_OBJECT);
 		nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		dynamicworld.addRigidBody(nyanbody);
 		nyanies.add(nyanbody);

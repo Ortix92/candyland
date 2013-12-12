@@ -268,16 +268,15 @@ public class MazeRunner implements GLEventListener {
 	}
 	
 	public void drawExit(GL gl) {
+		GLUT glut = new GLUT();
 		gl.glPushMatrix();
-		gl.glLoadIdentity();
-		gl.glTranslatef((float)player.locationX, (float)player.locationY-2, (float)player.locationZ);
-		gl.glBegin (GL.GL_QUADS);
-		gl.glVertex3f (0,0,10);
-		gl.glVertex3f (0,0,10);
-		gl.glVertex3f (10,10,10);
-		gl.glVertex3f (20,20,20);
-		
-		gl.glEnd();
+		float wallColour[] = { 14.5f, 0.0f, 3f, 1.0f }; // The walls are
+		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
+//		gl.glLoadIdentity();
+		double angle = Math.tan((player.locationZ - 200)/(player.locationX - 50));
+		gl.glRotatef((float)angle, 0, 0, 0f);
+		gl.glTranslated(player.getLocationX() + 10, -2.0, player.getLocationZ() + 2);
+		glut.glutSolidCube(5f);
 		gl.glPopMatrix();
 	}
 	
@@ -427,7 +426,6 @@ public class MazeRunner implements GLEventListener {
 		long currentTime = now.getTimeInMillis();
 		int deltaTime = (int) (currentTime - previousTime);
 		previousTime = currentTime;
-
 		// Update any movement since last frame.
 		
 		// Nyan.update(deltaTime);
@@ -451,7 +449,7 @@ public class MazeRunner implements GLEventListener {
 				.hasNext();) {
 			it.next().display(gl);
 		}
-		phworld.displaymaze(gl);
+	//	phworld.displaymaze(gl);
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
 		}
@@ -460,8 +458,8 @@ public class MazeRunner implements GLEventListener {
 			Nyan.get(j).display(gl);
 		}
 
-		box.display(gl);
-		weapon.display(gl);
+	//	box.display(gl);
+	//	weapon.display(gl);
 		drawExit(gl);
 		Orthoview(gl);
 		DrawHud(gl);
