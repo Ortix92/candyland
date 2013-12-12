@@ -132,7 +132,6 @@ public class jbullet {
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
 							1, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
-					mazebody.setFriction(0f);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
 				}

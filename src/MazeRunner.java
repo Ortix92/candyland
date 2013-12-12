@@ -3,8 +3,10 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+import javax.vecmath.Vector3f;
 
 import com.sun.opengl.util.*;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
@@ -265,6 +267,20 @@ public class MazeRunner implements GLEventListener {
 		gl.glPopMatrix();
 	}
 	
+	public void drawExit(GL gl) {
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		gl.glTranslatef((float)player.locationX, (float)player.locationY-2, (float)player.locationZ);
+		gl.glBegin (GL.GL_QUADS);
+		gl.glVertex3f (0,0,10);
+		gl.glVertex3f (0,0,10);
+		gl.glVertex3f (10,10,10);
+		gl.glVertex3f (20,20,20);
+		
+		gl.glEnd();
+		gl.glPopMatrix();
+	}
+	
 	public void drawPause(GL gl) {
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
@@ -446,6 +462,7 @@ public class MazeRunner implements GLEventListener {
 
 		box.display(gl);
 		weapon.display(gl);
+		drawExit(gl);
 		Orthoview(gl);
 		DrawHud(gl);
 		 
