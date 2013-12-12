@@ -59,7 +59,7 @@ public class jbullet {
 	private int amountofNyans;
 	private RigidBody boxRigidBody;
 	private ObjectArrayList<RigidBody> bullets;
-	private ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
+	private static ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
 	private RigidBody groundbody;
 	private RigidBody playar;
 
@@ -253,6 +253,19 @@ for (int i =0; i < mazeblocks.size(); i++) {
 	}
 	}
 
+	public static boolean isNewWall(double X,double Z){
+		for (int i =0; i < mazeblocks.size(); i++) {
+				Transform trans = new Transform();
+				mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+				float x = trans.origin.x;
+				float z = trans.origin.z;
+				if((Math.abs(X-x)<3)&&(Math.abs(Z-z)<3)){
+					return true;
+				}
+		}
+		return false;
+	}
+	
 	public void display(GL gl, int i) {
 		GLUT glut = new GLUT();
 		float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };

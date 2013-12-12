@@ -22,8 +22,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 															// funz.
 	private int HP = 100; // HealthPoints :D
 	private boolean goal = false; // has Nyan reached its goal yet?
-	private double goalX = 0; // where Nyan wants to go
-	private double goalZ = 0;
+	double goalX = 0; // where Nyan wants to go
+	double goalZ = 0;
 	boolean dead = false; // whether Nyan is dead or not.
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
@@ -204,7 +204,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 					for (double j = 0; j < Math.abs(player.getLocationX()
 							- this.getLocationX()); j = j + maze.SQUARE_SIZE
 							/ 2) {
-						if (maze.isWall(this.getLocationX() + i * deltaX,
+						if (jbullet.isNewWall(this.getLocationX() + i * deltaX,
 								this.getLocationZ() + j * deltaZ)) {
 							return false;
 						}
@@ -226,9 +226,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 				/ Math.sqrt(Math.pow(X - getLocationX(), 2)
 						+ Math.pow(Z - getLocationZ(), 2));
 
-		if (maze.isWall(this.getLocationX() + deltaX, this.getLocationZ()
-				+ deltaZ)) {
-			goal = true;
+		if (jbullet.isNewWall(this.getLocationX() + deltaX*speed, this.getLocationZ()
+				+ deltaZ*speed)) {
+			if (!jbullet.isNewWall(this.getLocationX() - deltaX*speed, this.getLocationZ()
+					+ deltaZ*speed)) {
+				moveTo(this.getLocationX()-deltaX*speed,this.getLocationZ()+deltaZ*speed);
+			}
+			else if (!jbullet.isNewWall(this.getLocationX() + deltaX*speed, this.getLocationZ()
+					- deltaZ*speed)) {
+				moveTo(this.getLocationX()+deltaX*speed,this.getLocationZ()-deltaZ*speed);
+				
+			}
+			else if (!jbullet.isNewWall(this.getLocationX() - deltaX*speed, this.getLocationZ()
+					- deltaZ*speed)) {
+				moveTo(this.getLocationX()-deltaX*speed,this.getLocationZ()-deltaZ*speed);
+			}
 		}
 
 		if (!goal) {

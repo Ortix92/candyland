@@ -56,7 +56,7 @@ public class MazeRunner implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
-	private int amountofNyans = 1; // The amount of NyanCats.
+	private int amountofNyans = 10; // The amount of NyanCats.
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	//	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
@@ -534,6 +534,12 @@ public class MazeRunner implements GLEventListener {
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
 		Nyan.get(j).update(deltaTime);
+		if(Nyan.get(j).SeePlayer()){
+			for(int i=0;i<Nyan.size();i++){
+				Nyan.get(i).goalX=player.getLocationX();
+				Nyan.get(i).goalZ=player.getLocationZ();
+			}
+		}
 		if (phworld.updateNyanhealth(j)) {
 			Nyan.remove(j);
 			score = score + 1000;
