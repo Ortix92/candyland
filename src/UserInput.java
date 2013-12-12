@@ -110,8 +110,8 @@ public class UserInput extends Control implements MouseListener,
 			left = true;
 		} else if (event.getKeyCode() == KeyEvent.VK_D) {
 			right = true;
-		} else if (event.getKeyCode() == KeyEvent.VK_F) {
-			// shoot = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {
+			jump = true;
 		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == false) {
 			pause = true;
 		} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
@@ -122,9 +122,6 @@ public class UserInput extends Control implements MouseListener,
 			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
 			pause = false;
 		}
-
-		System.out.println(Game.gsm.getGameState());
-
 	}
 
 	@Override
@@ -137,8 +134,8 @@ public class UserInput extends Control implements MouseListener,
 			left = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_D) {
 			right = false;
-		} else if (event.getKeyCode() == KeyEvent.VK_F) {
-			// shoot = false;
+		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {	
+			jump = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 		}
 

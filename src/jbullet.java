@@ -98,8 +98,7 @@ public class jbullet {
 
 		dynamicworld.addRigidBody(groundbody);
 
-		CollisionShape boxshape = new BoxShape(
-				new Vector3f(1.25f, 1.25f, 1.25f));
+		CollisionShape boxshape = new BoxShape(new Vector3f(15f, 15f, 15f));
 		Transform p = new Transform();
 		p.setRotation(new Quat4f(0, 0, 0, 1));
 		p.origin.set(27.5f, 5f, 27.5f);
@@ -110,7 +109,7 @@ public class jbullet {
 		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
 				mass, boxMotionState, boxshape, Inertia);
 		boxRigidBody = new RigidBody(boxRigidBodyInfo);
-		dynamicworld.addRigidBody(boxRigidBody);
+//		dynamicworld.addRigidBody(boxRigidBody);
 
 	}
 
@@ -129,7 +128,7 @@ public class jbullet {
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							100000, mazeMotionState, mazeshape, Inertia);
+							30000, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
 					mazebody.setFriction(0f);
 					dynamicworld.addRigidBody(mazebody);
@@ -148,10 +147,10 @@ public class jbullet {
 		nyanstate.setWorldTransform(nyan);
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(
-				4000, nyanstate, nyanshape, Inertia);
+				40, nyanstate, nyanshape, Inertia);
 		RigidBody nyanbody = new RigidBody(nyaninfo);
-		nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
-				| CollisionFlags.KINEMATIC_OBJECT);
+	//	nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
+	//			| CollisionFlags.KINEMATIC_OBJECT);
 		nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		dynamicworld.addRigidBody(nyanbody);
 		nyanies.add(nyanbody);
@@ -160,10 +159,11 @@ public class jbullet {
 
 	public void CreateBullet(float x, float y, float z, float verAngle,
 			float horAngle, Camera camera) {
-		CollisionShape bulletshape = new SphereShape(0.5f);
+		CollisionShape bulletshape = new SphereShape(10f);
 		Transform p = new Transform();
 		p.setRotation(new Quat4f(horAngle, verAngle, 0, 1));
-		p.origin.set(x - (float) Math.sin(Math.toRadians(horAngle)), y, z - (float)Math.cos(Math.toRadians(horAngle)));
+		p.origin.set(x - (float) Math.sin(Math.toRadians(horAngle)), y, z
+				- (float) Math.cos(Math.toRadians(horAngle)));
 		DefaultMotionState bulletmotion = new DefaultMotionState();
 		bulletmotion.setWorldTransform(p);
 		float mass = 0.002f;
@@ -172,7 +172,7 @@ public class jbullet {
 		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
 				mass, bulletmotion, bulletshape, Inertia);
 		RigidBody bullet = new RigidBody(boxRigidBodyInfo);
-		bullet.setLinearVelocity(new Vector3f(35 * (-(float) Math.sin(Math
+		bullet.applyCentralImpulse(new Vector3f(35 * (-(float) Math.sin(Math
 				.toRadians(horAngle))), 35 * (float) Math.sin(Math
 				.toRadians(verAngle)), 35 * (-(float) Math.cos(Math
 				.toRadians(horAngle)))));
@@ -201,13 +201,13 @@ public class jbullet {
 		// ghostobject.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo playerRigidBody = new RigidBodyConstructionInfo(
-				2, playerstate, playershape, Inertia);
+				20, playerstate, playershape, Inertia);
 		playar = new RigidBody(playerRigidBody);
 		// float stepHeight = 0.35f;
 		// player = new KinematicCharacterController(ghostobject, capsule,
 		// stepHeight);
 		playar.setFriction(5f);
-		playar.setLinearVelocity(new Vector3f(0, 0, 0));
+		playar.applyCentralImpulse(new Vector3f(0, 0, 0));
 		playar.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		// dynamicworld.addCollisionObject(ghostobject,
 		// CollisionFilterGroups.CHARACTER_FILTER,
@@ -246,7 +246,7 @@ public class jbullet {
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
 
-		glut.glutSolidCube(0.25f);
+		glut.glutSolidCube(05f);
 		gl.glPopMatrix();
 	}
 
@@ -277,7 +277,6 @@ public class jbullet {
 		play.setLocationX(transform.origin.x);
 		play.setLocationY(transform.origin.y);
 		play.setLocationZ(transform.origin.z);
-
 		return play;
 	}
 
@@ -355,73 +354,103 @@ public class jbullet {
 	}
 
 	public void update(Player play) {
-		// if (playar.getLinearVelocity(new Vector3f(0,0,0)).length() <= 15) {
-		if (play.getControl().getForward()) {
+		Transform trans = playar.getWorldTransform(new Transform());
+				
+		if (play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {		
+			playar.applyCentralImpulse(new Vector3f(0,80f,0));
+		}
+		if (play.getControl().getForward() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
 			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math
-					.toRadians(play.getHorAngle())) * 10f, 0, -(float) Math
+					.toRadians(play.getHorAngle())) * 10f, 0f, -(float) Math
 					.cos(Math.toRadians(play.getHorAngle())) * 10f));
 		}
-		if (play.getControl().getBack()) {
+		if (play.getControl().getBack() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
 			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math
 					.toRadians(play.getHorAngle())) * 10f, 0, (float) Math
 					.cos(Math.toRadians(play.getHorAngle())) * 10f));
 		}
-		if (play.getControl().getLeft()) {
+		if (play.getControl().getLeft() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
 			playar.setLinearVelocity(new Vector3f(-(float) Math.cos(Math
 					.toRadians(play.getHorAngle())) * 10f, 0, (float) Math
 					.sin(Math.toRadians(play.getHorAngle())) * 10f));
 		}
-		if (play.getControl().getRight()) {
+		if (play.getControl().getRight() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
 			playar.setLinearVelocity(new Vector3f((float) Math.cos(Math
 					.toRadians(play.getHorAngle())) * 10f, 0, -(float) Math
 					.sin(Math.toRadians(play.getHorAngle())) * 10f));
 		}
-		if (play.getControl().getForward() && play.getControl().getRight()) {
-			playar.setLinearVelocity(new Vector3f(
-					-(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, -(float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
+		if (play.getControl().getForward() && play.getControl().getRight() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math
+					.toRadians(play.getHorAngle()))
+					* 05f
+					+ (float) Math.cos(Math.toRadians(play.getHorAngle()))
+					* 05f, 0, -(float) Math.cos(Math.toRadians(play
+					.getHorAngle()))
+					* 05f
+					- (float) Math.sin(Math.toRadians(play.getHorAngle()))
+					* 05f));
 		}
-		if (play.getControl().getForward() && play.getControl().getLeft()) {
-			playar.setLinearVelocity(new Vector3f(
-					-(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, -(float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
+		if (play.getControl().getForward() && play.getControl().getLeft() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math
+					.toRadians(play.getHorAngle()))
+					* 05f
+					- (float) Math.cos(Math.toRadians(play.getHorAngle()))
+					* 05f, 0, -(float) Math.cos(Math.toRadians(play
+					.getHorAngle()))
+					* 05f
+					+ (float) Math.sin(Math.toRadians(play.getHorAngle()))
+					* 05f));
 		}
-		if (play.getControl().getBack() && play.getControl().getRight()) {
-			playar.setLinearVelocity(new Vector3f(
-					(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, (float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
+		if (play.getControl().getBack() && play.getControl().getRight() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math
+					.toRadians(play.getHorAngle()))
+					* 05f
+					+ (float) Math.cos(Math.toRadians(play.getHorAngle()))
+					* 05f, 0, (float) Math.cos(Math.toRadians(play
+					.getHorAngle()))
+					* 05f
+					- (float) Math.sin(Math.toRadians(play.getHorAngle()))
+					* 05f));
 		}
-		if (play.getControl().getBack() && play.getControl().getLeft()) {
-			playar.setLinearVelocity(new Vector3f(
-					(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, (float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
+		if (play.getControl().getBack() && play.getControl().getLeft() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math
+					.toRadians(play.getHorAngle()))
+					* 05f
+					- (float) Math.cos(Math.toRadians(play.getHorAngle()))
+					* 05f, 0, (float) Math.cos(Math.toRadians(play
+					.getHorAngle()))
+					* 05f
+					+ (float) Math.sin(Math.toRadians(play.getHorAngle())) * 5f));
+		}
+		
+		if(play.getControl().getForward() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math.toRadians(play.getHorAngle())) * 10f, 10f, -(float) Math.cos(Math.toRadians(play.getHorAngle())) * 10f));
+		}
+		
+		if(play.getControl().getBack() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math.toRadians(play.getHorAngle())) * 10f, 10f, (float) Math.cos(Math.toRadians(play.getHorAngle())) * 0.f));
+		}
+		
+		if(play.getControl().getLeft() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f(-(float) Math.cos(Math.toRadians(play.getHorAngle())) * 10f, 10, (float) Math.sin(Math.toRadians(play.getHorAngle())) * 0.f));
+		}
+		if(play.getControl().getRight() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f((float) Math.cos(Math.toRadians(play.getHorAngle())) * 10f, 10, -(float) Math.sin(Math.toRadians(play.getHorAngle())) * 10f));
+		}
+		
+		if (play.getControl().getForward() && play.getControl().getRight() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math.toRadians(play.getHorAngle()))	* 05f+ (float) Math.cos(Math.toRadians(play.getHorAngle()))	* 05f, 10, -(float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f- (float) Math.sin(Math.toRadians(play.getHorAngle()))* 05f));
+		}
+		if (play.getControl().getForward() && play.getControl().getLeft() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math.toRadians(play.getHorAngle()))* 05f- (float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f, 10, -(float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f+ (float) Math.sin(Math.toRadians(play.getHorAngle()))* 05f));
+		}
+		if (play.getControl().getBack() && play.getControl().getRight() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math.toRadians(play.getHorAngle()))* 05f+ (float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f, 10f, (float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f- (float) Math.sin(Math.toRadians(play.getHorAngle()))* 05f));
+		}
+		if (play.getControl().getBack() && play.getControl().getLeft() && play.getControl().getJump() && trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math.toRadians(play.getHorAngle()))* 05f- (float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f, 10, (float) Math.cos(Math.toRadians(play.getHorAngle()))* 05f+ (float) Math.sin(Math.toRadians(play.getHorAngle())) * 5f));
 		}
 	}
-
 	public class KinematicMotionState extends MotionState {
 		private Transform worldTransform;
 

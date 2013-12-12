@@ -188,7 +188,7 @@ public class MazeRunner implements GLEventListener {
 		
 		    skybox=new SkyBox(player);
 
-		   visibleObjects.add(skybox);
+		   //visibleObjects.add(skybox);
 		// initialize the NyanCat. 
 		for(int i=0;i<amountofNyans;i++){
 			double X=Math.random()*100+6 * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // x-position
@@ -442,7 +442,10 @@ public class MazeRunner implements GLEventListener {
 				.hasNext();) {
 			it.next().display(gl);
 		}
+		skybox.display(gl);
+
 		box.display(gl);
+		
 		weapon.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
@@ -450,6 +453,8 @@ public class MazeRunner implements GLEventListener {
 		if(UserInput.pause) {
 		pause.display(gl);
 		}
+		
+
 		Projectview(gl);
 		
 		gl.glLoadIdentity();
