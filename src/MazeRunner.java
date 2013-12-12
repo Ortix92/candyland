@@ -78,7 +78,7 @@ public class MazeRunner implements GLEventListener {
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private Control control = null;
 	private int score = 0;
-
+	private boolean NyanGeluid=false;
 	/*
 	 * **********************************************
 	 * * Initialization methods * **********************************************
@@ -519,7 +519,21 @@ public class MazeRunner implements GLEventListener {
 	 * **********************************************
 	 * * Methods * **********************************************
 	 */
-
+	
+	public boolean NyanSeePlayer(){
+		for(int i=0;i<Nyan.size();i++){
+			if(Nyan.get(i).SeePlayer()){
+				if(!NyanGeluid){
+					Menu.Sound.play("sounds/nyan.wav");
+				}
+				NyanGeluid=true;
+				return true;
+			}
+		}
+		NyanGeluid=false;
+		return false;
+	}
+	
 	/**
 	 * updateMovement(int) updates the position of all objects that need moving.
 	 * This includes rudimentary collision checking and collision reaction.
@@ -534,18 +548,22 @@ public class MazeRunner implements GLEventListener {
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
 		Nyan.get(j).update(deltaTime);
-		if(Nyan.get(j).SeePlayer()){
-			for(int i=0;i<Nyan.size();i++){
-				Nyan.get(i).goalX=player.getLocationX();
-				Nyan.get(i).goalZ=player.getLocationZ();
-			}
-		}
+		
 		if (phworld.updateNyanhealth(j)) {
 			Nyan.remove(j);
 			score = score + 1000;
 			
 		}
 	}
+
+		if(NyanSeePlayer()){
+			for(int i=0;i<Nyan.size();i++){
+				Nyan.get(i).goalX=player.getLocationX();
+				Nyan.get(i).goalZ=player.getLocationZ();
+			}
+			
+		}
+	
 		
 		
 		if (weapon.update(deltaTime, player, camera, phworld)) {

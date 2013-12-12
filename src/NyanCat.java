@@ -162,6 +162,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 								this.getLocationZ(), goalX,
 								this.getLocationY(), goalZ, maze);
 						rainbows.add(Rainbow);
+						
 					}
 				}
 
@@ -210,6 +211,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 						}
 					}
 				}
+				
 				return true;
 			}
 		}
