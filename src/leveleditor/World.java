@@ -11,6 +11,9 @@ public class World {
 	private String worldFile;
 	private ArrayList<ArrayList<Integer>> map = new ArrayList<ArrayList<Integer>>();
 	private int[][] mapArray;
+	private double spawnY;
+	private double spawnX;
+
 	public World(String absolutePath) {
 		this.worldFile = absolutePath;
 	}
@@ -32,6 +35,11 @@ public class World {
 			Scanner sc = new Scanner(new File(this.worldFile));
 			sc.useDelimiter("\\s");
 
+			// retrieve spawnpoints
+			spawnX = Integer.parseInt(sc.next());
+			spawnY = Integer.parseInt(sc.next());
+			sc.nextLine();
+
 			ArrayList<Integer> row;
 			while (sc.hasNextLine()) {
 
@@ -50,53 +58,46 @@ public class World {
 				map.add(row);
 				System.out.println("");
 			}
-		
-			int i = 0;
-			while (sc.hasNextLine()) {
-				row = new ArrayList<Integer>();
-				int j = 0;
-				while (sc.hasNextInt()) {
 
-					row.add(sc.nextInt());
-					System.out.print(" " + row.get(j));
-					j++;
-				}
-
-				// Add row to array
-				// Only if all vectors are same size (equal to first)
-				// if (map.get(0).size() == map.get(i).size()) {
-				// System.out.println(map.get(0).size());
-				map.add(row);
-				// } else {
-				// // TODO Catch the exception
-				// throw new IllegalArgumentException(
-				// "Array not square! File incompatible");
-				// }
-
-				// Check if end of file
-				if (sc.hasNext()) {
-					System.out.println(sc.next());
-				}
-				i++;
-			}
+			// int i = 0;
+			// while (sc.hasNextLine()) {
+			// row = new ArrayList<Integer>();
+			// int j = 0;
+			// while (sc.hasNextInt()) {
+			//
+			// row.add(sc.nextInt());
+			// System.out.print(" " + row.get(j));
+			// j++;
+			// }
+			// map.add(row);
+			// // Check if end of file
+			// if (sc.hasNext()) {
+			// System.out.println(sc.next());
+			// }
+			// i++;
+			// }
 			System.out.println("");
 		} catch (FileNotFoundException e) {
 			// TODO afhandelen!
 			e.printStackTrace();
 		} catch (InputMismatchException e) {
 			throw new IllegalArgumentException("Array corrupt");
-
 		}
 	}
 
 	public int[][] convertMapToArray() {
 
 		mapArray = new int[map.size()][map.size()];
-		//System.out.println(map.size());
-		//System.out.println(map);
+		// System.out.println(map.size());
+		// System.out.println(map);
 		for (int i = 0; i < map.size(); i++) {
 			for (int j = 0; j < map.size(); j++) {
-				mapArray[i][j] = map.get(i).get(j);
+				// spawn point is just an empty block
+				if (map.get(i).get(j) == 2) {
+					mapArray[i][j] = 0;
+				} else {
+					mapArray[i][j] = map.get(i).get(j);
+				}
 			}
 		}
 		return mapArray;
@@ -107,17 +108,21 @@ public class World {
 	}
 
 	public double getSpawnY() {
-		return 0;
+		return spawnY;
 	}
 
 	public double getSpawnX() {
-		return 0;
+		return spawnX;
 	}
 
-	// public static void main(String[] args) {
-	// World world = new World("map.txt");
-	// world.loadMapFromFile();
-	//
-	// }
+//	public static void main(String[] args) {
+//		World world = new World("map_export.txt");
+//		try {
+//			world.loadMapFromFile();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 }

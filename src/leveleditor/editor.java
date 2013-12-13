@@ -1,6 +1,7 @@
 package leveleditor;
 
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -20,13 +22,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JSlider;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 public class editor {
 
@@ -179,7 +179,7 @@ public class editor {
 		JLabel lblVisualEditor = new JLabel("Visual Editor");
 		lblVisualEditor.setBounds(717, 19, 58, 14);
 		panel.add(lblVisualEditor);
-		
+
 		JRadioButton rdbtnDrawMaze = new JRadioButton("Draw Maze");
 		buttonGroup.add(rdbtnDrawMaze);
 		rdbtnDrawMaze.setSelected(true);
@@ -187,14 +187,14 @@ public class editor {
 		rdbtnDrawMaze.setAction(action);
 		rdbtnDrawMaze.setText("Draw Maze");
 		panel.add(rdbtnDrawMaze);
-		
+
 		JRadioButton rdbtnDrawSpawnPoint = new JRadioButton("Draw Spawn Point");
 		buttonGroup.add(rdbtnDrawSpawnPoint);
 		rdbtnDrawSpawnPoint.setBounds(241, 411, 139, 23);
 		rdbtnDrawSpawnPoint.setAction(action);
 		rdbtnDrawSpawnPoint.setText("Draw Spawn Point");
 		panel.add(rdbtnDrawSpawnPoint);
-		
+
 		JLabel lblDrawMode = new JLabel("Draw Mode");
 		lblDrawMode.setBounds(250, 336, 84, 14);
 		panel.add(lblDrawMode);
@@ -217,7 +217,7 @@ public class editor {
 			case "Load Maze":
 				this.loadMaze();
 				break;
-			case "Export Maze":
+			case "Export Maze!":
 				this.exportMaze();
 				break;
 			case "New Maze":
@@ -262,11 +262,16 @@ public class editor {
 		}
 
 		private void exportMaze() {
+			System.out.println("exporting");
 			ArrayList<ArrayList<Integer>> map = editor.this.editorPanel
 					.getMaze();
+
+			Point spawn = editor.this.editorPanel.getSpawnPoint();
 			String filename = "map_export.txt";
+
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+				bw.write(spawn.x + " " + spawn.y + "\r\n");
 				for (int i = 0; i < map.size(); i++) {
 					for (int j = 0; j < map.size(); j++) {
 						bw.write(map.get(i).get(j) + " ");

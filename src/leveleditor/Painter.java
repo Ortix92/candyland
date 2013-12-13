@@ -1,6 +1,7 @@
 package leveleditor;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -46,6 +47,8 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	private int boxSize;
 
 	private boolean drawGrid;
+
+	private Point spawnPoint = new Point(0, 0);
 
 	/**
 	 * When instantiating, a GLCanvas is added for us to play with. An animator
@@ -184,6 +187,10 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 		return this.maze;
 	}
 
+	public Point getSpawnPoint() {
+		return spawnPoint;
+	}
+
 	/**
 	 * Draw the grid based on the resolution of the matrix (can be set by user)
 	 * 
@@ -218,16 +225,28 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 					if (this.maze.get(i).get(j) == 1) {
 						mazeBoxOnScreen(gl, getXLocationBlock(j),
 								getYLocationBlock(i), boxSize);
-					} else if (this.maze.get(i).get(j) == 2) {
-						spawnBoxOnScreen(gl, getXLocationBlock(j),
-								getYLocationBlock(i), boxSize);
 					} else {
 						// do nothing
 					}
 				}
 			}
+			this.spawnBoxOnScreen(gl, getXLocationBlock(spawnPoint.x),
+					getYLocationSpawnBlock(spawnPoint.y), boxSize);
 		}
 
+	}
+
+	/**
+	 * This is a special version of the getYLocationBlock() method since that
+	 * one doesn't work propperly with the spawn point
+	 * 
+	 * @param i
+	 *            the unscaled location
+	 * @return the scaled location
+	 */
+
+	private float getYLocationSpawnBlock(int i) {
+		return i * this.screenHeight / this.resolution;
 	}
 
 	/**
@@ -235,6 +254,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	 *            iterator
 	 * @return the Y location of the maze tile
 	 */
+
 	private float getYLocationBlock(int i) {
 		i++; // add 1 to the iterator to shift down by a single row
 		return this.screenHeight - i * this.screenHeight / this.resolution;
@@ -257,92 +277,91 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	 */
 
 	private void drawTile(int mode) {
+		if (editor.drawMode == editor.DRAW_MAZE) {
+			drawMazeTile(mode);
+		} else if (editor.drawMode == editor.DRAW_SPAWN) {
+			drawSpawnTile(mode);
+		}
+
+	}
+
+	private void drawSpawnTile(int mode) {
 		if (this.drawMap) {
+			int[] tiles = searchTileToDraw();
+			int tileX = tiles[0];
+			int tileY = tiles[1];
+			System.out.println(tileX + " " + (this.maze.size() - 1 - tileY));
 
-			int i = 0;
-			// Look for the x Coordinate of the tile
-			boolean tileXFound = false;
-			int tileX = 0;
-			while (!tileXFound) {
-				if (points.get(0).x > i * boxSize
-						&& points.get(0).x <= (i + 1) * boxSize) {
-					tileX = i;
-					tileXFound = true;
-				} else if (i > resolution) {
-					System.out.println("Error processing tile change in X");
-					break;
-				} else {
-					i++;
-				}
-			}
-
-			// Look for the y Coordinate of the tile
-			boolean tileYFound = false;
-			int tileY = 0;
-			i = 0;
-			while (!tileYFound) {
-				if (points.get(0).y > i * boxSize
-						&& points.get(0).y <= (i + 1) * boxSize) {
-					tileY = i;
-					tileYFound = true;
-				} else if (i > resolution) {
-					System.out.println("Error processing tile change in Y");
-					break;
-				} else {
-					i++;
-				}
-			}
-			System.out.println((this.maze.size() - 1 - tileY) + " " + tileX);
 			if (mode == 1) {
-				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 1);
+				this.maze.get(this.maze.size() - 1 - this.spawnPoint.y).set(
+						this.spawnPoint.x, 0);
+				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 2);
 			} else if (mode == 3) {
 				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 0);
+			}
+			this.spawnPoint.setLocation(tiles[0], tiles[1]);
+		}
+	}
+
+	private void drawMazeTile(int mode) {
+		if (this.drawMap) {
+
+			int[] tiles = searchTileToDraw();
+			int tileX = tiles[0];
+			int tileY = tiles[1];
+			System.out.println(tileX + " " + (this.maze.size() - 1 - tileY));
+
+			try {
+				if (mode == 1) {
+					this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 1);
+				} else if (mode == 3) {
+					this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 0);
+				}
+			} catch (IndexOutOfBoundsException e) {
+				System.out.println("Index out of bounds: " + e.getMessage());
 			}
 		}
 
 	}
 
-	private void changeTile(boolean isDragged) {
-		if (this.drawMap) {
-
-			int i = 0;
-			// Look for the x Coordinate of the tile
-			boolean tileXFound = false;
-			int tileX = 0;
-			while (!tileXFound) {
-				if (points.get(0).x > i * boxSize
-						&& points.get(0).x <= (i + 1) * boxSize) {
-					tileX = i;
-					tileXFound = true;
-				} else if (i > resolution) {
-					System.out.println("Error processing tile change in X");
-					break;
-				} else {
-					i++;
-				}
+	private int[] searchTileToDraw() {
+		int[] tiles = new int[2];
+		int i = 0;
+		// Look for the x Coordinate of the tile
+		boolean tileXFound = false;
+		int tileX = 0;
+		while (!tileXFound) {
+			if (points.get(0).x > i * boxSize
+					&& points.get(0).x <= (i + 1) * boxSize) {
+				tileX = i;
+				tileXFound = true;
+			} else if (i > resolution || i < 0) {
+				System.out.println("Error processing tile change in X");
+				break;
+			} else {
+				i++;
 			}
-
-			// Look for the y Coordinate of the tile
-			boolean tileYFound = false;
-			int tileY = 0;
-			i = 0;
-			while (!tileYFound) {
-				if (points.get(0).y > i * boxSize
-						&& points.get(0).y <= (i + 1) * boxSize) {
-					tileY = i;
-					tileYFound = true;
-				} else if (i > resolution) {
-					System.out.println("Error processing tile change in Y");
-					break;
-				} else {
-					i++;
-				}
-			}
-			System.out.println((this.maze.size() - 1 - tileY) + " " + tileX);
-			this.maze.get(this.maze.size() - 1 - tileY).set(tileX,
-					1 - this.maze.get(this.maze.size() - 1 - tileY).get(tileX));
 		}
 
+		// Look for the y Coordinate of the tile
+		boolean tileYFound = false;
+		int tileY = 0;
+		i = 0;
+		while (!tileYFound) {
+			if (points.get(0).y > i * boxSize
+					&& points.get(0).y <= (i + 1) * boxSize) {
+				tileY = i;
+				tileYFound = true;
+			} else if (i > resolution || i < 0) {
+				System.out.println("Error processing tile change in Y");
+				break;
+			} else {
+				i++;
+			}
+		}
+		tiles[0] = tileX;
+		tiles[1] = tileY;
+		return tiles;
 	}
 
 	/**
@@ -450,7 +469,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 		// Add a new point to the points list.
 		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
 		// this.changeTile(false);
-		System.out.println(me.getButton());
 		this.drawTile(me.getButton());
 
 		// Clear points after tile has been set

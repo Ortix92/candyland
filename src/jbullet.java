@@ -150,8 +150,8 @@ public class jbullet {
 		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(
 				4000, nyanstate, nyanshape, Inertia);
 		RigidBody nyanbody = new RigidBody(nyaninfo);
-		nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
-				| CollisionFlags.KINEMATIC_OBJECT);
+	//	nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
+	//			| CollisionFlags.KINEMATIC_OBJECT);
 		nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		dynamicworld.addRigidBody(nyanbody);
 		nyanies.add(nyanbody);
