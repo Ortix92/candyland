@@ -198,6 +198,12 @@ public class editor {
 		JLabel lblDrawMode = new JLabel("Draw Mode");
 		lblDrawMode.setBounds(250, 336, 84, 14);
 		panel.add(lblDrawMode);
+		
+		JButton btnFillEdges = new JButton("Fill Edges");
+		btnFillEdges.setBounds(241, 457, 126, 50);
+		btnFillEdges.setAction(action);
+		btnFillEdges.setText("Fill Edges");
+		panel.add(btnFillEdges);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
@@ -229,9 +235,15 @@ public class editor {
 			case "Draw Maze":
 				this.drawMaze();
 				break;
-
+			case "Fill Edges":
+				this.fillEdges();
+				break;
 			}
 
+		}
+
+		private void fillEdges() {
+			editor.this.editorPanel.fillEdges();
 		}
 
 		private void drawSpan() {

@@ -48,7 +48,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 	private boolean drawGrid;
 
-	private Point spawnPoint = new Point(0, 0);
+	private Point spawnPoint;
 
 	/**
 	 * When instantiating, a GLCanvas is added for us to play with. An animator
@@ -58,7 +58,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 		screenWidth = width;
 		screenHeight = height;
 		points = new ArrayList<Point2D.Float>();
-
+		spawnPoint =  new Point(2, 2);
 		// Set the desired size and background color of the frame
 		setSize(screenWidth, screenHeight);
 		// setBackground(Color.white);
@@ -189,6 +189,23 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 	public Point getSpawnPoint() {
 		return spawnPoint;
+	}
+
+	/**
+	 * Fills the edges of the maze with blocks
+	 */
+	public void fillEdges() {
+		if (this.drawMap) {
+			System.out.println("Filling the edges of the maze");
+			for (int i = 0; i < maze.size(); i++) {
+				for (int j = 0; j < maze.size(); j++) {
+					if (i == 0 || i == maze.size() - 1 || j == 0
+							|| j == maze.size() - 1) {
+						maze.get(i).set(j, 1);
+					}
+				}
+			}
+		}
 	}
 
 	/**
