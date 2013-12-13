@@ -71,6 +71,7 @@ public class MazeRunner implements GLEventListener {
 	private int score = 0;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
+	
 	/*
 	 * **********************************************
 	 * * Initialization methods * **********************************************
@@ -207,7 +208,6 @@ public class MazeRunner implements GLEventListener {
 						maze));
 			
 			//visibleObjects.add(Nyan.get(i)); // make Nyan visible.
-			
 			//Nyan[i].setControl(NyanInput);
 			NyanCat nyan = new NyanCat(X,
 					maze.SQUARE_SIZE/4, // y-position
@@ -220,7 +220,12 @@ public class MazeRunner implements GLEventListener {
 	     phworld.initNyan(nyan);
 		}
 		
-		
+		PickUp NewClaws=new PickUp(5,5,player,2);
+		visibleObjects.add(NewClaws);
+		pickup.add(NewClaws);
+		PickUp NewClaws2=new PickUp(15,15,player,3);
+		visibleObjects.add(NewClaws2);
+		pickup.add(NewClaws2);
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
 				player.getVerAngle());
@@ -298,14 +303,28 @@ public class MazeRunner implements GLEventListener {
 	 GLUT glut = new GLUT();
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
-
+		
+		
 		gl.glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
-		gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
-		gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
-		gl.glEnd();
+		if(Weapon.getNewWeapon()==0){
+			gl.glBegin(GL.GL_LINES);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
+			gl.glEnd();
+		}
+		if(Weapon.getNewWeapon()==2){
+			gl.glBegin(GL.GL_LINES);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			
+			gl.glEnd();
+		}
 
 		gl.glColor4d(1.0, 0.0, 0.0, 0.2);
 		gl.glBegin(GL.GL_QUADS);
@@ -419,8 +438,18 @@ public class MazeRunner implements GLEventListener {
 			updateCamera();
 			updatePhysics(deltaTime);
 		}
-	
 		
+		gl.glMatrixMode(GL.GL_PROJECTION);
+		gl.glLoadIdentity();
+		
+		if(UserInput.zoom){
+			System.out.println("Zoom");
+			glu.gluPerspective(30, screenWidth/ screenHeight,0.1, 200); 
+		}
+		else{
+			glu.gluPerspective(60, screenWidth/ screenHeight,0.1, 200); 
+		}
+		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
@@ -516,8 +545,29 @@ public class MazeRunner implements GLEventListener {
 			if(!pickup.get(i).getPickup()){
 				pickup.get(i).update(deltaTime);
 				if(pickup.get(i).getPickup()){
-					score=score*2;
-					player.setHealth(player.getHealth()+20);
+					int w=Weapon.getNewWeapon();
+					switch(pickup.get(i).getSoort()){
+					case 0:
+						Weapon.setNewWeapon(0);
+						break;
+					case 1: 
+						score=score*2;
+						player.setHealth(player.getHealth()+20);
+						break;
+					case 2:
+						Weapon.setNewWeapon(2);
+						break;
+					case 3:
+						Weapon.setNewWeapon(3);
+						break;
+					}
+					// place your old weapon in new pickup:
+					if(pickup.get(i).getSoort()!=1){
+						PickUp wapen=new PickUp(player.getLocationX() + Math.sin(Math.toRadians(player.getHorAngle()))*player.getSpeed()*20,player.getLocationZ() +
+								Math.cos(Math.toRadians(player.getHorAngle()))*player.getSpeed()*20,player,w);
+						visibleObjects.add(wapen);
+						pickup.add(wapen);
+					}
 				}
 			}
 		}
@@ -527,7 +577,7 @@ public class MazeRunner implements GLEventListener {
 	for (int j = 0; j < Nyan.size(); j++) {
 		Nyan.get(j).update(deltaTime);
 		if (phworld.updateNyanhealth(j)) {
-			PickUp pickupnieuw=new PickUp(Nyan.get(j).getLocationX(),Nyan.get(j).getLocationZ(),player);
+			PickUp pickupnieuw=new PickUp(Nyan.get(j).getLocationX(),Nyan.get(j).getLocationZ(),player,1);
 			visibleObjects.add(pickupnieuw);
 			pickup.add(pickupnieuw);
 			Nyan.remove(j);
@@ -546,7 +596,9 @@ public class MazeRunner implements GLEventListener {
 		for( int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).update(deltaTime); 
 			}
-			}
+	
+		
+	}
 		
 		//TODO: don't let Nyan walk through walls. However: walls will disappear thus this might not be
 		//necessary. 

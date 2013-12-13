@@ -167,6 +167,9 @@ public class jbullet {
 		DefaultMotionState bulletmotion = new DefaultMotionState();
 		bulletmotion.setWorldTransform(p);
 		float mass = 0.002f;
+		if(Weapon.getNewWeapon()==3){
+			mass=3000*mass;
+		}
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		bulletshape.calculateLocalInertia(mass, Inertia);
 		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(

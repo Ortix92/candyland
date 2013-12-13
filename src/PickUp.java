@@ -5,15 +5,24 @@ public class PickUp extends GameObject implements VisibleObject{
 Player player;
 boolean pickup=false;
 int i=0;
+int soort;
 
-	public PickUp(double X, double Z,Player playr){
+	public PickUp(double X, double Z,Player playr, int soort){
 		super(X,2,Z);
 		player=playr;
+		this.soort=soort;
+		// soort 1== Health+score multiplier
+		// soort 2== Zoom wapen
+		// soort 3== MoveBlock wapen
 		
 	}
 
 	public boolean getPickup(){
 		return pickup;
+	}
+	
+	public int getSoort(){
+		return this.soort;
 	}
 
 	@Override
