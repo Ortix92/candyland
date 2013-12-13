@@ -266,8 +266,7 @@ for (int i =0; i < mazeblocks.size(); i++) {
 
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
-
-		glut.glutSolidCube(0.25f);
+		glut.glutSolidCube(0.15f);
 		gl.glPopMatrix();
 	}
 

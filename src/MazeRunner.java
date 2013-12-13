@@ -6,9 +6,11 @@ import java.io.IOException;
 
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import com.sun.opengl.util.*;
+import com.sun.opengl.util.j2d.TextRenderer;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import java.util.ArrayList;
@@ -56,7 +58,7 @@ public class MazeRunner implements GLEventListener {
 														// will be displayed on
 														// screen.
 	private Player player; // The player object.
-	private int amountofNyans = 1; // The amount of NyanCats.
+	private int amountofNyans = 40; // The amount of NyanCats.
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	//	private NyanCat[] Nyan=new NyanCat[amountofNyans]; // The NyanCat object array. 
 	private Camera camera; // The camera object.
@@ -76,8 +78,9 @@ public class MazeRunner implements GLEventListener {
 	private PauseMenu pause;
 	private jbullet phworld;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private Control control = null;
+	private SQL dbconnection;
 	private int score = 0;
+	private GameOverScreen gameover;
 
 	/*
 	 * **********************************************
@@ -177,7 +180,7 @@ public class MazeRunner implements GLEventListener {
 		maze = new Maze();
 		visibleObjects.add(maze);
 		phworld = new jbullet(amountofNyans);
-	
+		dbconnection = new SQL();
 		 
 		NyanInput=new NyanCatInput(canvas);
 	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
@@ -220,7 +223,6 @@ public class MazeRunner implements GLEventListener {
 					// horizontal angle
 					player,
 					maze);
-	     System.out.println(nyan.toString());
 	     phworld.initNyan(nyan);
 		}
 		
@@ -232,6 +234,7 @@ public class MazeRunner implements GLEventListener {
 		weapon = new Weapon(10);
 		input = new UserInput(canvas);
 		pause = new PauseMenu();
+		gameover = new GameOverScreen();
 		player.setControl(input);
 		weapon.setControl(input);
 		guy.setControl(input);
@@ -267,45 +270,6 @@ public class MazeRunner implements GLEventListener {
 		gl.glPopMatrix();
 	}
 	
-	public void drawExit(GL gl) {
-		GLUT glut = new GLUT();
-		gl.glPushMatrix();
-		float wallColour[] = { 14.5f, 0.0f, 3f, 1.0f }; // The walls are
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
-//		gl.glLoadIdentity();
-		double angle = Math.tan((player.locationZ - 200)/(player.locationX - 50));
-		gl.glRotatef((float)angle, 0, 0, 0f);
-		gl.glTranslated(player.getLocationX() + 10, -2.0, player.getLocationZ() + 2);
-		glut.glutSolidCube(5f);
-		gl.glPopMatrix();
-	}
-	
-	public void drawPause(GL gl) {
-		gl.glDisable(GL.GL_DEPTH_TEST);
-		gl.glDisable(GL.GL_LIGHTING);
-
-		gl.glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
-		gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
-		gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
-		gl.glEnd();
-
-		gl.glColor4d(1.0, 0.0, 0.0, 0.2);
-		gl.glBegin(GL.GL_QUADS);
-		gl.glVertex2d(screenWidth / 100.0, screenHeight - 10.0);
-		gl.glVertex2d(screenWidth / 100.0 + 30.0, screenHeight - 10.0);
-		gl.glVertex2d(screenWidth / 100.0 + 30.0, screenHeight - 10.0 - 5
-				* player.getHealth());
-		gl.glVertex2d(screenWidth / 100.0,
-				screenHeight - 10.0 - 5 * player.getHealth());
-
-		gl.glEnd();
-
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_DEPTH_TEST);
-	}
 
 	/**
 	 * Draws the Hud on screen.
@@ -344,6 +308,7 @@ public class MazeRunner implements GLEventListener {
 		  for (i = 0; i < len; i++) {
 		    glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,string.charAt(i));
 		  }
+		  
 		
 		
 		gl.glEnable(GL.GL_LIGHTING);
@@ -428,12 +393,13 @@ public class MazeRunner implements GLEventListener {
 		previousTime = currentTime;
 		// Update any movement since last frame.
 		
-		// Nyan.update(deltaTime);
+	//	Nyan.update(deltaTime);
 		
-		if(!UserInput.pause) {
+		if(!UserInput.pause && !UserInput.dead) {
 			updateMovement(deltaTime);
 			updateCamera();
 			updatePhysics(deltaTime);
+			
 		}
 	
 		
@@ -449,23 +415,26 @@ public class MazeRunner implements GLEventListener {
 				.hasNext();) {
 			it.next().display(gl);
 		}
-	//	phworld.displaymaze(gl);
+		phworld.displaymaze(gl);
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
 		}
-		
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
 		}
-
-	//	box.display(gl);
-	//	weapon.display(gl);
-		drawExit(gl);
+		box.display(gl);
+		weapon.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
 		 
 		if(UserInput.pause) {
 		pause.display(gl);
+		}
+		
+		
+		if (UserInput.dead) {
+			gameover.display(gl);
+			dbconnection.AddHighScore("Reschaper", score);
 		}
 		Projectview(gl);
 		
@@ -497,7 +466,6 @@ public class MazeRunner implements GLEventListener {
 	 */
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-		System.out.println("Reschape");
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
 
@@ -527,10 +495,14 @@ public class MazeRunner implements GLEventListener {
 	 * This includes rudimentary collision checking and collision reaction.
 	 */
 	private void updateMovement(int deltaTime) {
+		if (player.getHealth() <= 0) {
+			input.setdead();
+		}
 		player.update(deltaTime);
 		phworld.update(player);
 		player = phworld.updatePlayer(player);
 	for (int j = 0; j < Nyan.size(); j++) {
+		player.setHealth(player.getHealth() - Nyan.get(j).getHPoff());
 		Nyan.get(j).update(deltaTime);
 		if (phworld.updateNyanhealth(j)) {
 			Nyan.remove(j);
@@ -621,6 +593,7 @@ public class MazeRunner implements GLEventListener {
 			box = phworld.getBox(box);
 			bullets = phworld.getbullets();
 		}
+	
 	/*
 	 * ****************************************
 	 * * Main * **********************************************

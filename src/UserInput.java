@@ -37,6 +37,7 @@ public class UserInput extends Control implements MouseListener,
 	private int initX = 500;
 	private int initY = 300;
 	public static boolean pause = false;
+	public static boolean dead = false;
 
 	/**
 	 * UserInput constructor.
@@ -120,8 +121,12 @@ public class UserInput extends Control implements MouseListener,
 			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
 			pause = false;
 		}
+		else if (event.getKeyCode() == KeyEvent.VK_ENTER
+				&& UserInput.dead == true) {
+			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
+			dead = false;
+		}
 
-		System.out.println(Game.gsm.getGameState());
 
 	}
 
@@ -140,6 +145,10 @@ public class UserInput extends Control implements MouseListener,
 		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 		}
 
+	}
+	
+	public void setdead() {
+		dead = true;
 	}
 
 	/*
