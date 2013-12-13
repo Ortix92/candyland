@@ -162,10 +162,10 @@ public class Weapon extends GameObject {
 			gl.glLoadIdentity();
 			gl.glTranslatef(-0.1f, -0.25f, -0.2f);
 			glut.glutSolidSphere(0.05, 50, 40);
-			if(NewWeapon!=2){
+			
 				float CColour2[] = { 0.4f, 22.1f, 16.2f, 1.0f };
 				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour2, 0);
-			}
+			
 			gl.glLoadIdentity();
 			gl.glTranslatef(0.13f, -0.22f, -0.5f);
 			glut.glutSolidCylinder(0.005, 1.0, 10, 10);
@@ -217,10 +217,10 @@ public class Weapon extends GameObject {
 			glut.glutSolidSphere(0.05, 50, 40);
 
 			
-			if(NewWeapon!=2){
+			
 				float CColour2[] = { 0.4f, 22.1f, 16.2f, 1.0f };
 				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour2, 0);
-			}
+			
 			gl.glLoadIdentity();
 			if (control.getRight()) {
 				gl.glRotated(-5,0 ,0 , 1);

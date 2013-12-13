@@ -325,6 +325,25 @@ public class MazeRunner implements GLEventListener {
 			
 			gl.glEnd();
 		}
+		if(Weapon.getNewWeapon()==3){
+			gl.glBegin(GL.GL_LINES);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 10.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 10.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0 - 10.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0 + 10.0, screenHeight / 2.0);
+			
+			
+			gl.glEnd();
+		}
 
 		gl.glColor4d(1.0, 0.0, 0.0, 0.2);
 		gl.glBegin(GL.GL_QUADS);
