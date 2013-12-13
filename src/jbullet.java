@@ -163,7 +163,8 @@ public class jbullet {
 		CollisionShape bulletshape = new SphereShape(0.5f);
 		Transform p = new Transform();
 		p.setRotation(new Quat4f(horAngle, verAngle, 0, 1));
-		p.origin.set(x - (float) Math.sin(Math.toRadians(horAngle)), y, z - (float)Math.cos(Math.toRadians(horAngle)));
+		p.origin.set(x - (float) Math.sin(Math.toRadians(horAngle)), y, z
+				- (float) Math.cos(Math.toRadians(horAngle)));
 		DefaultMotionState bulletmotion = new DefaultMotionState();
 		bulletmotion.setWorldTransform(p);
 		float mass = 0.002f;
@@ -172,10 +173,16 @@ public class jbullet {
 		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
 				mass, bulletmotion, bulletshape, Inertia);
 		RigidBody bullet = new RigidBody(boxRigidBodyInfo);
-		bullet.setLinearVelocity(new Vector3f(35 * (-(float) Math.sin(Math
-				.toRadians(horAngle))), 35 * (float) Math.sin(Math
-				.toRadians(verAngle)), 35 * (-(float) Math.cos(Math
-				.toRadians(horAngle)))));
+
+		int velocityScalar = 50;
+		Vector3f velocityVector = new Vector3f(velocityScalar * (-(float) Math.sin(Math
+				.toRadians(horAngle)) * (float) Math.cos(Math
+				.toRadians(verAngle))), velocityScalar * (float) Math.sin(Math
+				.toRadians(verAngle)), velocityScalar * (-(float) Math.cos(Math
+				.toRadians(horAngle)) * (float) Math.cos(Math
+				.toRadians(verAngle))));
+
+		bullet.setLinearVelocity(velocityVector);
 		dynamicworld.addRigidBody(bullet);
 		bullets.add(bullet);
 	}
@@ -245,7 +252,6 @@ public class jbullet {
 
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
-
 		glut.glutSolidCube(0.25f);
 		gl.glPopMatrix();
 	}

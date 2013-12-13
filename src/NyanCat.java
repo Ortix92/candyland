@@ -171,7 +171,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 				}
 			};
 
-			timer.scheduleAtFixedRate(timertask, 0, 1000);
+			timer.scheduleAtFixedRate(timertask, 0,
+					1000 + Math.round((Math.random() * 100)));
 		}
 	}
 

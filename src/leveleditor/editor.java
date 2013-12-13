@@ -25,9 +25,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class editor {
 
+	public static final int DRAW_MAZE = 0;
+	public static final int DRAW_SPAWN = 1;
 	private JFrame frame;
 	private final Action action = new SwingAction();
 	private World world;
@@ -36,6 +40,8 @@ public class editor {
 	private Painter editorPanel;
 	private JSlider resolutionSlider;
 	private JPanel panel;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	public static int drawMode;
 
 	/**
 	 * Launch the application.
@@ -125,27 +131,27 @@ public class editor {
 
 		// New Maze Button
 		JButton btnNewMaze = new JButton("New Maze");
-		btnNewMaze.setBounds(47, 173, 126, 45);
+		btnNewMaze.setBounds(45, 82, 126, 50);
 		panel.add(btnNewMaze);
 		btnNewMaze.setAction(action);
 		btnNewMaze.setText("New Maze");
 
 		// Load maze button
 		JButton btnLoadMaze = new JButton("Load Maze");
-		btnLoadMaze.setBounds(47, 229, 126, 41);
+		btnLoadMaze.setBounds(45, 140, 126, 45);
 		panel.add(btnLoadMaze);
 		btnLoadMaze.setAction(action);
 		btnLoadMaze.setText("Load Maze");
 
 		// Export the maze
 		JButton btnExportMaze = new JButton("Export Maze");
-		btnExportMaze.setBounds(47, 281, 126, 53);
+		btnExportMaze.setBounds(45, 218, 126, 64);
 		panel.add(btnExportMaze);
 		btnExportMaze.setAction(action);
-		btnExportMaze.setText("Export Maze");
+		btnExportMaze.setText("Export Maze!");
 
 		resolutionSlider = new JSlider();
-		resolutionSlider.setBounds(242, 148, 43, 200);
+		resolutionSlider.setBounds(241, 82, 43, 200);
 		panel.add(resolutionSlider);
 		resolutionSlider.setOrientation(SwingConstants.VERTICAL);
 		resolutionSlider.setMaximum(50);
@@ -158,11 +164,11 @@ public class editor {
 		resolutionSlider.setMajorTickSpacing(20);
 
 		JLabel lblOptions = new JLabel("Options");
-		lblOptions.setBounds(70, 148, 37, 14);
+		lblOptions.setBounds(68, 57, 37, 14);
 		panel.add(lblOptions);
 
 		JLabel lblGridResolution = new JLabel("Grid Resolution");
-		lblGridResolution.setBounds(217, 123, 72, 14);
+		lblGridResolution.setBounds(216, 57, 72, 14);
 		panel.add(lblGridResolution);
 
 		// JOGL Panel
@@ -173,6 +179,25 @@ public class editor {
 		JLabel lblVisualEditor = new JLabel("Visual Editor");
 		lblVisualEditor.setBounds(717, 19, 58, 14);
 		panel.add(lblVisualEditor);
+		
+		JRadioButton rdbtnDrawMaze = new JRadioButton("Draw Maze");
+		buttonGroup.add(rdbtnDrawMaze);
+		rdbtnDrawMaze.setSelected(true);
+		rdbtnDrawMaze.setBounds(241, 362, 109, 23);
+		rdbtnDrawMaze.setAction(action);
+		rdbtnDrawMaze.setText("Draw Maze");
+		panel.add(rdbtnDrawMaze);
+		
+		JRadioButton rdbtnDrawSpawnPoint = new JRadioButton("Draw Spawn Point");
+		buttonGroup.add(rdbtnDrawSpawnPoint);
+		rdbtnDrawSpawnPoint.setBounds(241, 411, 139, 23);
+		rdbtnDrawSpawnPoint.setAction(action);
+		rdbtnDrawSpawnPoint.setText("Draw Spawn Point");
+		panel.add(rdbtnDrawSpawnPoint);
+		
+		JLabel lblDrawMode = new JLabel("Draw Mode");
+		lblDrawMode.setBounds(250, 336, 84, 14);
+		panel.add(lblDrawMode);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
@@ -186,8 +211,9 @@ public class editor {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			String button = ((JButton) e.getSource()).getText();
-			switch (button) {
+			String action = e.getActionCommand();
+			System.out.println(action);
+			switch (action) {
 			case "Load Maze":
 				this.loadMaze();
 				break;
@@ -197,9 +223,23 @@ public class editor {
 			case "New Maze":
 				this.newMaze();
 				break;
+			case "Draw Spawn Point":
+				this.drawSpan();
+				break;
+			case "Draw Maze":
+				this.drawMaze();
+				break;
 
 			}
 
+		}
+
+		private void drawSpan() {
+			editor.drawMode = editor.DRAW_SPAWN;
+		}
+
+		private void drawMaze() {
+			editor.drawMode = editor.DRAW_MAZE;
 		}
 
 		private void newMaze() {

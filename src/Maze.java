@@ -29,6 +29,9 @@ import com.sun.opengl.util.GLUT;
  */
 public class Maze implements VisibleObject {
 
+	public double PLAYER_SPAWN_X = 50;
+	public double PLAYER_SPAWN_Y = 3;
+	public double PLAYER_SPAWN_Z = 50;
 	public double MAZE_SIZE = 10;
 	public double SQUARE_SIZE = 5;
 
@@ -40,7 +43,8 @@ public class Maze implements VisibleObject {
 			world.loadMapFromFile();
 			MAZE_SIZE = world.getMap().size();
 			maze = world.convertMapToArray();
-			System.out.println(MAZE_SIZE);
+			PLAYER_SPAWN_X = world.getSpawnX();
+			PLAYER_SPAWN_Z = world.getSpawnY();
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Falling back to default map due to error");

@@ -92,8 +92,8 @@ public class World {
 	public int[][] convertMapToArray() {
 
 		mapArray = new int[map.size()][map.size()];
-		System.out.println(map.size());
-		System.out.println(map);
+		//System.out.println(map.size());
+		//System.out.println(map);
 		for (int i = 0; i < map.size(); i++) {
 			for (int j = 0; j < map.size(); j++) {
 				mapArray[i][j] = map.get(i).get(j);
@@ -104,6 +104,14 @@ public class World {
 
 	public ArrayList<ArrayList<Integer>> getMap() {
 		return map;
+	}
+
+	public double getSpawnY() {
+		return 0;
+	}
+
+	public double getSpawnX() {
+		return 0;
 	}
 
 	// public static void main(String[] args) {

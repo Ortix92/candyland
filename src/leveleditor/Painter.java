@@ -1,14 +1,10 @@
 package leveleditor;
 
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 
 import javax.media.opengl.GL;
@@ -16,8 +12,8 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLJPanel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.sun.opengl.util.Animator;
 
@@ -39,9 +35,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	private GLCanvas canvas;
 
 	private static final byte DM_POINT = 0;
-	private static final byte DM_LINE = 1;
-	private static final byte DM_KOCH = 2;
-	private byte drawMode = DM_POINT;
 	private ArrayList<Point2D.Float> points;
 
 	private int resolution;
@@ -222,9 +215,14 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 			boxSize = this.screenWidth / this.resolution;
 			for (int i = 0; i < maze.size(); i++) {
 				for (int j = 0; j < maze.size(); j++) {
-					if (this.maze.get(i).get(j) != 0) {
-						boxOnScreen(gl, getXLocationBlock(j),
+					if (this.maze.get(i).get(j) == 1) {
+						mazeBoxOnScreen(gl, getXLocationBlock(j),
 								getYLocationBlock(i), boxSize);
+					} else if (this.maze.get(i).get(j) == 2) {
+						spawnBoxOnScreen(gl, getXLocationBlock(j),
+								getYLocationBlock(i), boxSize);
+					} else {
+						// do nothing
 					}
 				}
 			}
@@ -257,6 +255,52 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	 * 
 	 * @param points2
 	 */
+
+	private void drawTile(int mode) {
+		if (this.drawMap) {
+
+			int i = 0;
+			// Look for the x Coordinate of the tile
+			boolean tileXFound = false;
+			int tileX = 0;
+			while (!tileXFound) {
+				if (points.get(0).x > i * boxSize
+						&& points.get(0).x <= (i + 1) * boxSize) {
+					tileX = i;
+					tileXFound = true;
+				} else if (i > resolution) {
+					System.out.println("Error processing tile change in X");
+					break;
+				} else {
+					i++;
+				}
+			}
+
+			// Look for the y Coordinate of the tile
+			boolean tileYFound = false;
+			int tileY = 0;
+			i = 0;
+			while (!tileYFound) {
+				if (points.get(0).y > i * boxSize
+						&& points.get(0).y <= (i + 1) * boxSize) {
+					tileY = i;
+					tileYFound = true;
+				} else if (i > resolution) {
+					System.out.println("Error processing tile change in Y");
+					break;
+				} else {
+					i++;
+				}
+			}
+			System.out.println((this.maze.size() - 1 - tileY) + " " + tileX);
+			if (mode == 1) {
+				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 1);
+			} else if (mode == 3) {
+				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 0);
+			}
+		}
+
+	}
 
 	private void changeTile(boolean isDragged) {
 		if (this.drawMap) {
@@ -336,6 +380,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	 * Help method that uses GL calls to draw a line.
 	 */
 	private void lineOnScreen(GL gl, float x1, float y1, float x2, float y2) {
+		gl.glColor3f(1.0f, 1.0f, 1.0f);
 		gl.glBegin(GL.GL_LINES);
 		gl.glVertex2f(x1, y1);
 		gl.glVertex2f(x2, y2);
@@ -345,7 +390,18 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	/**
 	 * Help method that uses GL calls to draw a square
 	 */
-	private void boxOnScreen(GL gl, float x, float y, float size) {
+	private void mazeBoxOnScreen(GL gl, float x, float y, float size) {
+		gl.glColor3f(1.0f, 1.0f, 1.0f);
+		gl.glBegin(GL.GL_QUADS);
+		gl.glVertex2f(x, y);
+		gl.glVertex2f(x + size, y);
+		gl.glVertex2f(x + size, y + size);
+		gl.glVertex2f(x, y + size);
+		gl.glEnd();
+	}
+
+	private void spawnBoxOnScreen(GL gl, float x, float y, float size) {
+		gl.glColor3f(0f, 1.0f, 1.0f);
 		gl.glBegin(GL.GL_QUADS);
 		gl.glVertex2f(x, y);
 		gl.glVertex2f(x + size, y);
@@ -393,7 +449,9 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 		// Add a new point to the points list.
 		points.add(new Point2D.Float(me.getX(), screenHeight - me.getY()));
-		this.changeTile(false);
+		// this.changeTile(false);
+		System.out.println(me.getButton());
+		this.drawTile(me.getButton());
 
 		// Clear points after tile has been set
 		points.clear();
@@ -432,7 +490,11 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	@Override
 	public void mouseDragged(MouseEvent event) {
 		points.add(new Point2D.Float(event.getX(), screenHeight - event.getY()));
-		this.changeTile(true);
+		if (SwingUtilities.isLeftMouseButton(event)) {
+			this.drawTile(1);
+		} else if (SwingUtilities.isRightMouseButton(event)) {
+			this.drawTile(3);
+		}
 
 		// Clear points after tile has been set
 		points.clear();
