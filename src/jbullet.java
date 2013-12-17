@@ -130,7 +130,7 @@ public class jbullet {
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							1, mazeMotionState, mazeshape, Inertia);
+							100, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
@@ -167,7 +167,7 @@ public class jbullet {
 		p.origin.set(x - (float) Math.sin(Math.toRadians(horAngle)), y, z - (float)Math.cos(Math.toRadians(horAngle)));
 		DefaultMotionState bulletmotion = new DefaultMotionState();
 		bulletmotion.setWorldTransform(p);
-		float mass = 20f;
+		float mass = 0.002f;
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		bulletshape.calculateLocalInertia(mass, Inertia);
 		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
