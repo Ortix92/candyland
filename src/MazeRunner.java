@@ -180,7 +180,7 @@ public class MazeRunner implements GLEventListener {
 		maze = new Maze();
 		visibleObjects.add(maze);
 		phworld = new jbullet(amountofNyans);
-//		dbconnection = new SQL();
+		dbconnection = new SQL();
 		 
 		NyanInput=new NyanCatInput(canvas);
 	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
@@ -433,7 +433,7 @@ public class MazeRunner implements GLEventListener {
 		
 		if (player.getHealth() <= 0) {
 			gameover.display(gl);
-		//	dbconnection.AddHighScore("Reschaper", score);
+			endgame();
 		}
 		
 		Projectview(gl);
@@ -441,6 +441,11 @@ public class MazeRunner implements GLEventListener {
 		gl.glLoadIdentity();
 		// Flush the OpenGL buffer.
 		gl.glFlush();
+	}
+	
+	public void endgame() {
+		dbconnection.AddHighScore("Reschaper", score);
+		Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
 	}
 
 	/**

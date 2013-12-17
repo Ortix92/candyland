@@ -34,7 +34,7 @@ public class GameOverScreen {
 		Font f3 = new Font("SansSerif", Font.ITALIC, 15);
 		tr.draw("", (int) (screenWidth/2 - 360), (int) (screenHeight -400));
 		Font f4 = new Font("SansSerif", Font.ITALIC, 5);
-		tr.draw("PRESS ENTER TO RETURN TO MAIN MENU", (int) (screenWidth/2 - 220), (int) (screenHeight -450));
+		tr.draw("PRESS ENTER TO RETURN TO MAIN MENU", (int) (screenWidth/2 - 400), (int) (screenHeight -450));
 		tr.endRendering();
 
 		gl.glEnable(GL.GL_LIGHTING);

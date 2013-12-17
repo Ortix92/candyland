@@ -121,11 +121,6 @@ public class UserInput extends Control implements MouseListener,
 			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
 			pause = false;
 		}
-		else if (event.getKeyCode() == KeyEvent.VK_ENTER
-				&& UserInput.dead == true) {
-			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
-			dead = false;
-		}
 
 
 	}
