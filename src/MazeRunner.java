@@ -180,7 +180,7 @@ public class MazeRunner implements GLEventListener {
 		maze = new Maze();
 		visibleObjects.add(maze);
 		phworld = new jbullet(amountofNyans);
-		dbconnection = new SQL();
+//		dbconnection = new SQL();
 		 
 		NyanInput=new NyanCatInput(canvas);
 	 // Zorgt dat Nyan beweegt volgens de input in NyanCatInput
@@ -395,7 +395,7 @@ public class MazeRunner implements GLEventListener {
 		
 	//	Nyan.update(deltaTime);
 		
-		if(!UserInput.pause && !UserInput.dead) {
+		if(!UserInput.pause && player.getHealth() > 0) {
 			updateMovement(deltaTime);
 			updateCamera();
 			updatePhysics(deltaTime);
@@ -431,11 +431,11 @@ public class MazeRunner implements GLEventListener {
 		pause.display(gl);
 		}
 		
-		
-		if (UserInput.dead) {
+		if (player.getHealth() <= 0) {
 			gameover.display(gl);
-			dbconnection.AddHighScore("Reschaper", score);
+		//	dbconnection.AddHighScore("Reschaper", score);
 		}
+		
 		Projectview(gl);
 		
 		gl.glLoadIdentity();
@@ -490,14 +490,7 @@ public class MazeRunner implements GLEventListener {
 	 * updateMovement(int) updates the position of all objects that need moving.
 	 * This includes rudimentary collision checking and collision reaction.
 	 */
-	/**
-	 * updateMovement(int) updates the position of all objects that need moving.
-	 * This includes rudimentary collision checking and collision reaction.
-	 */
 	private void updateMovement(int deltaTime) {
-		if (player.getHealth() <= 0) {
-			input.setdead();
-		}
 		player.update(deltaTime);
 		phworld.update(player);
 		player = phworld.updatePlayer(player);

@@ -25,7 +25,8 @@ public SQL() {
 
 		Class.forName("com.mysql.jdbc.Driver");
          connect = DriverManager.getConnection(db_connect_string,
-                  db_userid, db_password);
+                  db_userid, 
+                  db_password);
       } catch (Exception e) {
           e.printStackTrace();
        }
