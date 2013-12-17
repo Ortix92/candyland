@@ -372,20 +372,20 @@ public class jbullet {
 		} else {
 			floor = false;
 		}
-//		
+		
 ////		//bukken
 //		if(trans.origin.y <=2.6 && trans.origin.y >= 0) {
 //			if(duck) {
-//				playar.setCollisionShape(new BoxShape(new Vector3f(1f, 2.3f, 1f))); 
-//				playar.translate(new Vector3f(0,-0.2f,0));
+//				playar.setCollisionShape(new BoxShape(new Vector3f(1f, 2.29f, 1f))); 
+//				playar.translate(new Vector3f(0,-0.1f,0));
 //			}
 //		}
 //		else if (net_gebukt) {
-////			playar.translate(new Vector3f(0,0.2f,0));
+//			playar.translate(new Vector3f(0,0.11f,0));
 //			playar.setCollisionShape(new BoxShape(new Vector3f(1f, 2.5f, 1f))); 
 //			play.getControl().setNet_gebukt(false);
 //		}
-		
+//		
 				
 		if (floor) { // je mag pas een actie doen als je op de vloer staat
 			if (jump) { //Druk je de spring toets in tijdens het lopen?
