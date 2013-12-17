@@ -64,7 +64,8 @@ public class MazeRunner implements GLEventListener {
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
 	private SkyBox skybox;
-
+	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
+	
 	/*
 	 * **********************************************
 	 * * Initialization methods * **********************************************
@@ -167,6 +168,10 @@ public class MazeRunner implements GLEventListener {
 		visibleObjects.add(maze);
 		phworld = new jbullet(amountofNyans);
 
+		    skybox=new SkyBox(player);
+
+		//   visibleObjects.add(skybox);
+		  
 		new NyanCatInput(canvas);
 
 		player = new Player(maze.PLAYER_SPAWN_X, 3, maze.PLAYER_SPAWN_Z, -120,
@@ -277,14 +282,92 @@ public class MazeRunner implements GLEventListener {
 		GLUT glut = new GLUT();
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
-
+		
+		
 		gl.glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
-		gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
-		gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
-		gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
-		gl.glEnd();
+		if(Weapon.getNewWeapon()==0){
+			gl.glBegin(GL.GL_LINES);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
+			gl.glEnd();
+		}
+		if(Weapon.getNewWeapon()==2){
+			if(!UserInput.zoom){
+				gl.glBegin(GL.GL_LINES);
+				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+				gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+				gl.glEnd();
+			}
+			else{
+				// ZOOM! Draw scope
+				//draw Circle:
+				double radius=40;
+				double segments=100;
+				double theta=(2*Math.PI)/segments;				
+				double x=radius;
+				double y=0;
+				double tantheta=Math.tan(theta);
+				double costheta=Math.cos(theta);
+				
+				gl.glBegin(GL.GL_LINES);
+			
+				for(int i=0;i<segments;i++){
+					gl.glVertex2d(screenWidth/2+x,screenHeight/2+y);
+					double tx = -y; 
+					double ty = x; 
+			        
+					//add the tangential vector 
+
+					x += tx * tantheta; 
+					y += ty * tantheta; 
+			        
+					//correct using the radial factor 
+
+					x *= costheta; 
+					y *= costheta; 
+					gl.glVertex2d(screenWidth/2+x,screenHeight/2+y);
+				}
+				// draw lines on the circle:
+				gl.glVertex2d(screenWidth/2+50, screenHeight/2);
+				gl.glVertex2d(screenWidth/2+30, screenHeight/2);
+				gl.glVertex2d(screenWidth/2-50, screenHeight/2);
+				gl.glVertex2d(screenWidth/2-30, screenHeight/2);
+				gl.glVertex2d(screenWidth/2,screenHeight/2+50);
+				gl.glVertex2d(screenWidth/2,screenHeight/2+30);
+				gl.glVertex2d(screenWidth/2,screenHeight/2-50);
+				gl.glVertex2d(screenWidth/2,screenHeight/2-30);
+				
+				gl.glEnd();
+				
+			
+			}
+			
+		}
+		if(Weapon.getNewWeapon()==3){
+			gl.glBegin(GL.GL_LINES);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 + 10.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
+			gl.glVertex2d(screenWidth / 2.0 - 10.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0 - 10.0, screenHeight / 2.0);
+			gl.glVertex2d(screenWidth / 2.0 + 10.0, screenHeight / 2.0);
+			
+			
+			gl.glEnd();
+		}
 
 		gl.glColor4d(1.0, 0.0, 0.0, 0.2);
 		gl.glBegin(GL.GL_QUADS);
@@ -398,6 +481,17 @@ public class MazeRunner implements GLEventListener {
 			updatePhysics(deltaTime);
 		}
 
+		gl.glMatrixMode(GL.GL_PROJECTION);
+		gl.glLoadIdentity();
+		
+		if(UserInput.zoom){
+			System.out.println("Zoom");
+			glu.gluPerspective(30, screenWidth/ screenHeight,0.1, 200); 
+		}
+		else{
+			glu.gluPerspective(60, screenWidth/ screenHeight,0.1, 200); 
+		}
+		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
@@ -486,6 +580,37 @@ public class MazeRunner implements GLEventListener {
 	 */
 	private void updateMovement(int deltaTime) {
 		player.update(deltaTime);
+		for(int i=0;i<pickup.size();i++){
+			if(!pickup.get(i).getPickup()){
+				pickup.get(i).update(deltaTime);
+				if(pickup.get(i).getPickup()){
+					int w=Weapon.getNewWeapon();
+					switch(pickup.get(i).getSoort()){
+					case 0:
+						Weapon.setNewWeapon(0);
+						break;
+					case 1: 
+						score=score*2;
+						player.setHealth(player.getHealth()+20);
+						break;
+					case 2:
+						Weapon.setNewWeapon(2);
+						break;
+					case 3:
+						Weapon.setNewWeapon(3);
+						break;
+					}
+					// place your old weapon in new pickup:
+					if(pickup.get(i).getSoort()!=1){
+						PickUp wapen=new PickUp(player.getLocationX() + Math.sin(Math.toRadians(player.getHorAngle()))*player.getSpeed()*20,player.getLocationZ() +
+								Math.cos(Math.toRadians(player.getHorAngle()))*player.getSpeed()*20,player,w);
+						visibleObjects.add(wapen);
+						pickup.add(wapen);
+					}
+				}
+			}
+		}
+	
 		phworld.update(player);
 		player = phworld.updatePlayer(player);
 		for (int j = 0; j < Nyan.size(); j++) {

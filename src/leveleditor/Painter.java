@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.sun.opengl.util.Animator;
-
 /**
  * A frame for us to draw on using OpenGL.
  * 

@@ -132,8 +132,8 @@ public class jbullet {
 		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(
 				4000, nyanstate, nyanshape, Inertia);
 		RigidBody nyanbody = new RigidBody(nyaninfo);
-	//	nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
-	//			| CollisionFlags.KINEMATIC_OBJECT);
+		//nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
+		//		| CollisionFlags.KINEMATIC_OBJECT);
 		nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		dynamicworld.addRigidBody(nyanbody);
 		nyanies.add(nyanbody);
@@ -150,6 +150,9 @@ public class jbullet {
 		DefaultMotionState bulletmotion = new DefaultMotionState();
 		bulletmotion.setWorldTransform(p);
 		float mass = 0.002f;
+		if(Weapon.getNewWeapon()==3){
+			mass=3000*mass;
+		}
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		bulletshape.calculateLocalInertia(mass, Inertia);
 		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
@@ -343,7 +346,7 @@ public class jbullet {
 	}
 
 	public void update(Player play) {
-
+		if(!UserInput.zoom){
 		// updates movement
 		boolean net_gebukt = play.getControl().getNet_gebukt();
 		boolean duck = play.getControl().getDuck();
@@ -373,7 +376,7 @@ public class jbullet {
 //			play.getControl().setNet_gebukt(false);
 //		}
 //		
-				
+		
 		if (floor) { // je mag pas een actie doen als je op de vloer staat
 			if (jump) { //Druk je de spring toets in tijdens het lopen?
 				if (forward && left) {
@@ -432,7 +435,7 @@ public class jbullet {
 				
 			}
 			
-			
+			}
 		}
 		
 	

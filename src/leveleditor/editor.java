@@ -1,5 +1,4 @@
 package leveleditor;
-
 import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.ActionEvent;

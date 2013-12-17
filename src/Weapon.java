@@ -15,6 +15,19 @@ public class Weapon extends GameObject {
 	private boolean Down = false;
 	private int rateoffire;
 	private int firecounter = 0;
+	private static int NewWeapon=0;
+	// Weapon 0: default weapon
+	// Weapon 2: zoom weapon
+	// Weapon 3: MoveBlock weapon
+	
+	
+	public static int getNewWeapon(){
+		return NewWeapon;
+	}
+	
+	public static void setNewWeapon(int x){
+		NewWeapon=x;
+	}
 
 	public Weapon(int rateoffire) {
 		this.rateoffire = rateoffire;
@@ -127,9 +140,20 @@ public class Weapon extends GameObject {
 	public void display(GL gl) {
 		if (control.getShoot()) {
 			GLUT glut = new GLUT();
-			float CColour[] = { 34.0f, 0.1f, 0.2f, 1.0f };
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour, 0);
-
+			
+			if(NewWeapon==0){
+				float CColour[]= { 34.0f, 0.1f, 0.2f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour, 0);
+			}
+			
+			if(NewWeapon==2){
+				float CColourNew[]= { 0.0f, 0.0f, 0.0f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColourNew, 0);
+			}
+			if(NewWeapon==3){
+				float CColourNew[]= { 0.0f, 1.0f, 0.0f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColourNew, 0);
+			}
 			gl.glDisable(GL.GL_DEPTH_TEST);
 			gl.glPushMatrix();
 			gl.glLoadIdentity();
@@ -138,9 +162,10 @@ public class Weapon extends GameObject {
 			gl.glLoadIdentity();
 			gl.glTranslatef(-0.1f, -0.25f, -0.2f);
 			glut.glutSolidSphere(0.05, 50, 40);
-
-			float CColour2[] = { 0.4f, 22.1f, 16.2f, 1.0f };
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour2, 0);
+			
+				float CColour2[] = { 0.4f, 22.1f, 16.2f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour2, 0);
+			
 			gl.glLoadIdentity();
 			gl.glTranslatef(0.13f, -0.22f, -0.5f);
 			glut.glutSolidCylinder(0.005, 1.0, 10, 10);
@@ -160,8 +185,21 @@ public class Weapon extends GameObject {
 
 		} else {
 			GLUT glut = new GLUT();
-			float CColour[] = { 34.0f, 0.1f, 0.2f, 1.0f };
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour, 0);
+			
+			
+			if(NewWeapon==0){
+				float CColour[] = { 34.0f, 0.1f, 0.2f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour, 0);
+			}
+			
+			if(NewWeapon==2){
+				float CColourNew[]= { 0.0f, 0.0f, 0.0f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColourNew, 0);
+			}
+			if(NewWeapon==3){
+				float CColourNew[]= { 0.0f, 1.0f, 0.0f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColourNew, 0);
+			}
 			Weaponsway();
 			Calcoffset();
 			gl.glDisable(GL.GL_DEPTH_TEST);
@@ -178,8 +216,11 @@ public class Weapon extends GameObject {
 			gl.glTranslatef(-0.2f + Xoffset, 0.0f, 0.0f);
 			glut.glutSolidSphere(0.05, 50, 40);
 
-			float CColour2[] = { 0.4f, 22.1f, 16.2f, 1.0f };
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour2, 0);
+			
+			
+				float CColour2[] = { 0.4f, 22.1f, 16.2f, 1.0f };
+				gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, CColour2, 0);
+			
 			gl.glLoadIdentity();
 			if (control.getRight()) {
 				gl.glRotated(-5,0 ,0 , 1);

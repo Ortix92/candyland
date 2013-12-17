@@ -11,6 +11,7 @@
  * All these variables can be adjusted freely by MazeRunner. They could be
  * accessed by other classes if you pass a reference to them, but this should be
  * done with caution.
+ * 
  * @author Bruno Scheele
  * 
  */

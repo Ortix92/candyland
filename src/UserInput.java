@@ -37,6 +37,7 @@ public class UserInput extends Control implements MouseListener,
 	private int initX;
 	private int initY;
 	public static boolean pause = false;
+	public static boolean zoom = false;
 
 	/**
 	 * UserInput constructor.
@@ -49,8 +50,8 @@ public class UserInput extends Control implements MouseListener,
 	 */
 	public UserInput(GLCanvas canvas) {
 		this.canvas = canvas;
-		initX = canvas.getWidth()/2;
-		initY = canvas.getHeight()/2;
+		initX = canvas.getWidth() / 2;
+		initY = canvas.getHeight() / 2;
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
 		canvas.addKeyListener(this);
@@ -82,7 +83,13 @@ public class UserInput extends Control implements MouseListener,
 			shoot = true;
 		}
 
-		
+		if (Weapon.getNewWeapon() == 2) {
+			if (event.getButton() == 3) {
+				zoom = true;
+			}
+		}
+
+		// System.out.println(event.getButton());
 
 	}
 
@@ -90,6 +97,11 @@ public class UserInput extends Control implements MouseListener,
 	public void mouseReleased(MouseEvent event) {
 		if (event.getButton() == 1) {
 			shoot = false;
+		}
+		if (Weapon.getNewWeapon() == 2) {
+			if (event.getButton() == 3) {
+				zoom = false;
+			}
 		}
 	}
 
@@ -101,30 +113,31 @@ public class UserInput extends Control implements MouseListener,
 
 	@Override
 	public void keyPressed(KeyEvent event) {
-
-		if (event.getKeyCode() == KeyEvent.VK_W) {
-			forward = true;
-		} else if (event.getKeyCode() == KeyEvent.VK_S) {
-			back = true;
-		} else if (event.getKeyCode() == KeyEvent.VK_A) {
-			left = true;
-		} else if (event.getKeyCode() == KeyEvent.VK_D) {
-			right = true;
-		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {
-			jump = true;
-		} else if (event.getKeyCode() == KeyEvent.VK_CONTROL) {
-			duck = true;				
-		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == false) {
-			pause = true;
-		} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
-				|| (event.getKeyCode() == KeyEvent.VK_P && pause == true)) {
-			pause = false;
-		} else if (event.getKeyCode() == KeyEvent.VK_ENTER
-				&& UserInput.pause == true) {
-			Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
-			pause = false;
+		if (!zoom) {
+			if (event.getKeyCode() == KeyEvent.VK_W) {
+				forward = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_S) {
+				back = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_A) {
+				left = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_D) {
+				right = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {
+				jump = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_CONTROL) {
+				duck = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE
+					&& pause == false) {
+				pause = true;
+			} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
+					|| (event.getKeyCode() == KeyEvent.VK_P && pause == true)) {
+				pause = false;
+			} else if (event.getKeyCode() == KeyEvent.VK_ENTER
+					&& UserInput.pause == true) {
+				Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
+				pause = false;
+			}
 		}
-
 
 	}
 
@@ -138,7 +151,7 @@ public class UserInput extends Control implements MouseListener,
 			left = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_D) {
 			right = false;
-		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {	
+		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {
 			jump = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_CONTROL) {
 			duck = false;
