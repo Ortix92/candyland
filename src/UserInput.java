@@ -112,6 +112,8 @@ public class UserInput extends Control implements MouseListener,
 			right = true;
 		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {
 			jump = true;
+		} else if (event.getKeyCode() == KeyEvent.VK_CONTROL) {
+			duck = true;				
 		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == false) {
 			pause = true;
 		} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
@@ -136,7 +138,9 @@ public class UserInput extends Control implements MouseListener,
 			right = false;
 		} else if (event.getKeyCode() == KeyEvent.VK_SPACE) {	
 			jump = false;
-		} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		} else if (event.getKeyCode() == KeyEvent.VK_CONTROL) {
+			duck = false;
+			net_gebukt = true;
 		}
 
 	}
