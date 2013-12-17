@@ -45,6 +45,7 @@ public class Player extends GameObject {
 	public Player(double x, double y, double z, double h, double v) {
 		// Set the initial position and viewing direction of the player.
 		super(x, y, z);
+		System.out.println(x + ", " + y + ", " + z);
 		horAngle = h;
 		verAngle = v;
 		speed = 0.2;
@@ -146,8 +147,8 @@ public class Player extends GameObject {
 		if (control != null) {
 			control.update();
 
-			setHorAngle(getHorAngle() - control.getdX()*0.5);
-			setVerAngle(getVerAngle() - control.getdY()*0.5);
+			setHorAngle(getHorAngle() - control.getdX() * 0.5);
+			setVerAngle(getVerAngle() - control.getdY() * 0.5);
 
 			if (getHorAngle() >= 360) {
 				setHorAngle(getHorAngle() - 360);

@@ -169,7 +169,7 @@ public class MazeRunner implements GLEventListener {
 
 		new NyanCatInput(canvas);
 
-		player = new Player(maze.PLAYER_SPAWN_X, maze.PLAYER_SPAWN_Y, 17.5,
+		player = new Player(maze.PLAYER_SPAWN_X, 3, maze.PLAYER_SPAWN_Z,
 				-120, -90);
 
 		skybox = new SkyBox(player);
@@ -177,14 +177,14 @@ public class MazeRunner implements GLEventListener {
 
 		// initialize the NyanCat.
 		for (int i = 0; i < amountofNyans; i++) {
-			double X = Math.random() * 100 + 6 * maze.SQUARE_SIZE
+			double X = Math.random() * 200 + 6 * maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // x-position
-			double Z = Math.random() * 100 + 3 * maze.SQUARE_SIZE
+			double Z = Math.random() * 200 + 3 * maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // z-position
 			while (maze.isWall(X, Z)) {
-				X = Math.random() * 100 + 6 * maze.SQUARE_SIZE
+				X = Math.random() * 200 + 6 * maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // x-position
-				Z = Math.random() * 100 + 3 * maze.SQUARE_SIZE
+				Z = Math.random() * 200 + 3 * maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // z-position
 			}
 			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position

@@ -11,7 +11,7 @@ public class World {
 	private String worldFile;
 	private ArrayList<ArrayList<Integer>> map = new ArrayList<ArrayList<Integer>>();
 	private int[][] mapArray;
-	private double spawnY;
+	private double spawnZ;
 	private double spawnX;
 
 	public World(String absolutePath) {
@@ -37,7 +37,7 @@ public class World {
 
 			// retrieve spawnpoints
 			spawnX = Integer.parseInt(sc.next());
-			spawnY = Integer.parseInt(sc.next());
+			spawnZ = Integer.parseInt(sc.next());
 			sc.nextLine();
 
 			ArrayList<Integer> row;
@@ -107,8 +107,8 @@ public class World {
 		return map;
 	}
 
-	public double getSpawnY() {
-		return spawnY;
+	public double getSpawnZ() {
+		return spawnZ;
 	}
 
 	public double getSpawnX() {
