@@ -63,6 +63,7 @@ public class MazeRunner implements GLEventListener {
 	private jbullet phworld;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
+	private GameOverScreen gameover;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
 	

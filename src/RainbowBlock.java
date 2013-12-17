@@ -72,7 +72,14 @@ public class RainbowBlock extends GameObject implements VisibleObject {
 		}
 		
 	}
-	
+			public boolean CollisionCheck(Player player) {
+			if (getLocationX() <= player.getLocationX() + 1 && getLocationX() >= player.getLocationX() - 1 &&
+					getLocationZ() <= player.getLocationZ() + 1 && getLocationZ() >= player.getLocationZ() - 1)	{
+				return true; 
+				}
+		return false;
+			
+		}
 	
 
 }

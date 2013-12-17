@@ -121,16 +121,16 @@ public class Weapon extends GameObject {
 
 	public void Calcoffset() {
 		if (Right) {
-			Xoffset = Xoffset + 0.0005f;
+			Xoffset = Xoffset + 0.005f;
 		}
 		if (Left) {
-			Xoffset = Xoffset - 0.0005f;
+			Xoffset = Xoffset - 0.005f;
 		}
 		if (Up) {
-			Yoffset = Yoffset - 0.0006f;
+			Yoffset = Yoffset - 0.006f;
 		}
 		if (Down) {
-			Yoffset = Yoffset + 0.0006f;
+			Yoffset = Yoffset + 0.006f;
 		} else {
 			Xoffset = 0;
 			Yoffset = 0;

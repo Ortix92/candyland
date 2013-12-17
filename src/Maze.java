@@ -137,26 +137,12 @@ public class Maze implements VisibleObject {
 		// draw the grid with the current material
 		for (int i = 0; i < MAZE_SIZE; i++) {
 			for (int j = 0; j < MAZE_SIZE; j++) {
-				gl.glPushMatrix();
-			
-				        gl.glTranslated( i * SQUARE_SIZE + SQUARE_SIZE / 2, 0, j * SQUARE_SIZE + SQUARE_SIZE / 2 );
-
-				       Textureloader.Floor(gl, SQUARE_SIZE );
-
-				        gl.glTranslated(0,  SQUARE_SIZE / 2, 0 );
-
-				       if ( isWall(i, j) ){
-
-				         gl.glTranslated(-0.5*SQUARE_SIZE,-0.5*SQUARE_SIZE,-0.5*SQUARE_SIZE);
-
-				       gl.glScaled(SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE);
-
-				      Textureloader.Wall(gl);
-
-				         //glut.glutSolidCube( (float) SQUARE_SIZE );
-
-				  }
-				gl.glPopMatrix();
+//				gl.glPushMatrix();
+//				gl.glTranslated(i * SQUARE_SIZE + SQUARE_SIZE / 2,
+//						SQUARE_SIZE / 2, j * SQUARE_SIZE + SQUARE_SIZE / 2);
+//				if (isWall(i, j))
+//					glut.glutSolidCube((float) SQUARE_SIZE);
+//				gl.glPopMatrix();
 			}
 		}
 		

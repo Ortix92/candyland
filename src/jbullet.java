@@ -41,6 +41,7 @@ public class jbullet {
 	private int amountofNyans;
 	private RigidBody boxRigidBody;
 	private ObjectArrayList<RigidBody> bullets;
+	private ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
 	private RigidBody groundbody;
 	private RigidBody playar;
 
@@ -111,10 +112,10 @@ public class jbullet {
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							30000, mazeMotionState, mazeshape, Inertia);
+							100, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
-					mazebody.setFriction(0f);
 					dynamicworld.addRigidBody(mazebody);
+					mazeblocks.add(mazebody);
 				}
 			}
 		}
@@ -130,7 +131,7 @@ public class jbullet {
 		nyanstate.setWorldTransform(nyan);
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(
-				4000, nyanstate, nyanshape, Inertia);
+				5, nyanstate, nyanshape, Inertia);
 		RigidBody nyanbody = new RigidBody(nyaninfo);
 		//nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
 		//		| CollisionFlags.KINEMATIC_OBJECT);
@@ -222,6 +223,26 @@ public class jbullet {
 		nyanies.remove(i);
 		nyanies.add(nyan);
 
+	}
+	
+	public void displaymaze(GL gl) {
+		GLUT glut = new GLUT();
+		float wallColour[] = { 0.0f, 70.0f, 0.0f, 1.0f };
+		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
+for (int i =0; i < mazeblocks.size(); i++) {
+	gl.glPushMatrix();
+		Transform trans = new Transform();
+		mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+		float x = trans.origin.x;
+		float y = trans.origin.y;
+		float z = trans.origin.z;
+
+		
+		gl.glTranslatef(x, y, z);
+
+		glut.glutSolidCube(5f);
+		gl.glPopMatrix();
+	}
 	}
 
 	public void display(GL gl, int i) {

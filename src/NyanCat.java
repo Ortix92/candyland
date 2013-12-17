@@ -32,7 +32,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 	private Maze maze;
 	private TimerTask timertask;
 	private Timer timer = new Timer();
-
+        private double HPoff = 0;
 	// makes a NyanCat on the location x, y , z, looking in direction h
 	public NyanCat(double x, double y, double z, double h, Player play, Maze m) {
 		super(x, y, z);
@@ -431,10 +431,18 @@ public class NyanCat extends GameObject implements VisibleObject {
 			for (int i = 0; i < rainbows.size(); i++) {
 				rainbows.get(i).update();
 				rainbows.get(i).display(gl);
+				                                if (rainbows.get(i).CollisionCheck(player)) {
+                                	HPoff = HPoff + 2;
+                                	rainbows.remove(i);
+                                }
 			}
 		}
 	}
-
+        public double getHPoff() {
+        	double res = HPoff;
+        	HPoff = 0;
+        	return res;
+        }
 	public void setHP(int x) {
 		HP = x;
 	}

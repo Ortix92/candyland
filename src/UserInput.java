@@ -38,6 +38,7 @@ public class UserInput extends Control implements MouseListener,
 	private int initY;
 	public static boolean pause = false;
 	public static boolean zoom = false;
+	public static boolean dead = false;
 
 	/**
 	 * UserInput constructor.
@@ -158,6 +159,10 @@ public class UserInput extends Control implements MouseListener,
 			net_gebukt = true;
 		}
 
+	}
+	
+	public void setdead() {
+		dead = true;
 	}
 
 	/*

@@ -11,7 +11,7 @@ public class Bullet extends GameObject {
 	public Bullet(double x, double y, double z, double HorAngle, double VerAngle) {
 	super( x,y,z );
 	bullet = true;
-	time = 80;
+	time = 300;
 	}
 	
 	
