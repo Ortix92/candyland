@@ -22,7 +22,10 @@ public abstract class Control
 	protected boolean back = false;
 	protected boolean left = false;
 	protected boolean right = false;
-	protected boolean shoot = false;
+	protected boolean shoot = false;	
+	protected boolean jump = false;
+	protected boolean duck = false;
+	protected boolean net_gebukt = false;
 	
 	protected int dX = 0;
 	protected int dY = 0;
@@ -80,6 +83,24 @@ public abstract class Control
 	public boolean getShoot() 
 	{
 		return shoot;
+	}
+	
+	public boolean getJump() 
+	{
+		return jump;
+	}
+	
+	public boolean getDuck() 
+	{
+		return duck;
+	}
+	public boolean getNet_gebukt() 
+	{
+		return net_gebukt;
+	}
+	public void setNet_gebukt(boolean bol) 
+	{
+		net_gebukt = bol;
 	}
 	
 	/**
