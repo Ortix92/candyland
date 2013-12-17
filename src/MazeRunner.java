@@ -501,7 +501,7 @@ public class MazeRunner implements GLEventListener {
 				camera.getVuvZ());
 
 		// Display all the visible objects of MazeRunner.
-
+		phworld.displaymaze(gl);
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
 		}
