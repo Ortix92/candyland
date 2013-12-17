@@ -358,70 +358,72 @@ public class jbullet {
 	}
 
 	public void update(Player play) {
-		// if (playar.getLinearVelocity(new Vector3f(0,0,0)).length() <= 15) {
-		if (play.getControl().getForward()) {
-			playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math
-					.toRadians(play.getHorAngle())) * 10f, 0, -(float) Math
-					.cos(Math.toRadians(play.getHorAngle())) * 10f));
-		}
-		if (play.getControl().getBack()) {
-			playar.setLinearVelocity(new Vector3f((float) Math.sin(Math
-					.toRadians(play.getHorAngle())) * 10f, 0, (float) Math
-					.cos(Math.toRadians(play.getHorAngle())) * 10f));
-		}
-		if (play.getControl().getLeft()) {
-			playar.setLinearVelocity(new Vector3f(-(float) Math.cos(Math
-					.toRadians(play.getHorAngle())) * 10f, 0, (float) Math
-					.sin(Math.toRadians(play.getHorAngle())) * 10f));
-		}
-		if (play.getControl().getRight()) {
-			playar.setLinearVelocity(new Vector3f((float) Math.cos(Math
-					.toRadians(play.getHorAngle())) * 10f, 0, -(float) Math
-					.sin(Math.toRadians(play.getHorAngle())) * 10f));
-		}
-		if (play.getControl().getForward() && play.getControl().getRight()) {
-			playar.setLinearVelocity(new Vector3f(
-					-(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, -(float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
-		}
-		if (play.getControl().getForward() && play.getControl().getLeft()) {
-			playar.setLinearVelocity(new Vector3f(
-					-(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, -(float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
-		}
-		if (play.getControl().getBack() && play.getControl().getRight()) {
-			playar.setLinearVelocity(new Vector3f(
-					(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, (float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
-		}
-		if (play.getControl().getBack() && play.getControl().getLeft()) {
-			playar.setLinearVelocity(new Vector3f(
-					(float) Math.sin(Math.toRadians(play.getHorAngle()))
-							* 5f
-							- (float) Math.cos(Math.toRadians(play
-									.getHorAngle())) * 5f, 0, (float) Math
-							.cos(Math.toRadians(play.getHorAngle()))
-							* 5f
-							+ (float) Math.sin(Math.toRadians(play
-									.getHorAngle())) * 5f));
+		if(!UserInput.zoom){
+			// if (playar.getLinearVelocity(new Vector3f(0,0,0)).length() <= 15) {
+			if (play.getControl().getForward()) {
+				playar.setLinearVelocity(new Vector3f(-(float) Math.sin(Math
+						.toRadians(play.getHorAngle())) * 10f, 0, -(float) Math
+						.cos(Math.toRadians(play.getHorAngle())) * 10f));
+			}
+			if (play.getControl().getBack()) {
+				playar.setLinearVelocity(new Vector3f((float) Math.sin(Math
+						.toRadians(play.getHorAngle())) * 10f, 0, (float) Math
+						.cos(Math.toRadians(play.getHorAngle())) * 10f));
+			}
+			if (play.getControl().getLeft()) {
+				playar.setLinearVelocity(new Vector3f(-(float) Math.cos(Math
+						.toRadians(play.getHorAngle())) * 10f, 0, (float) Math
+						.sin(Math.toRadians(play.getHorAngle())) * 10f));
+			}
+			if (play.getControl().getRight()) {
+				playar.setLinearVelocity(new Vector3f((float) Math.cos(Math
+						.toRadians(play.getHorAngle())) * 10f, 0, -(float) Math
+						.sin(Math.toRadians(play.getHorAngle())) * 10f));
+			}
+			if (play.getControl().getForward() && play.getControl().getRight()) {
+				playar.setLinearVelocity(new Vector3f(
+						-(float) Math.sin(Math.toRadians(play.getHorAngle()))
+								* 5f
+								+ (float) Math.cos(Math.toRadians(play
+										.getHorAngle())) * 5f, 0, -(float) Math
+								.cos(Math.toRadians(play.getHorAngle()))
+								* 5f
+								- (float) Math.sin(Math.toRadians(play
+										.getHorAngle())) * 5f));
+			}
+			if (play.getControl().getForward() && play.getControl().getLeft()) {
+				playar.setLinearVelocity(new Vector3f(
+						-(float) Math.sin(Math.toRadians(play.getHorAngle()))
+								* 5f
+								- (float) Math.cos(Math.toRadians(play
+										.getHorAngle())) * 5f, 0, -(float) Math
+								.cos(Math.toRadians(play.getHorAngle()))
+								* 5f
+								+ (float) Math.sin(Math.toRadians(play
+										.getHorAngle())) * 5f));
+			}
+			if (play.getControl().getBack() && play.getControl().getRight()) {
+				playar.setLinearVelocity(new Vector3f(
+						(float) Math.sin(Math.toRadians(play.getHorAngle()))
+								* 5f
+								+ (float) Math.cos(Math.toRadians(play
+										.getHorAngle())) * 5f, 0, (float) Math
+								.cos(Math.toRadians(play.getHorAngle()))
+								* 5f
+								- (float) Math.sin(Math.toRadians(play
+										.getHorAngle())) * 5f));
+			}
+			if (play.getControl().getBack() && play.getControl().getLeft()) {
+				playar.setLinearVelocity(new Vector3f(
+						(float) Math.sin(Math.toRadians(play.getHorAngle()))
+								* 5f
+								- (float) Math.cos(Math.toRadians(play
+										.getHorAngle())) * 5f, 0, (float) Math
+								.cos(Math.toRadians(play.getHorAngle()))
+								* 5f
+								+ (float) Math.sin(Math.toRadians(play
+										.getHorAngle())) * 5f));
+			}
 		}
 	}
 

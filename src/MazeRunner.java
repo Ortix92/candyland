@@ -315,15 +315,60 @@ public class MazeRunner implements GLEventListener {
 			gl.glEnd();
 		}
 		if(Weapon.getNewWeapon()==2){
-			gl.glBegin(GL.GL_LINES);
-			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
-			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
-			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
-			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
-			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
-			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+			if(!UserInput.zoom){
+				gl.glBegin(GL.GL_LINES);
+				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+				gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
+				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+				gl.glEnd();
+			}
+			else{
+				// ZOOM! Draw scope
+				//draw Circle:
+				double radius=40;
+				double segments=100;
+				double theta=(2*Math.PI)/segments;				
+				double x=radius;
+				double y=0;
+				double tantheta=Math.tan(theta);
+				double costheta=Math.cos(theta);
+				
+				gl.glBegin(GL.GL_LINES);
 			
-			gl.glEnd();
+				for(int i=0;i<segments;i++){
+					gl.glVertex2d(screenWidth/2+x,screenHeight/2+y);
+					double tx = -y; 
+					double ty = x; 
+			        
+					//add the tangential vector 
+
+					x += tx * tantheta; 
+					y += ty * tantheta; 
+			        
+					//correct using the radial factor 
+
+					x *= costheta; 
+					y *= costheta; 
+					gl.glVertex2d(screenWidth/2+x,screenHeight/2+y);
+				}
+				// draw lines on the circle:
+				gl.glVertex2d(screenWidth/2+50, screenHeight/2);
+				gl.glVertex2d(screenWidth/2+30, screenHeight/2);
+				gl.glVertex2d(screenWidth/2-50, screenHeight/2);
+				gl.glVertex2d(screenWidth/2-30, screenHeight/2);
+				gl.glVertex2d(screenWidth/2,screenHeight/2+50);
+				gl.glVertex2d(screenWidth/2,screenHeight/2+30);
+				gl.glVertex2d(screenWidth/2,screenHeight/2-50);
+				gl.glVertex2d(screenWidth/2,screenHeight/2-30);
+				
+				gl.glEnd();
+				
+			
+			}
+			
 		}
 		if(Weapon.getNewWeapon()==3){
 			gl.glBegin(GL.GL_LINES);

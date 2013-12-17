@@ -29,18 +29,21 @@ int soort;
 	public void display(GL gl) {
 			if(!pickup){
 				gl.glPushMatrix();
-				
 				gl.glTranslated(this.getLocationX(),this.getLocationY(),this.getLocationZ());
 				gl.glRotated(i,0,1,0);
 				gl.glTranslated(-0.5, -0.5, -0.5);
-				if(!Textureloader.load){
-					Textureloader.load();
-					Textureloader.load=true;
+				if(Textureloader.loadtextures){
+					if(!Textureloader.load){
+						Textureloader.load();
+						Textureloader.load=true;
+					}
+					Textureloader.PickUp.enable();
+					Textureloader.PickUp.bind();
 				}
-				Textureloader.PickUp.enable();
-				Textureloader.PickUp.bind();
 				Textureloader.drawCube(gl, false);
-				Textureloader.PickUp.disable();
+				if(Textureloader.loadtextures){
+					Textureloader.PickUp.disable();
+				}
 				gl.glPopMatrix();
 			}
 		}

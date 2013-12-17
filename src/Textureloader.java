@@ -13,6 +13,7 @@ import com.sun.opengl.util.texture.TextureIO;
 
 
 public class Textureloader {
+	static boolean loadtextures=false; // Nicks spookversie when false;
 	static Texture PoptartTexture; // remembers the texture of the poptart. 
 	static Texture Nyanface; // remembers the texture of the face
 	static Texture Rainbow; // remembers the texture of the rainbow
@@ -151,59 +152,72 @@ public class Textureloader {
 	
 	public static void head(GL gl,GLUT glut, float size,int roundness){
 		// makes the head. 
-		if(!load){ // checks if loading is needed
-			load(); //loads textures
-			load=true; // next time loading is not needed anymore. 
-		}
+		if(loadtextures){
+				if(!load){ // checks if loading is needed			
+				load(); //loads textures
+				load=true; // next time loading is not needed anymore. 
+				}
+		
+	
 		Nyanface.enable(); // enable the texture so that it can be used. 
 		Nyanface.bind(); // bind texture to the following object
+		}
 		GLU glu=new GLU(); // needed to make a sphere with texture coordinates
 		GLUquadric head = glu.gluNewQuadric(); // makes a quadric object 
 		  glu.gluQuadricTexture(head, true);	// Makes the quadric object head capable of having textures. 
 		glu. gluSphere(head,0.5*size,roundness,roundness); // make the object into a sphere
-        Nyanface.disable(); // disable texture so that it will not be put on every next object. 
+		
+		if(loadtextures){
+			Nyanface.disable(); // disable texture so that it will not be put on every next object. 
+		}
         
 	}
 	
 	public static  void poptart( GL gl, float size){
 		// Makes a poptart. 
-		if(!load){ // checks if loading is needed
-			load(); //loads textures
-			load=true; // next time loading is not needed anymore. 
-		}
+		if(loadtextures){
+				if(!load){ // checks if loading is needed
+			
+				load(); //loads textures
+				load=true; // next time loading is not needed anymore. 
+				}
+			
 		
-		PoptartTexture.enable(); // enable texture so that it can be used. 
-		PoptartTexture.bind(); // bind texture to following object. 
+			PoptartTexture.enable(); // enable texture so that it can be used. 
+			PoptartTexture.bind(); // bind texture to following object. 
+		}
 		 gl.glTranslated(-size/2,-size/2,-size/2); // put the poptart in the right position
 		 gl.glScaled(size, size, size); // make the rib lengths: size. 
 		 drawCube(gl,false); // make a cube with ribs length 1 and with texture coords.
 		 gl.glScaled(1/size,1/size,1/size); // unscale so that following objects will not be scaled. 
 		 gl.glTranslated(size/2,size/2,size/2); // translate back. 
-		 PoptartTexture.disable(); // disable texture so that next objects won't have it. 
+		 if(loadtextures){
+			 PoptartTexture.disable(); // disable texture so that next objects won't have it. 
+		 }
 	}
 	
 	public static void Rainbow(GL gl, double size){
-		if(!load){
+		// set de size van de rainbowblokjes:
+				gl.glScaled(size, size, size);
+		if(loadtextures) {
+			if(!load){
 			load();
 			load=true;
+			}
+			// Plak rainbow texture op de zijden:
+			Rainbow.enable();
+			Rainbow.bind();
 		}
-		
-		// set de size van de rainbowblokjes:
-		gl.glScaled(size, size, size);
-		
-		// Plak rainbow texture op de zijden:
-		Rainbow.enable();
-		Rainbow.bind();
 	//	gl.glScaled(2,2,1);	
 		 gl.glTranslated(-size/2,-size/2,-size/2); // put the rainbowcube in the right position
 		drawCube(gl,true);
-		  
-		Rainbow.disable();
 		
-		
-		// Plak paarse texture op de onderkant:
-		purple.enable();
-		purple.bind();
+		if(loadtextures){
+			Rainbow.disable();
+			// Plak paarse texture op de onderkant:
+			purple.enable();
+			purple.bind();
+		}
   
 		    // Square 5:
 	     gl.glBegin(GL.GL_QUADS);
@@ -215,12 +229,14 @@ public class Textureloader {
 	        gl.glVertex3f(0, 0, 0);
 	        gl.glTexCoord2f(0, 0);
 	        gl.glVertex3f(1, 0, 0);
-	    gl.glEnd();	    
-	    purple.disable();
+	    gl.glEnd();	   
+	    if(loadtextures){
+	    	purple.disable();
 	    
 	    // plak rode texture op de bovenkant:
 	    red.enable();
 	    red.bind();
+	    }
 	    // Square 3:
 	    gl.glBegin(GL.GL_QUADS);
 	    	gl.glTexCoord2f(1,0);
@@ -232,7 +248,10 @@ public class Textureloader {
 	        gl.glTexCoord2f(0, 0);
 	        gl.glVertex3f(0, 1, 0);
 	     gl.glEnd();
-	     red.disable();
+	     
+	     if(loadtextures){
+	    	 red.disable();
+	     }
 	     gl.glScaled(1/size,1/size,1/size); // unscale so that following objects will not be scaled. 
 	    
 	     gl.glTranslated(size/2,size/2,size/2); // translate back.
@@ -324,13 +343,14 @@ public class Textureloader {
 	}
 	
 	public static void Floor(GL gl, double size){
-        if (!load) {
-                load();
-                load = true;
-        }
-        
-        CandyFloor.enable();
-        CandyFloor.bind();
+       if(loadtextures){
+	    	   if (!load) {
+	                load();
+	                load = true;
+	    	   }	        
+	        CandyFloor.enable();
+	        CandyFloor.bind();
+       }
  gl.glNormal3d(0, 1, 0);
                 gl.glBegin(GL.GL_QUADS);
                 gl.glTexCoord2f(1,0);
@@ -341,37 +361,47 @@ public class Textureloader {
          gl.glVertex3d(size, 0, size);
          gl.glTexCoord2f(0,0);
          gl.glVertex3d(size, 0, 0);                
-                gl.glEnd();        
-        CandyFloor.disable();
+                gl.glEnd();  
+                
+                if(loadtextures){
+                	CandyFloor.disable();
+                }
 }
 
 public static void Wall(GL gl){
+	if(loadtextures){
         if (!load) {
                 load();
                 load = true;
         }
         CandyWall.enable();
         CandyWall.bind();
+	}
         drawCube(gl,false);
-        CandyWall.disable();
+        
+        if(loadtextures){
+        	CandyWall.disable();
+        }
 }
 
 
 public static void SkyBox(GL gl) {
-
-        if (!load) {
+	if(loadtextures){
+    // draws a cube with texture coordinates.
+	   gl.glDepthMask(false);
+       
+       // Set size:
+       gl.glScaled(100, 100, 100);
+	    if (!load) {
                 load();
                 load = true;
         }
-       
+
         //gl.glPushAttrib(GL.GL_ENABLE_BIT);
        //gl.glDisable(GL.GL_DEPTH_TEST);
        // gl.glDisable(GL.GL_LIGHTING);
       //  gl.glDisable(GL.GL_BLEND);
-        gl.glDepthMask(false);
-        // draws a cube with texture coordinates.
-        // Set size:
-        gl.glScaled(100, 100, 100);
+     
         // Square 1:
         SkyBox5.enable();
         SkyBox5.bind();
@@ -474,6 +504,7 @@ public static void SkyBox(GL gl) {
         gl.glDepthMask(true);
       //  gl.glPopAttrib();
       //  gl.glEnable(GL.GL_DEPTH_TEST);
+	}
 
 }
 			
