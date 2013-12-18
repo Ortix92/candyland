@@ -162,6 +162,13 @@ public class Player extends GameObject {
 			if (getVerAngle() <= -90) {
 				setVerAngle(-90);
 			}
+			if (getVerAngle() == 90) {
+				setVerAngle(89);
+			}
+			if (getVerAngle() == -90) {
+				setVerAngle(-89);
+			}
+			
 
 			// TODO: Move the player, according to control
 

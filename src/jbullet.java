@@ -143,7 +143,7 @@ public class jbullet {
 
 	public void CreateBullet(float x, float y, float z, float verAngle,
 			float horAngle, Camera camera) {
-		CollisionShape bulletshape = new SphereShape(0.5f);
+		CollisionShape bulletshape = new SphereShape(0.2f);
 		Transform p = new Transform();
 		p.setRotation(new Quat4f(horAngle, verAngle, 0, 1));
 		p.origin.set(x - (float) Math.sin(Math.toRadians(horAngle)), y, z
@@ -259,7 +259,7 @@ public class jbullet {
 
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
-		glut.glutSolidCube(0.25f);
+		Textureloader.stuiterbal(0.1f, 10);
 		gl.glPopMatrix();
 	}
 
@@ -357,7 +357,7 @@ public class jbullet {
 		// if(Nyan[i].getHP()>-1){
 		// System.out.println(nyans.get(i).getHP());
 		if (nyans.get(i).getHP() <= 0) {
-			System.out.println(nyans.get(i).getLocationX());
+//			System.out.println(nyans.get(i).getLocationX());
 			nyans.remove(i);
 			dynamicworld.removeRigidBody(nyanies.get(i));
 			nyanies.remove(i);
