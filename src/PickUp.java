@@ -14,6 +14,7 @@ int soort;
 		// soort 1== Health+score multiplier
 		// soort 2== Zoom wapen
 		// soort 3== MoveBlock wapen
+		System.out.println("Pick up made");
 		
 	}
 

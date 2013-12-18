@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
@@ -66,6 +67,7 @@ public class MazeRunner implements GLEventListener {
 	private GameOverScreen gameover;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
+	private Floor floor;
 	
 	/*
 	 * **********************************************
@@ -167,9 +169,13 @@ public class MazeRunner implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add(maze);
+		floor=new Floor(maze);
+		
+		
+		//visibleObjects.add(floor);
 		phworld = new jbullet(amountofNyans);
 
-		    skybox=new SkyBox(player);
+		   
 
 		//   visibleObjects.add(skybox);
 		  
@@ -178,21 +184,22 @@ public class MazeRunner implements GLEventListener {
 		player = new Player(maze.PLAYER_SPAWN_X, 3, maze.PLAYER_SPAWN_Z, -120,
 				-90);
 
-		skybox = new SkyBox(player);
-		visibleObjects.add(skybox);
+		skybox = new SkyBox(player,50);
+		//visibleObjects.add(skybox);
 
 		// initialize the NyanCat.
 		for (int i = 0; i < amountofNyans; i++) {
-			double X = Math.random() * 200 + 6 * maze.SQUARE_SIZE
+			double X = Math.random() * maze.MAZE_SIZE + 6 * maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // x-position
-			double Z = Math.random() * 200 + 3 * maze.SQUARE_SIZE
+			double Z = Math.random() * maze.MAZE_SIZE + 3 * maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // z-position
 			while (maze.isWall(X, Z)) {
-				X = Math.random() * 200 + 6 * maze.SQUARE_SIZE
+				X = Math.random() * maze.MAZE_SIZE + 6 * maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // x-position
-				Z = Math.random() * 200 + 3 * maze.SQUARE_SIZE
+				Z = Math.random() * maze.MAZE_SIZE + 3 * maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // z-position
 			}
+			System.out.println("X "+X+" Z "+Z);
 			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
 					// horizontal angle
@@ -206,6 +213,12 @@ public class MazeRunner implements GLEventListener {
 					player, maze);
 			phworld.initNyan(nyan);
 		}
+		PickUp NewClaws=new PickUp(5,5,player,2);
+        visibleObjects.add(NewClaws);
+        pickup.add(NewClaws);
+        PickUp NewClaws2=new PickUp(15,15,player,3);
+        visibleObjects.add(NewClaws2);
+        pickup.add(NewClaws2);
 
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
@@ -449,6 +462,7 @@ public class MazeRunner implements GLEventListener {
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glShadeModel(GL.GL_SMOOTH);
+		
 
 	}
 
@@ -465,13 +479,12 @@ public class MazeRunner implements GLEventListener {
 	public void display(GLAutoDrawable drawable) {
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
-
 		// Calculating time since last frame.
 		Calendar now = Calendar.getInstance();
 		long currentTime = now.getTimeInMillis();
 		int deltaTime = (int) (currentTime - previousTime);
 		previousTime = currentTime;
-
+		
 		// Update any movement since last frame.
 
 		// Nyan.update(deltaTime);
@@ -481,7 +494,7 @@ public class MazeRunner implements GLEventListener {
 			updateCamera();
 			updatePhysics(deltaTime);
 		}
-
+		
 		gl.glMatrixMode(GL.GL_PROJECTION);
 		gl.glLoadIdentity();
 		
@@ -501,6 +514,7 @@ public class MazeRunner implements GLEventListener {
 				camera.getVuvZ());
 
 		// Display all the visible objects of MazeRunner.
+		skybox.display(gl);
 		phworld.displaymaze(gl);
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
@@ -509,10 +523,13 @@ public class MazeRunner implements GLEventListener {
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
 		}
+	//	floor.display(gl);
 		for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
 				.hasNext();) {
 			it.next().display(gl);
 		}
+		floor.display(gl);
+		
 		box.display(gl);
 		weapon.display(gl);
 		Orthoview(gl);
@@ -617,7 +634,11 @@ public class MazeRunner implements GLEventListener {
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).update(deltaTime);
 			if (phworld.updateNyanhealth(j)) {
+				 PickUp pickupnieuw=new PickUp(Nyan.get(j).getLocationX(),Nyan.get(j).getLocationZ(),player,1);
+                 visibleObjects.add(pickupnieuw);
+                 pickup.add(pickupnieuw);
 				Nyan.remove(j);
+				Menu.Sound.play("sounds/sonic_ring.wav");
 				score = score + 1000;
 
 			}

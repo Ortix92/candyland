@@ -44,6 +44,7 @@ public class jbullet {
 	private ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
 	private RigidBody groundbody;
 	private RigidBody playar;
+	private Maze maze;
 
 	public jbullet(int n) {
 		Bullets = new ArrayList<Bullet>();
@@ -98,6 +99,7 @@ public class jbullet {
 	}
 
 	public void initMaze(Maze maze) {
+		this.maze=maze;
 		for (int i = 0; i < maze.MAZE_SIZE; i++) {
 			for (int j = 0; j < maze.MAZE_SIZE; j++) {
 				if (maze.isWall(i, j)) {
@@ -229,7 +231,7 @@ public class jbullet {
 
 	public void displaymaze(GL gl) {
 		GLUT glut = new GLUT();
-		float wallColour[] = { 0.0f, 70.0f, 0.0f, 1.0f };
+		float wallColour[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 		for (int i = 0; i < mazeblocks.size(); i++) {
 			gl.glPushMatrix();
@@ -240,9 +242,12 @@ public class jbullet {
 			float z = trans.origin.z;
 
 			gl.glTranslatef(x, y, z);
-
-			glut.glutSolidCube(5f);
+			gl.glTranslatef(-5/2f,-5/2f,-5/2f); // Textured walls worden vanuit hoekpunt getekend ipv origin blok. 
+			gl.glScaled(5,5,5); // Grootte van muur blok. 
+			Textureloader.Wall(gl);
+			//glut.glutSolidCube(5f);
 			gl.glPopMatrix();
+			//Textureloader.Floor(gl, 5, maze);
 		}
 	}
 

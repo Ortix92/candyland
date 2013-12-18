@@ -13,7 +13,7 @@ import com.sun.opengl.util.texture.TextureIO;
 
 
 public class Textureloader {
-	static boolean loadtextures=false; // Nicks spookversie when false;
+	static boolean loadtextures=true; // Nicks spookversie when false;
 	static Texture PoptartTexture; // remembers the texture of the poptart. 
 	static Texture Nyanface; // remembers the texture of the face
 	static Texture Rainbow; // remembers the texture of the rainbow
@@ -138,7 +138,7 @@ public class Textureloader {
                     CandyWall.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     
                     BufferedImage CandyFloorImage=ImageIO.read(new File("src/CandyFloor3.png"));
-                    CandyFloor=TextureIO.newTexture(CandyFloorImage,false);
+                    CandyFloor=TextureIO.newTexture(CandyFloorImage,true);
                     CandyFloor.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
                     CandyFloor.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
 			} catch(IOException e) {
@@ -342,8 +342,8 @@ public class Textureloader {
 		
 	}
 	
-	public static void Floor(GL gl, double size){
-       if(loadtextures){
+	public static void Floor(GL gl, double size,Maze maze){
+		if(loadtextures){
 	    	   if (!load) {
 	                load();
 	                load = true;
@@ -351,6 +351,15 @@ public class Textureloader {
 	        CandyFloor.enable();
 	        CandyFloor.bind();
        }
+		for (int i = 0; i < maze.MAZE_SIZE; i++) {
+            for (int j = 0; j < maze.MAZE_SIZE; j++) {
+                    gl.glPushMatrix();
+            
+                     gl.glTranslated( i * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2, 0, j * maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2 );
+
+                    // Textureloader.Floor(gl, maze.SQUARE_SIZE );
+
+                     gl.glTranslated(0, maze.SQUARE_SIZE / 2, 0 );
  gl.glNormal3d(0, 1, 0);
                 gl.glBegin(GL.GL_QUADS);
                 gl.glTexCoord2f(1,0);
@@ -361,7 +370,10 @@ public class Textureloader {
          gl.glVertex3d(size, 0, size);
          gl.glTexCoord2f(0,0);
          gl.glVertex3d(size, 0, 0);                
-                gl.glEnd();  
+                gl.glEnd(); 
+                gl.glPopMatrix();
+            }
+		}
                 
                 if(loadtextures){
                 	CandyFloor.disable();
@@ -385,21 +397,23 @@ public static void Wall(GL gl){
 }
 
 
-public static void SkyBox(GL gl) {
+public static void SkyBox(GL gl,double size) {
 	if(loadtextures){
     // draws a cube with texture coordinates.
-	   gl.glDepthMask(false);
+	
+	  // gl.glDepthMask(false);
        
        // Set size:
-       gl.glScaled(100, 100, 100);
+		
+       gl.glScaled(size, size, size);
 	    if (!load) {
                 load();
                 load = true;
         }
 
         //gl.glPushAttrib(GL.GL_ENABLE_BIT);
-       //gl.glDisable(GL.GL_DEPTH_TEST);
-       // gl.glDisable(GL.GL_LIGHTING);
+       gl.glDisable(GL.GL_DEPTH_TEST);
+       gl.glDisable(GL.GL_LIGHTING);
       //  gl.glDisable(GL.GL_BLEND);
      
         // Square 1:
@@ -500,10 +514,11 @@ public static void SkyBox(GL gl) {
         gl.glEnd();
         SkyBox6.disable();
 
-        gl.glScaled(1 / 100, 1 / 100, 1 / 100);
-        gl.glDepthMask(true);
+        gl.glScaled(1 / size, 1 / size, 1 / size);
+        //gl.glDepthMask(true);
       //  gl.glPopAttrib();
-      //  gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glEnable(GL.GL_LIGHTING);
 	}
 
 }
