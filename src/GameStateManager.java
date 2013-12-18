@@ -9,7 +9,7 @@ public class GameStateManager {
 	public final static int LOAD_STATE = 2;
 	public final static int EDITOR_STATE = 3;
 	
-	public MazeRunner mazerunner = new MazeRunner();
+	public MazeRunner mazerunner;
 	public Menu menu = new Menu(this);
  
 	public GameStateManager() {
@@ -25,15 +25,17 @@ public class GameStateManager {
 		}
 		else if(state == MAZE_STATE) {
 			Game.frame.remove(Game.gsm.menu);
+			mazerunner = new MazeRunner();
 			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
+			Textureloader.load = false;
 		}		
 		else if(state == LOAD_STATE) {
-			Game.frame.add(mazerunner.canvas); 
+//			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
 		}		
 		else if(state == EDITOR_STATE) {
-			Game.frame.add(mazerunner.canvas); 
+//			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
 		}
 		
