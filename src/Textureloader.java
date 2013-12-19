@@ -28,6 +28,7 @@ public class Textureloader {
     static Texture CandyWall;
     static Texture CandyFloor;
     static Texture PickUp;
+    static Texture Flag;
 	static boolean load=false; // boolean so that images are only loaded once
 	
 
@@ -141,6 +142,11 @@ public class Textureloader {
                     CandyFloor=TextureIO.newTexture(CandyFloorImage,true);
                     CandyFloor.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
                     CandyFloor.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+                    
+                    BufferedImage FlagImage=ImageIO.read(new File("src/nyanflag.png"));
+                    Flag=TextureIO.newTexture(FlagImage,true);
+                    Flag.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+                    Flag.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
 			} catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("Trolololol"); 

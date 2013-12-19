@@ -44,6 +44,8 @@ public class Floor implements VisibleObject {
 				gl.glPopMatrix();
 			}
 		}
-		Textureloader.CandyFloor.disable();
+		if(Textureloader.loadtextures){
+			Textureloader.CandyFloor.disable();
+		}
 	}
 }

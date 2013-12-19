@@ -51,7 +51,7 @@ public class MazeRunner implements GLEventListener {
 	private static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	private int amountofNyans = 10;
+	private int amountofNyans = 1;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
@@ -68,6 +68,7 @@ public class MazeRunner implements GLEventListener {
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
 	private Floor floor;
+	private Flag flag;
 	
 	/*
 	 * **********************************************
@@ -186,19 +187,20 @@ public class MazeRunner implements GLEventListener {
 
 		skybox = new SkyBox(player,50);
 		//visibleObjects.add(skybox);
-
+		System.out.println("Maze size: "+maze.MAZE_SIZE);
 		// initialize the NyanCat.
 		for (int i = 0; i < amountofNyans; i++) {
-			double X = Math.random() * maze.MAZE_SIZE + 6 * maze.SQUARE_SIZE
+			double X = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // x-position
-			double Z = Math.random() * maze.MAZE_SIZE + 3 * maze.SQUARE_SIZE
+			double Z = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // z-position
 			while (maze.isWall(X, Z)) {
-				X = Math.random() * maze.MAZE_SIZE + 6 * maze.SQUARE_SIZE
+				X = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // x-position
-				Z = Math.random() * maze.MAZE_SIZE + 3 * maze.SQUARE_SIZE
+				Z = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE + 3 * maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // z-position
 			}
+			
 			System.out.println("X "+X+" Z "+Z);
 			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
@@ -235,6 +237,7 @@ public class MazeRunner implements GLEventListener {
 		phworld.initObjects();
 		phworld.initPlayer((float) player.getLocationX(),
 				(float) player.getLocationY(), (float) player.getLocationZ());
+		System.out.println("Maze size: "+maze.MAZE_SIZE);
 
 	}
 
@@ -403,7 +406,21 @@ public class MazeRunner implements GLEventListener {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
 					string.charAt(i));
 		}
-
+		if(Nyan.size()==0){
+			gl.glRasterPos2f(screenWidth / 3,screenHeight - 0.7f*screenHeight );
+			String vlagstring="";
+			if(!Flag.Flag){
+				vlagstring="Loop naar de vlag om te winnen.";
+			}
+			else{
+				vlagstring="YOU WIN!";
+			}
+			int j=(int) vlagstring.length();
+			for(int k=0;k<j;k++){
+			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+			vlagstring.charAt(k));
+			}
+		}
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_DEPTH_TEST);
 	}
@@ -628,9 +645,23 @@ public class MazeRunner implements GLEventListener {
 				}
 			}
 		}
-	
-		phworld.update(player);
-		player = phworld.updatePlayer(player);
+		if(Nyan.size()!=0){
+			phworld.update(player);
+			player = phworld.updatePlayer(player);
+			
+		}
+		else{
+			flag.update();
+			if(!flag.Flag){
+				phworld.update(player);
+				player = phworld.updatePlayer(player);
+			}	
+			else{
+				//TODO: push score naar database!
+			}
+		}
+		
+		
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).update(deltaTime);
 			if (phworld.updateNyanhealth(j)) {
@@ -640,9 +671,13 @@ public class MazeRunner implements GLEventListener {
 				Nyan.remove(j);
 				Menu.Sound.play("sounds/sonic_ring.wav");
 				score = score + 1000;
-
+				if(Nyan.size()==0){
+					flag=new Flag(maze.PLAYER_SPAWN_X,0,maze.PLAYER_SPAWN_Z,player);
+					visibleObjects.add(flag);
+				}
 			}
 		}
+		
 
 		if (weapon.update(deltaTime, player, camera, phworld)) {
 			phworld.CreateBullet((float) camera.getLocationX(),

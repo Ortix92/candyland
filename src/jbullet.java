@@ -114,7 +114,7 @@ public class jbullet {
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							100, mazeMotionState, mazeshape, Inertia);
+							100000, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
@@ -154,7 +154,7 @@ public class jbullet {
 		bulletmotion.setWorldTransform(p);
 		float mass = 0.002f;
 		if (Weapon.getNewWeapon() == 3) {
-			mass = 3000 * mass;
+			mass = 3000000 * mass;
 		}
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		bulletshape.calculateLocalInertia(mass, Inertia);
