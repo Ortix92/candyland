@@ -12,7 +12,7 @@ import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureIO;
 
 public class Textureloader {
-	static boolean loadtextures = true; // Nicks spookversie when false;
+	static boolean loadtextures = false; // Nicks spookversie when false;
 	static Texture PoptartTexture; // remembers the texture of the poptart.
 	static Texture Nyanface; // remembers the texture of the face
 	static Texture Rainbow; // remembers the texture of the rainbow

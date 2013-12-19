@@ -11,9 +11,8 @@ import javax.swing.JPanel;
 
 class Menu extends JPanel {
 
-
 	public Menu(GameStateManager gsm) {
-		
+
 		JButton button_start = new JButton(new ImageIcon(
 				"images/menu/button_start.png"));
 		JButton button_load = new JButton(new ImageIcon(
@@ -24,7 +23,6 @@ class Menu extends JPanel {
 				"images/menu/button_options.png"));
 		JButton button_exit = new JButton(new ImageIcon(
 				"images/menu/button_exit.png"));
-
 
 		JLabel background = new JLabel(new ImageIcon(
 				"images/menu/Nyan-Cat-menu.gif"));
@@ -78,19 +76,19 @@ class Menu extends JPanel {
 					Sound.play("sounds/sonic_ring.wav");
 
 					switch (j) {
-						case 0:
-							Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
-						case 1:
-							break;
-						case 2:
-							break;
-						case 3:
-							break;
-						case 4:
-							System.exit(0);
+					case 0:
+						Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
+					case 1:
+						Game.frame = Game.gsm.setGameState(Game.gsm.LOAD_STATE);
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						System.exit(0);
 					}
 				}
-				
+
 			});
 
 		}

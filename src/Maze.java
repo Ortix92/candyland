@@ -34,11 +34,12 @@ public class Maze implements VisibleObject {
 	public double PLAYER_SPAWN_Z = 100;
 	public double MAZE_SIZE = 10;
 	public double SQUARE_SIZE = 5;
+	public static String mazeFile = "map_export.txt";
 
 	private int[][] maze;
 
 	public Maze() {
-		World world = new World("map_export.txt");
+		World world = new World(Maze.mazeFile);
 		try {
 			world.loadMapFromFile();
 			MAZE_SIZE = world.getMap().size();

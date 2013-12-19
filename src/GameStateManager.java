@@ -1,5 +1,7 @@
 import javax.swing.JFrame;
 
+import leveleditor.editor;
+
 public class GameStateManager {
 
 	private static final long serialVersionUID = -2385197562776088374L;
@@ -10,6 +12,7 @@ public class GameStateManager {
 	public final static int EDITOR_STATE = 3;
 	
 	public MazeRunner mazerunner;
+	public LevelSelector levelselector;
 	public Menu menu = new Menu(this);
  
 	public GameStateManager() {
@@ -18,24 +21,31 @@ public class GameStateManager {
 
 	public JFrame setGameState(int state) {
 				
-		if(state == MENU_STATE) {	
-			Game.frame.remove(mazerunner.canvas);
+		if(state == MENU_STATE) {
+			Game.frame.setVisible(false);
+			Game.frame.getContentPane().removeAll();
 			Game.frame.add(Game.gsm.menu);
 			this.gameState = state;
+			Game.frame.setVisible(true);
 		}
 		else if(state == MAZE_STATE) {
-			Game.frame.remove(Game.gsm.menu);
+			Game.frame.getContentPane().removeAll();
+			//Game.frame.remove(Game.gsm.menu);
 			mazerunner = new MazeRunner();
 			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
 			Textureloader.load = false;
 		}		
 		else if(state == LOAD_STATE) {
-//			Game.frame.add(mazerunner.canvas); 
+			//Game.frame.setVisible(false);
+			Game.frame.remove(Game.gsm.menu);
+			levelselector = new LevelSelector();
+			Game.frame.add(levelselector);
 			this.gameState = state;	
+			Game.frame.setVisible(true);
 		}		
 		else if(state == EDITOR_STATE) {
-//			Game.frame.add(mazerunner.canvas); 
+			new editor();
 			this.gameState = state;	
 		}
 		
