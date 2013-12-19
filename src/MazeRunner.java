@@ -589,6 +589,7 @@ public class MazeRunner implements GLEventListener {
 		}
 		if (player.getHealth() <= 0) {
 			ScoreScreen.score = score;
+			ScoreScreen.dood = true;
 			Game.gsm.setGameState(GameStateManager.DEAD_STATE);
 		}
 		player.update(deltaTime);

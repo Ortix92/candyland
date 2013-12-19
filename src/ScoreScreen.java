@@ -30,6 +30,7 @@ public class ScoreScreen implements GLEventListener {
 	private int screenHeight = 768;
 	public static UserInput input; 
 	public static int score;
+	public static boolean dood;
 	
 public ScoreScreen(int i){
 	initJOGL();
@@ -108,7 +109,18 @@ public void display(GLAutoDrawable drawable) {
 	
 	GL gl = drawable.getGL();
 	
-	if (gameover == 1) {
+	if (gameover == 1 && dood) {
+		screen.setdood(true);
+		screen.display(gl, naam);
+		if (letter != null) {
+		naam = naam + letter;
+		letter = null; }
+		if (input.backspace) {
+			removeLetter();
+		}
+	}
+	if (gameover == 1 && !dood) {
+		screen.setdood(false);
 		screen.display(gl, naam);
 		if (letter != null) {
 		naam = naam + letter;
