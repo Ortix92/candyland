@@ -44,13 +44,14 @@ public class MazeRunner implements GLEventListener {
 	 * * Local variables * **********************************************
 	 */
 	public GLCanvas canvas;
+	private Animator anim;
 
 	private static int screenWidth = 1024;
 
 	private static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	private int amountofNyans = 10;
+	private int amountofNyans = 15;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
@@ -63,7 +64,6 @@ public class MazeRunner implements GLEventListener {
 	private jbullet phworld;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
-	private GameOverScreen gameover;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
 	
@@ -129,7 +129,7 @@ public class MazeRunner implements GLEventListener {
 		 * continuously repaint itself. The Animator class handles that for
 		 * JOGL.
 		 */
-		Animator anim = new Animator(canvas);
+		anim = new Animator(canvas);
 		anim.start();
 		// makes an image of 1 by 1 pixel, type:
 		// Represents an image with 8-bit RGBA color components packed into
@@ -463,9 +463,10 @@ public class MazeRunner implements GLEventListener {
 	 * reference of the GL context, so it knows where to draw.
 	 */
 	public void display(GLAutoDrawable drawable) {
+	try {
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
-
+		
 		// Calculating time since last frame.
 		Calendar now = Calendar.getInstance();
 		long currentTime = now.getTimeInMillis();
@@ -505,7 +506,6 @@ public class MazeRunner implements GLEventListener {
 		for (int i = 0; i < bullets.size(); i++) {
 			phworld.display(gl, i);
 		}
-
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).display(gl);
 		}
@@ -526,7 +526,11 @@ public class MazeRunner implements GLEventListener {
 		gl.glLoadIdentity();
 		// Flush the OpenGL buffer.
 		gl.glFlush();
+	} catch (GLException e) {
+		System.out.println("This is not the exception you are looking for..");
 	}
+	}
+	
 
 	/**
 	 * displayChanged(GLAutoDrawable, boolean, boolean) is called upon whenever
@@ -580,6 +584,13 @@ public class MazeRunner implements GLEventListener {
 	 * This includes rudimentary collision checking and collision reaction.
 	 */
 	private void updateMovement(int deltaTime) {
+		for (int j = 0; j < Nyan.size(); j++) {
+			player.setHealth(player.getHealth()- Nyan.get(j).getHPoff());
+		}
+		if (player.getHealth() <= 0) {
+			ScoreScreen.score = score;
+			Game.gsm.setGameState(GameStateManager.DEAD_STATE);
+		}
 		player.update(deltaTime);
 		for(int i=0;i<pickup.size();i++){
 			if(!pickup.get(i).getPickup()){

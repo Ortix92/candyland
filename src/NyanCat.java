@@ -432,7 +432,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 				rainbows.get(i).update();
 				rainbows.get(i).display(gl);
 				                                if (rainbows.get(i).CollisionCheck(player)) {
-                                	HPoff = HPoff + 2;
+                                	HPoff = HPoff + 5;
                                 	rainbows.remove(i);
                                 }
 			}

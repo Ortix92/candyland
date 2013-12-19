@@ -76,12 +76,11 @@ class Menu extends JPanel {
 
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
 					Sound.play("sounds/sonic_ring.wav");
-
 					switch (j) {
 						case 0:
-							Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE);
+							Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE); break;
 						case 1:
-							break;
+							Game.frame = Game.gsm.setGameState(Game.gsm.SCORE_STATE); break;
 						case 2:
 							break;
 						case 3:

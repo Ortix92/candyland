@@ -110,10 +110,11 @@ public class jbullet {
 									* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2f));
 					DefaultMotionState mazeMotionState = new DefaultMotionState(
 							t);
-					Vector3f Inertia = new Vector3f(0, 0, 0);
+					Vector3f Inertia = new Vector3f(10, 10, 10);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
 							100, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
+					mazebody.setFriction(500);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
 				}
@@ -122,7 +123,7 @@ public class jbullet {
 	}
 
 	public void initNyan(NyanCat nyancat) {
-		CollisionShape nyanshape = new BoxShape(new Vector3f(1f, 2f, 3f));
+		CollisionShape nyanshape = new BoxShape(new Vector3f(1f, 1f, 2f));
 		Transform nyan = new Transform();
 		nyan.setRotation(new Quat4f((float) nyancat.getHorAngle(), 0f, 0f, 1f));
 		nyan.origin.set((float) nyancat.getLocationX(),
@@ -338,10 +339,12 @@ public class jbullet {
 				Transform trans2 = new Transform();
 				trans = bullets.get(j).getWorldTransform(trans);
 				trans2 = nyanies.get(i).getWorldTransform(trans2);
-				if (trans.origin.x > trans2.origin.x - 2f
+				if (	   trans.origin.x > trans2.origin.x - 2f
 						&& trans.origin.x < trans2.origin.x + 2f
 						&& trans.origin.z > trans2.origin.z - 2f
-						&& trans.origin.z < trans2.origin.z + 2f) {
+						&& trans.origin.z < trans2.origin.z + 2f
+						&& trans.origin.y > trans2.origin.y - 1f
+						&& trans.origin.y < trans2.origin.y + 1f) {
 					nyans.get(i).setHP(nyans.get(i).getHP() - 50);
 					Bullets.get(j).BulletStop();
 				}
