@@ -137,6 +137,8 @@ public class UserInput extends Control implements MouseListener,
 					&& UserInput.pause == true) {
 				Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
 				pause = false;
+			} else if (event.getKeyCode() == KeyEvent.VK_SHIFT) {
+				sprint = true;
 			}
 		}
 
@@ -157,6 +159,8 @@ public class UserInput extends Control implements MouseListener,
 		} else if (event.getKeyCode() == KeyEvent.VK_CONTROL) {
 			duck = false;
 			net_gebukt = true;
+		} else if(event.getKeyCode() == KeyEvent.VK_SHIFT) {
+			sprint = false;
 		}
 
 	}

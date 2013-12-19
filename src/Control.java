@@ -25,6 +25,7 @@ public abstract class Control
 	protected boolean shoot = false;	
 	protected boolean jump = false;
 	protected boolean duck = false;
+	protected boolean sprint = false;
 	protected boolean net_gebukt = false;
 	
 	protected int dX = 0;
@@ -93,6 +94,10 @@ public abstract class Control
 	public boolean getDuck() 
 	{
 		return duck;
+	}	
+	public boolean getSprint() 
+	{
+		return sprint;
 	}
 	public boolean getNet_gebukt() 
 	{
