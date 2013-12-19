@@ -137,6 +137,7 @@ public class Player extends GameObject {
 		return health;
 	}
 
+
 	/**
 	 * Updates the physical location and orientation of the player
 	 * 

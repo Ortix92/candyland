@@ -170,6 +170,9 @@ public class UserInput extends Control implements MouseListener,
 		} else if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			backspace = false;
 		}
+		else if(event.getKeyCode() == KeyEvent.VK_SHIFT) {
+			sprint = false;
+		}
 
 	}
 	

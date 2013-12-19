@@ -45,7 +45,8 @@ public class jbullet {
 	private RigidBody groundbody;
 	private RigidBody playar;
 	private Maze maze;
-
+	public static int energy = 1000;
+	
 	public jbullet(int n) {
 		Bullets = new ArrayList<Bullet>();
 		nyanies = new ObjectArrayList<RigidBody>();
@@ -382,6 +383,7 @@ public class jbullet {
 			boolean back = play.getControl().getBack();
 			boolean left = play.getControl().getLeft();
 			boolean right = play.getControl().getRight();
+			boolean sprint = play.getControl().getSprint();
 			boolean floor = false;
 			Transform trans = playar.getWorldTransform(new Transform());
 			if (trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
@@ -409,138 +411,181 @@ public class jbullet {
 				play.getControl().setNet_gebukt(false);
 			}
 
+			float speed = 10f;
+
+			System.out.println(energy);
+			if (sprint && energy >= 0) {
+				if (energy > 0) {
+					energy -= 10;
+					speed = 20f;
+				}
+			}
+			if (energy < 1000) {
+				energy++;
+			}
+
+			float jumpheight = 8f;
+
 			if (floor) { // je mag pas een actie doen als je op de vloer staat
-				if (jump) { // Druk je de spring toets in tijdens het lopen?
+				if (jump && energy >= 100) { // Druk je de spring toets in
+												// tijdens het lopen?
 					if (forward && left) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f(-(float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								- (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 10,
-								-(float) Math.cos(Math.toRadians(play
-										.getHorAngle()))
-										* 05f
+										.getHorAngle())) * speed / 2,
+								jumpheight, -(float) Math.cos(Math
+										.toRadians(play.getHorAngle()))
+										* speed
+										/ 2
 										+ (float) Math.sin(Math.toRadians(play
-												.getHorAngle())) * 05f));
+												.getHorAngle())) * speed / 2));
 					} else if (forward && right) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f(-(float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								+ (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 10,
-								-(float) Math.cos(Math.toRadians(play
-										.getHorAngle()))
-										* 05f
+										.getHorAngle())) * speed / 2,
+								jumpheight, -(float) Math.cos(Math
+										.toRadians(play.getHorAngle()))
+										* speed
+										/ 2
 										- (float) Math.sin(Math.toRadians(play
-												.getHorAngle())) * 05f));
+												.getHorAngle())) * speed / 2));
 					} else if (forward) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f(-(float) Math
-								.sin(Math.toRadians(play.getHorAngle())) * 10f,
-								10f, -(float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 10f));
+								.sin(Math.toRadians(play.getHorAngle()))
+								* speed, jumpheight, -(float) Math.cos(Math
+								.toRadians(play.getHorAngle())) * speed));
 					} else if (back && left) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f((float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								- (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 10,
-								(float) Math.cos(Math.toRadians(play
-										.getHorAngle()))
-										* 05f
+										.getHorAngle())) * speed / 2,
+								jumpheight, (float) Math.cos(Math
+										.toRadians(play.getHorAngle()))
+										* speed
+										/ 2
 										+ (float) Math.sin(Math.toRadians(play
-												.getHorAngle())) * 5f));
+												.getHorAngle())) * speed / 2));
 					} else if (back && right) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f((float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								+ (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 10f,
-								(float) Math.cos(Math.toRadians(play
-										.getHorAngle()))
-										* 05f
+										.getHorAngle())) * speed / 2,
+								jumpheight, (float) Math.cos(Math
+										.toRadians(play.getHorAngle()))
+										* speed
+										/ 2
 										- (float) Math.sin(Math.toRadians(play
-												.getHorAngle())) * 05f));
+												.getHorAngle())) * speed / 2));
 					} else if (back) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f((float) Math
-								.sin(Math.toRadians(play.getHorAngle())) * 10f,
-								10f, (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 0.f));
+								.sin(Math.toRadians(play.getHorAngle()))
+								* speed, jumpheight, (float) Math.cos(Math
+								.toRadians(play.getHorAngle())) * speed));
 					} else if (left) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f(-(float) Math
-								.cos(Math.toRadians(play.getHorAngle())) * 10f,
-								10, (float) Math.sin(Math.toRadians(play
-										.getHorAngle())) * 0.f));
+								.cos(Math.toRadians(play.getHorAngle()))
+								* speed, jumpheight, (float) Math.sin(Math
+								.toRadians(play.getHorAngle())) * speed));
 					} else if (right) {
+						energy -= 100;
 						playar.setLinearVelocity(new Vector3f((float) Math
-								.cos(Math.toRadians(play.getHorAngle())) * 10f,
-								10, -(float) Math.sin(Math.toRadians(play
-										.getHorAngle())) * 10f));
+								.cos(Math.toRadians(play.getHorAngle()))
+								* speed, jumpheight, -(float) Math.sin(Math
+								.toRadians(play.getHorAngle())) * speed));
 					} else { // Nee ik sta stil en wil gewoon even springen, ja!
+						energy -= 100;
 						playar.applyCentralImpulse(new Vector3f(0, 80f, 0));
 					}
 				} else { // Fuck dat springen, ik wil gewoon lopen.
 					if (forward && left) {
 						playar.setLinearVelocity(new Vector3f(-(float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								- (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 0,
+										.getHorAngle())) * speed / 2, 0,
 								-(float) Math.cos(Math.toRadians(play
 										.getHorAngle()))
-										* 05f
+										* speed
+										/ 2
 										+ (float) Math.sin(Math.toRadians(play
-												.getHorAngle())) * 05f));
+												.getHorAngle())) * speed / 2));
 					} else if (forward && right) {
 						playar.setLinearVelocity(new Vector3f(-(float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								+ (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 0,
+										.getHorAngle())) * speed / 2, 0,
 								-(float) Math.cos(Math.toRadians(play
 										.getHorAngle()))
-										* 05f
+										* speed
+										/ 2
 										- (float) Math.sin(Math.toRadians(play
-												.getHorAngle())) * 05f));
+												.getHorAngle())) * speed / 2));
 					} else if (forward) {
 						playar.setLinearVelocity(new Vector3f(-(float) Math
-								.sin(Math.toRadians(play.getHorAngle())) * 10f,
-								0f, -(float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 10f));
+								.sin(Math.toRadians(play.getHorAngle()))
+								* speed, 0f, -(float) Math.cos(Math
+								.toRadians(play.getHorAngle())) * speed));
 					} else if (back && left) {
 						playar.setLinearVelocity(new Vector3f((float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								- (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 0, (float) Math
-								.cos(Math.toRadians(play.getHorAngle()))
-								* 05f
-								+ (float) Math.sin(Math.toRadians(play
-										.getHorAngle())) * 5f));
+										.getHorAngle())) * speed / 2, 0,
+								(float) Math.cos(Math.toRadians(play
+										.getHorAngle()))
+										* speed
+										/ 2
+										+ (float) Math.sin(Math.toRadians(play
+												.getHorAngle())) * speed / 2));
 					} else if (back && right) {
 						playar.setLinearVelocity(new Vector3f((float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* 05f
+								* speed
+								/ 2
 								+ (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 05f, 0, (float) Math
-								.cos(Math.toRadians(play.getHorAngle()))
-								* 05f
-								- (float) Math.sin(Math.toRadians(play
-										.getHorAngle())) * 05f));
+										.getHorAngle())) * speed / 2, 0,
+								(float) Math.cos(Math.toRadians(play
+										.getHorAngle()))
+										* speed
+										/ 2
+										- (float) Math.sin(Math.toRadians(play
+												.getHorAngle())) * speed / 2));
 					} else if (back) {
 						playar.setLinearVelocity(new Vector3f((float) Math
-								.sin(Math.toRadians(play.getHorAngle())) * 10f,
-								0, (float) Math.cos(Math.toRadians(play
-										.getHorAngle())) * 10f));
+								.sin(Math.toRadians(play.getHorAngle()))
+								* speed, 0, (float) Math.cos(Math
+								.toRadians(play.getHorAngle())) * speed / 2));
 					} else if (left) {
 						playar.setLinearVelocity(new Vector3f(-(float) Math
-								.cos(Math.toRadians(play.getHorAngle())) * 10f,
-								0, (float) Math.sin(Math.toRadians(play
-										.getHorAngle())) * 10f));
+								.cos(Math.toRadians(play.getHorAngle()))
+								* speed / 2, 0, (float) Math.sin(Math
+								.toRadians(play.getHorAngle())) * speed / 2));
 					} else if (right) {
 						playar.setLinearVelocity(new Vector3f((float) Math
-								.cos(Math.toRadians(play.getHorAngle())) * 10f,
-								0, -(float) Math.sin(Math.toRadians(play
-										.getHorAngle())) * 10f));
+								.cos(Math.toRadians(play.getHorAngle()))
+								* speed / 2, 0, -(float) Math.sin(Math
+								.toRadians(play.getHorAngle())) * speed / 2));
 					}
 
 				}
