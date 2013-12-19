@@ -8,11 +8,16 @@ import com.sun.opengl.util.j2d.TextRenderer;
 
 public class GameOverScreen {
 	
+	public static boolean dood;
 	private double screenWidth = 1024;
 	private double screenHeight = 768;
 
 	public void display(GL gl, String naam) {
-		gl.glColor4d(1, 0, .1 , 1); // grey 
+		if (dood) {
+		gl.glColor4d(1, 0, .1 , 1);
+		} else {
+		gl.glColor4d(0,0.3,1,1);
+		}
 		gl.glBegin(GL.GL_QUADS);
 		gl.glVertex2d(0, screenHeight);
 		gl.glVertex2d(screenWidth, screenHeight);
@@ -23,6 +28,14 @@ public class GameOverScreen {
 		gl.glColor4d(0.0, 0.0, 0.0, 0.2);
 		Font f = new Font("SansSerif", Font.BOLD, 36);
 		TextRenderer tr = new TextRenderer(f);
+		
+	if (dood) {	
+		tr.beginRendering((int) screenWidth, (int) screenHeight);
+		tr.draw("JE BENT DOOD", (int) (screenWidth/2 - 150), (int) (screenHeight -200));
+	} else {
+		tr.beginRendering((int) screenWidth, (int) screenHeight);
+	}
+		tr.draw("YOU ARE WINNER!!!", (int) (screenWidth/2 - 150), (int) (screenHeight -200));
 		tr.beginRendering((int) screenWidth, (int) screenHeight);
 		tr.draw("JE BENT DOOD", (int) (screenWidth/2 - 150), (int) (screenHeight -200));
 		Font f3 = new Font("SansSerif", Font.ITALIC, 15);

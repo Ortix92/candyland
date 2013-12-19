@@ -110,7 +110,7 @@ public class jbullet {
 									* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2f));
 					DefaultMotionState mazeMotionState = new DefaultMotionState(
 							t);
-					Vector3f Inertia = new Vector3f(10, 10, 10);
+					Vector3f Inertia = new Vector3f(0, 0, 0);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
 							100, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
