@@ -14,6 +14,7 @@ int soort;
 		// soort 1== Health+score multiplier
 		// soort 2== Zoom wapen
 		// soort 3== MoveBlock wapen
+		System.out.println("Pick up made");
 		
 	}
 
@@ -37,12 +38,22 @@ int soort;
 						Textureloader.load();
 						Textureloader.load=true;
 					}
-					Textureloader.PickUp.enable();
-					Textureloader.PickUp.bind();
-				}
-				Textureloader.drawCube(gl, false);
-				if(Textureloader.loadtextures){
-					Textureloader.PickUp.disable();
+					if(this.soort==1){
+						Textureloader.PickUp.enable();
+						Textureloader.PickUp.bind();
+					}
+					else{
+						//TODO: // Stuiterbal texture. 
+					}
+					Textureloader.drawCube(gl, false);
+					if(Textureloader.loadtextures){
+						if(this.soort==1){
+							Textureloader.PickUp.disable();
+						}
+						else{
+							//TODO: // disable stuiterbal texture
+							}
+					}
 				}
 				gl.glPopMatrix();
 			}

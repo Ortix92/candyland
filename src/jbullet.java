@@ -44,6 +44,7 @@ public class jbullet {
 	private ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
 	private RigidBody groundbody;
 	private RigidBody playar;
+	private Maze maze;
 
 	public jbullet(int n) {
 		Bullets = new ArrayList<Bullet>();
@@ -81,23 +82,10 @@ public class jbullet {
 
 		dynamicworld.addRigidBody(groundbody);
 
-		CollisionShape boxshape = new BoxShape(
-				new Vector3f(1.25f, 1.25f, 1.25f));
-		Transform p = new Transform();
-		p.setRotation(new Quat4f(0, 0, 0, 1));
-		p.origin.set(27.5f, 5f, 27.5f);
-		MotionState boxMotionState = new DefaultMotionState(p);
-		float mass = 20;
-		Vector3f Inertia = new Vector3f(0, 0, 0);
-		boxshape.calculateLocalInertia(mass, Inertia);
-		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
-				mass, boxMotionState, boxshape, Inertia);
-		boxRigidBody = new RigidBody(boxRigidBodyInfo);
-		// dynamicworld.addRigidBody(boxRigidBody);
-
-	}
+		}
 
 	public void initMaze(Maze maze) {
+		this.maze=maze;
 		for (int i = 0; i < maze.MAZE_SIZE; i++) {
 			for (int j = 0; j < maze.MAZE_SIZE; j++) {
 				if (maze.isWall(i, j)) {
@@ -112,7 +100,7 @@ public class jbullet {
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							100, mazeMotionState, mazeshape, Inertia);
+							100000, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
@@ -152,7 +140,7 @@ public class jbullet {
 		bulletmotion.setWorldTransform(p);
 		float mass = 0.002f;
 		if (Weapon.getNewWeapon() == 3) {
-			mass = 3000 * mass;
+			mass = 3000000 * mass;
 		}
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		bulletshape.calculateLocalInertia(mass, Inertia);
@@ -161,6 +149,9 @@ public class jbullet {
 		RigidBody bullet = new RigidBody(boxRigidBodyInfo);
 
 		int velocityScalar = 50;
+		if(Weapon.getNewWeapon()==2){
+			velocityScalar=velocityScalar*10;
+		}
 		Vector3f velocityVector = new Vector3f(
 				velocityScalar
 						* (-(float) Math.sin(Math.toRadians(horAngle)) * (float) Math.cos(Math
@@ -229,7 +220,7 @@ public class jbullet {
 
 	public void displaymaze(GL gl) {
 		GLUT glut = new GLUT();
-		float wallColour[] = { 0.0f, 70.0f, 0.0f, 1.0f };
+		float wallColour[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 		for (int i = 0; i < mazeblocks.size(); i++) {
 			gl.glPushMatrix();
@@ -240,9 +231,12 @@ public class jbullet {
 			float z = trans.origin.z;
 
 			gl.glTranslatef(x, y, z);
-
-			glut.glutSolidCube(5f);
+			gl.glTranslatef(-5/2f,-5/2f,-5/2f); // Textured walls worden vanuit hoekpunt getekend ipv origin blok. 
+			gl.glScaled(5,5,5); // Grootte van muur blok. 
+			Textureloader.Wall(gl);
+			//glut.glutSolidCube(5f);
 			gl.glPopMatrix();
+			//Textureloader.Floor(gl, 5, maze);
 		}
 	}
 
@@ -259,7 +253,7 @@ public class jbullet {
 
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
-		Textureloader.stuiterbal(0.1f, 10);
+		//Textureloader.stuiterbal(0.1f, 10);
 		gl.glPopMatrix();
 	}
 
@@ -322,14 +316,6 @@ public class jbullet {
 		return Bullets;
 	}
 
-	public TestBox getBox(TestBox box) {
-		Transform trans = new Transform();
-		boxRigidBody.getMotionState().getWorldTransform(trans);
-		box.setLocationX(trans.origin.x);
-		box.setLocationY(trans.origin.y);
-		box.setLocationZ(trans.origin.z);
-		return box;
-	}
 
 	public void CollisionCheck() {
 		for (int j = 0; j < bullets.size(); j++) {
