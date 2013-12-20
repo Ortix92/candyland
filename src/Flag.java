@@ -49,8 +49,10 @@ public class Flag extends GameObject implements VisibleObject{
 		}
 	}
 	public void drawFlag(GL gl) {
-		Textureloader.Flag.enable();
-		Textureloader.Flag.bind();
+		if(Textureloader.loadtextures){
+			Textureloader.Flag.enable();
+			Textureloader.Flag.bind();
+		}		
 		gl.glBegin(GL.GL_QUADS);
 			gl.glTexCoord2f(0,0);
 			gl.glVertex3f(0, 0, 0);
@@ -73,7 +75,9 @@ public class Flag extends GameObject implements VisibleObject{
 			gl.glVertex3f(0, 0, 0);
 					
 			gl.glEnd();
-			Textureloader.Flag.disable();
+			if(Textureloader.loadtextures){
+				Textureloader.Flag.disable();
+			}
 		
 		
 	}

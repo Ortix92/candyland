@@ -681,20 +681,6 @@ public class MazeRunner implements GLEventListener {
 				}
 			}
 		}
-		if (Nyan.size() != 0) {
-			phworld.update(player);
-			player = phworld.updatePlayer(player);
-
-		} else {
-			flag.update();
-			if (!flag.Flag) {
-				phworld.update(player);
-				player = phworld.updatePlayer(player);
-			} else {
-				// TODO: push score naar database!
-			}
-		}
-
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).update(deltaTime);
 			if (phworld.updateNyanhealth(j)) {
@@ -712,6 +698,21 @@ public class MazeRunner implements GLEventListener {
 				}
 			}
 		}
+		if (Nyan.size() != 0) {
+			phworld.update(player);
+			player = phworld.updatePlayer(player);
+
+		} else {
+			flag.update();
+			if (!flag.Flag) {
+				phworld.update(player);
+				player = phworld.updatePlayer(player);
+			} else {
+				// TODO: push score naar database!
+			}
+		}
+
+		
 
 		if (NyanSeePlayer()) {
 			for (int i = 0; i < Nyan.size(); i++) {
