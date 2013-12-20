@@ -51,7 +51,7 @@ public class MazeRunner implements GLEventListener {
 	private static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	private int amountofNyans = 1;
+	private int amountofNyans = 10;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
@@ -232,7 +232,7 @@ public class MazeRunner implements GLEventListener {
 		player.setControl(input);
 		weapon.setControl(input);
 		guy.setControl(input);
-		box = new TestBox(27.5, 2.5, 27.5);
+		//box = new TestBox(27.5, 2.5, 27.5);
 		phworld.initMaze(maze);
 		phworld.initObjects();
 		phworld.initPlayer((float) player.getLocationX(),
@@ -299,7 +299,7 @@ public class MazeRunner implements GLEventListener {
 		GLUT glut = new GLUT();
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
-		
+		String weaponString="";
 		
 		gl.glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
 		if(Weapon.getNewWeapon()==0){
@@ -309,17 +309,20 @@ public class MazeRunner implements GLEventListener {
 			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
 			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
 			gl.glEnd();
+			weaponString="Default weapon.";
 		}
 		if(Weapon.getNewWeapon()==2){
+			weaponString="Sniper. Use right mouse button to zoom.";
 			if(!UserInput.zoom){
 				gl.glBegin(GL.GL_LINES);
-				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
-				gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
-				gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
-				gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
-				gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
-				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
+				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 5.0);
+				gl.glVertex2d(screenWidth / 2.0 + 5.0, screenHeight / 2.0 - 5.0);
+				gl.glVertex2d(screenWidth / 2.0 + 5.0, screenHeight / 2.0 - 5.0);
+				gl.glVertex2d(screenWidth / 2.0 - 5.0, screenHeight / 2.0 - 5.0);
+				gl.glVertex2d(screenWidth / 2.0 - 5.0, screenHeight / 2.0 - 5.0);
+				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 5.0);
 				gl.glEnd();
+				
 			}
 			else{
 				// ZOOM! Draw scope
@@ -367,6 +370,7 @@ public class MazeRunner implements GLEventListener {
 			
 		}
 		if(Weapon.getNewWeapon()==3){
+			weaponString="Wallmoving Weapon.";
 			gl.glBegin(GL.GL_LINES);
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
 			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
@@ -420,6 +424,14 @@ public class MazeRunner implements GLEventListener {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
 			vlagstring.charAt(k));
 			}
+		}
+		
+		
+		gl.glRasterPos2f(50, screenHeight - 0.95f * screenHeight);
+		int l=(int) weaponString.length();
+		for (int k = 0; k < l; k++) {
+			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+					weaponString.charAt(k));
 		}
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_DEPTH_TEST);
@@ -547,7 +559,7 @@ public class MazeRunner implements GLEventListener {
 		}
 		floor.display(gl);
 		
-		box.display(gl);
+		
 		weapon.display(gl);
 		Orthoview(gl);
 		DrawHud(gl);
@@ -744,7 +756,7 @@ public class MazeRunner implements GLEventListener {
 	public void updatePhysics(int deltaTime) {
 
 		phworld.update(deltaTime, box, Nyan, player);
-		box = phworld.getBox(box);
+		
 		bullets = phworld.getbullets();
 	}
 

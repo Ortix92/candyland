@@ -82,21 +82,7 @@ public class jbullet {
 
 		dynamicworld.addRigidBody(groundbody);
 
-		CollisionShape boxshape = new BoxShape(
-				new Vector3f(1.25f, 1.25f, 1.25f));
-		Transform p = new Transform();
-		p.setRotation(new Quat4f(0, 0, 0, 1));
-		p.origin.set(27.5f, 5f, 27.5f);
-		MotionState boxMotionState = new DefaultMotionState(p);
-		float mass = 20;
-		Vector3f Inertia = new Vector3f(0, 0, 0);
-		boxshape.calculateLocalInertia(mass, Inertia);
-		RigidBodyConstructionInfo boxRigidBodyInfo = new RigidBodyConstructionInfo(
-				mass, boxMotionState, boxshape, Inertia);
-		boxRigidBody = new RigidBody(boxRigidBodyInfo);
-		// dynamicworld.addRigidBody(boxRigidBody);
-
-	}
+		}
 
 	public void initMaze(Maze maze) {
 		this.maze=maze;
@@ -163,6 +149,9 @@ public class jbullet {
 		RigidBody bullet = new RigidBody(boxRigidBodyInfo);
 
 		int velocityScalar = 50;
+		if(Weapon.getNewWeapon()==2){
+			velocityScalar=velocityScalar*10;
+		}
 		Vector3f velocityVector = new Vector3f(
 				velocityScalar
 						* (-(float) Math.sin(Math.toRadians(horAngle)) * (float) Math.cos(Math
@@ -327,14 +316,6 @@ public class jbullet {
 		return Bullets;
 	}
 
-	public TestBox getBox(TestBox box) {
-		Transform trans = new Transform();
-		boxRigidBody.getMotionState().getWorldTransform(trans);
-		box.setLocationX(trans.origin.x);
-		box.setLocationY(trans.origin.y);
-		box.setLocationZ(trans.origin.z);
-		return box;
-	}
 
 	public void CollisionCheck() {
 		for (int j = 0; j < bullets.size(); j++) {

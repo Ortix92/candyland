@@ -26,7 +26,7 @@ public class Flag extends GameObject implements VisibleObject{
 		gl.glRotated(-90,1,0,0);
 		//gl.glTranslated(0, 5, 0);
 		glut.glutSolidSphere(0.3, 10, 10);
-		gl.glTranslated(0, -1-i, 0);
+		gl.glTranslated(0, -5+i, 0);
 		if(Flag){
 			if(i<4){
 				i=i+0.01;

@@ -43,6 +43,12 @@ public class Weapon extends GameObject {
 	
 	public boolean Canshoot() {
 		if (control.getShoot()) {
+			if(getNewWeapon()==2){
+				rateoffire=50;
+			}
+			else{
+				rateoffire=10;
+			}
 			firecounter = firecounter + 1;
 			if (firecounter >= rateoffire) {
 				firecounter = 0;
