@@ -463,7 +463,7 @@ public class MazeRunner implements GLEventListener {
 	 * reference of the GL context, so it knows where to draw.
 	 */
 	public void display(GLAutoDrawable drawable) {
-	try {
+try {
 		GL gl = drawable.getGL();
 		GLU glu = new GLU();
 		
@@ -527,9 +527,10 @@ public class MazeRunner implements GLEventListener {
 		// Flush the OpenGL buffer.
 		gl.glFlush();
 	} catch (GLException e) {
-		System.out.println("This is not the exception you are looking for..");
+		System.out.println("no excpetion here...");
 	}
 	}
+	
 	
 
 	/**

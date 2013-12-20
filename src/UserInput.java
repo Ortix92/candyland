@@ -177,8 +177,8 @@ public class UserInput extends Control implements MouseListener,
 		dead = true;
 	}
 	
-	public boolean getDead() {
-		return dead;
+	public void isDead() {
+		Game.gsm.setGameState(GameStateManager.DEAD_STATE);
 	}
 
 	/*

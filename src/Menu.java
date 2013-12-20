@@ -80,11 +80,11 @@ class Menu extends JPanel {
 						case 0:
 							Game.frame = Game.gsm.setGameState(Game.gsm.MAZE_STATE); break;
 						case 1:
-							Game.frame = Game.gsm.setGameState(Game.gsm.SCORE_STATE); break;
+							break;
 						case 2:
 							break;
 						case 3:
-							break;
+							Game.frame = Game.gsm.setGameState(Game.gsm.SCORE_STATE); break;
 						case 4:
 							System.exit(0);
 					}
