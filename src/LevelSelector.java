@@ -42,7 +42,7 @@ public class LevelSelector extends JPanel {
 		btnMap2.setActionCommand("map2");
 		btnMap2.setIcon(new ImageIcon(LevelSelector.class
 				.getResource("/assets/maps/map2.jpg")));
-		btnMap2.setBounds(513, 52, 200, 200);
+		btnMap2.setBounds(265, 52, 200, 200);
 		add(btnMap2);
 
 		btnMap3 = new JButton();
@@ -58,15 +58,22 @@ public class LevelSelector extends JPanel {
 		btnMap4.setActionCommand("map4");
 		btnMap4.setIcon(new ImageIcon(LevelSelector.class
 				.getResource("/assets/maps/map4.jpg")));
-		btnMap4.setBounds(513, 315, 200, 200);
+		btnMap4.setBounds(265, 315, 200, 200);
 		add(btnMap4);
 
 		btnReturn = new JButton("Return");
 		btnReturn.setAction(action);
 		btnReturn.setText("Return!");
 		btnReturn.setActionCommand("return");
-		btnReturn.setBounds(345, 246, 89, 87);
+		btnReturn.setBounds(508, 52, 200, 200);
 		add(btnReturn);
+
+		JButton btnLoadExportedMap = new JButton();
+		btnLoadExportedMap.setAction(action);
+		btnLoadExportedMap.setText("Load Exported Map");
+		btnLoadExportedMap.setActionCommand("exported");
+		btnLoadExportedMap.setBounds(508, 315, 200, 200);
+		add(btnLoadExportedMap);
 
 	}
 
@@ -77,20 +84,51 @@ public class LevelSelector extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			String action = e.getActionCommand();
 
-			if (action.equals("return")) {
-				Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
-			} else if (action.equals("exported")) {
+			switch (action) {
+			case "return":
+				break;
+			case "exported":
 				Maze.mazeFile = "map_export.txt";
-			} else {
-				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
 				JOptionPane
 						.showMessageDialog(LevelSelector.this,
-								"Your map has been selected. Time to kick some NYAN ass~");
-				System.out.println("Map Selected: " + Maze.mazeFile);
+								"Your exported map has been selected. Time to kick some NYAN ass~");
+				break;
+			case "map1":
+				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
+				MazeRunner.amountofNyans = 4;
 
+				JOptionPane
+						.showMessageDialog(LevelSelector.this,
+								"Your a pathetic soul. You will dwell for all of eternity in hell.");
+				System.out.println("Map Selected: " + Maze.mazeFile);
+				break;
+			case "map2":
+				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
+				MazeRunner.amountofNyans = 7;
+
+				JOptionPane
+						.showMessageDialog(LevelSelector.this,
+								"You have some skill, warrior, but you still suck.");
+				System.out.println("Map Selected: " + Maze.mazeFile);
+				break;
+			case "map3":
+				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
+				MazeRunner.amountofNyans = 15;
+				JOptionPane
+						.showMessageDialog(LevelSelector.this,
+								"You will avenge your fallen brothers, God like human.");
+				System.out.println("Map Selected: " + Maze.mazeFile);
+				break;
+			case "map4":
+				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
+				MazeRunner.amountofNyans = 25;
+				JOptionPane
+						.showMessageDialog(LevelSelector.this,
+								"Right this way sir... do you want some coffee to go?");
+				System.out.println("Map Selected: " + Maze.mazeFile);
+				break;
 			}
 
 		}
 	}
-
 }

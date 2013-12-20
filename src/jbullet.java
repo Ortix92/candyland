@@ -82,10 +82,10 @@ public class jbullet {
 
 		dynamicworld.addRigidBody(groundbody);
 
-		}
+	}
 
 	public void initMaze(Maze maze) {
-		this.maze=maze;
+		this.maze = maze;
 		for (int i = 0; i < maze.MAZE_SIZE; i++) {
 			for (int j = 0; j < maze.MAZE_SIZE; j++) {
 				if (maze.isWall(i, j)) {
@@ -102,7 +102,7 @@ public class jbullet {
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
 							100000, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
-					mazebody.setFriction(500);
+					mazebody.setFriction(1);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
 				}
@@ -150,8 +150,8 @@ public class jbullet {
 		RigidBody bullet = new RigidBody(boxRigidBodyInfo);
 
 		int velocityScalar = 200;
-		if(Weapon.getNewWeapon()==2){
-			velocityScalar=velocityScalar*10;
+		if (Weapon.getNewWeapon() == 2) {
+			velocityScalar = velocityScalar * 10;
 		}
 		Vector3f velocityVector = new Vector3f(
 				velocityScalar
@@ -206,16 +206,16 @@ public class jbullet {
 	}
 
 	public void updateNyanpos(int i, NyanCat newnyan) {
-		RigidBody nyan = nyanies.get(i);
+	//	RigidBody nyan = nyanies.get(i);
 		Transform trans = new Transform();
 		trans.setRotation(new Quat4f((float) newnyan.getHorAngle(), 0, 0, 1));
 		trans.origin.set((float) newnyan.getLocationX(),
 				(float) newnyan.getLocationY(), (float) newnyan.getLocationZ());
-		nyan.setWorldTransform(trans);
-		dynamicworld.addRigidBody(nyan);
-		dynamicworld.removeRigidBody(nyanies.get(i));
-		nyanies.remove(i);
-		nyanies.add(nyan);
+		nyanies.get(i).setWorldTransform(trans);
+	//	dynamicworld.addRigidBody(nyan);
+	//	dynamicworld.removeRigidBody(nyanies.get(i));
+	//	nyanies.remove(i);
+	//	nyanies.add(nyan);
 
 	}
 
@@ -232,28 +232,31 @@ public class jbullet {
 			float z = trans.origin.z;
 
 			gl.glTranslatef(x, y, z);
-			gl.glTranslatef(-5/2f,-5/2f,-5/2f); // Textured walls worden vanuit hoekpunt getekend ipv origin blok. 
-			gl.glScaled(5,5,5); // Grootte van muur blok. 
+			gl.glTranslatef(-5 / 2f, -5 / 2f, -5 / 2f); // Textured walls worden
+														// vanuit hoekpunt
+														// getekend ipv origin
+														// blok.
+			gl.glScaled(5, 5, 5); // Grootte van muur blok.
 			Textureloader.Wall(gl);
-			//glut.glutSolidCube(5f);
+			// glut.glutSolidCube(5f);
 			gl.glPopMatrix();
-			//Textureloader.Floor(gl, 5, maze);
+			// Textureloader.Floor(gl, 5, maze);
 		}
 	}
 
-	public static boolean isNewWall(double X,double Z){
-//		for (int i =0; i < mazeblocks.size(); i++) {
-//				Transform trans = new Transform();
-//				mazeblocks.get(i).getMotionState().getWorldTransform(trans);
-//				float x = trans.origin.x;
-//				float z = trans.origin.z;
-//				if((Math.abs(X-x)<3)&&(Math.abs(Z-z)<3)){
-//					return true;
-//				}
+	public static boolean isNewWall(double X, double Z) {
+//		for (int i = 0; i < mazeblocks.size(); i++) {
+//			Transform trans = new Transform();
+//			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+//			float x = trans.origin.x;
+//			float z = trans.origin.z;
+//			if (Math.abs(X - x) < 3 && Math.abs(Z - z) < 3) {
+//				return true;
+//			}
 //		}
 		return false;
 	}
-	
+
 	public void display(GL gl, int i) {
 		GLUT glut = new GLUT();
 		float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };
@@ -268,7 +271,7 @@ public class jbullet {
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
 		glut.glutSolidCube(0.2f);
-		//Textureloader.stuiterbal(0.1f, 10);
+		// Textureloader.stuiterbal(0.1f, 10);
 		gl.glPopMatrix();
 	}
 
@@ -331,7 +334,6 @@ public class jbullet {
 		return Bullets;
 	}
 
-
 	public void CollisionCheck() {
 		for (int j = 0; j < bullets.size(); j++) {
 			for (int i = 0; i < nyanies.size(); i++) {
@@ -339,7 +341,7 @@ public class jbullet {
 				Transform trans2 = new Transform();
 				trans = bullets.get(j).getWorldTransform(trans);
 				trans2 = nyanies.get(i).getWorldTransform(trans2);
-				if (	   trans.origin.x > trans2.origin.x - 2f
+				if (trans.origin.x > trans2.origin.x - 2f
 						&& trans.origin.x < trans2.origin.x + 2f
 						&& trans.origin.z > trans2.origin.z - 2f
 						&& trans.origin.z < trans2.origin.z + 2f
@@ -360,7 +362,7 @@ public class jbullet {
 		// if(Nyan[i].getHP()>-1){
 		// System.out.println(nyans.get(i).getHP());
 		if (nyans.get(i).getHP() <= 0) {
-//			System.out.println(nyans.get(i).getLocationX());
+			// System.out.println(nyans.get(i).getLocationX());
 			nyans.remove(i);
 			dynamicworld.removeRigidBody(nyanies.get(i));
 			nyanies.remove(i);
