@@ -1,22 +1,23 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.media.opengl.*;
-import javax.media.opengl.glu.*;
-
-import com.sun.opengl.util.*;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 
-import loader.Model;
-import loader.OBJLoader;
+import javax.media.opengl.DebugGL;
+import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLException;
+import javax.media.opengl.glu.GLU;
+
+import com.sun.opengl.util.Animator;
+import com.sun.opengl.util.GLUT;
 
 /**
  * MazeRunner is the base class of the game, functioning as the view controller
@@ -66,10 +67,11 @@ public class MazeRunner implements GLEventListener {
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
 	private SkyBox skybox;
-	private ArrayList<PickUp> pickup=new ArrayList<PickUp>();
+	private ArrayList<PickUp> pickup = new ArrayList<PickUp>();
 	private Floor floor;
 	private Flag flag;
-	
+	private boolean NyanGeluid = false;
+
 	/*
 	 * **********************************************
 	 * * Initialization methods * **********************************************
@@ -170,38 +172,35 @@ public class MazeRunner implements GLEventListener {
 		// Add the maze that we will be using.
 		maze = new Maze();
 		visibleObjects.add(maze);
-		floor=new Floor(maze);
-		
-		
-		//visibleObjects.add(floor);
+		floor = new Floor(maze);
+
+		// visibleObjects.add(floor);
 		phworld = new jbullet(amountofNyans);
 
-		   
+		// visibleObjects.add(skybox);
 
-		//   visibleObjects.add(skybox);
-		  
 		new NyanCatInput(canvas);
 
 		player = new Player(maze.PLAYER_SPAWN_X, 3, maze.PLAYER_SPAWN_Z, -120,
 				-90);
 
-		skybox = new SkyBox(player,50);
-		//visibleObjects.add(skybox);
-		System.out.println("Maze size: "+maze.MAZE_SIZE);
+		skybox = new SkyBox(player, 50);
+		// visibleObjects.add(skybox);
+		System.out.println("Maze size: " + maze.MAZE_SIZE);
 		// initialize the NyanCat.
 		for (int i = 0; i < amountofNyans; i++) {
-			double X = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE
+			double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // x-position
-			double Z = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE
+			double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
 					+ maze.SQUARE_SIZE / 2; // z-position
 			while (maze.isWall(X, Z)) {
-				X = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE
+				X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
 						+ maze.SQUARE_SIZE / 2; // x-position
-				Z = Math.random() * maze.MAZE_SIZE*maze.SQUARE_SIZE + 3 * maze.SQUARE_SIZE
-						+ maze.SQUARE_SIZE / 2; // z-position
+				Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
+						* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
 			}
-			
-			System.out.println("X "+X+" Z "+Z);
+
+			System.out.println("X " + X + " Z " + Z);
 			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
 					// horizontal angle
@@ -215,12 +214,12 @@ public class MazeRunner implements GLEventListener {
 					player, maze);
 			phworld.initNyan(nyan);
 		}
-		PickUp NewClaws=new PickUp(5,5,player,2);
-        visibleObjects.add(NewClaws);
-        pickup.add(NewClaws);
-        PickUp NewClaws2=new PickUp(15,15,player,3);
-        visibleObjects.add(NewClaws2);
-        pickup.add(NewClaws2);
+		PickUp NewClaws = new PickUp(5, 5, player, 2);
+		visibleObjects.add(NewClaws);
+		pickup.add(NewClaws);
+		PickUp NewClaws2 = new PickUp(15, 15, player, 3);
+		visibleObjects.add(NewClaws2);
+		pickup.add(NewClaws2);
 
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
@@ -232,12 +231,12 @@ public class MazeRunner implements GLEventListener {
 		player.setControl(input);
 		weapon.setControl(input);
 		guy.setControl(input);
-		//box = new TestBox(27.5, 2.5, 27.5);
+		// box = new TestBox(27.5, 2.5, 27.5);
 		phworld.initMaze(maze);
 		phworld.initObjects();
 		phworld.initPlayer((float) player.getLocationX(),
 				(float) player.getLocationY(), (float) player.getLocationZ());
-		System.out.println("Maze size: "+maze.MAZE_SIZE);
+		System.out.println("Maze size: " + maze.MAZE_SIZE);
 
 	}
 
@@ -299,21 +298,21 @@ public class MazeRunner implements GLEventListener {
 		GLUT glut = new GLUT();
 		gl.glDisable(GL.GL_DEPTH_TEST);
 		gl.glDisable(GL.GL_LIGHTING);
-		String weaponString="";
-		
+		String weaponString = "";
+
 		gl.glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
-		if(Weapon.getNewWeapon()==0){
+		if (Weapon.getNewWeapon() == 0) {
 			gl.glBegin(GL.GL_LINES);
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
 			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0);
 			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0);
 			gl.glEnd();
-			weaponString="Default weapon.";
+			weaponString = "Default weapon.";
 		}
-		if(Weapon.getNewWeapon()==2){
-			weaponString="Sniper. Use right mouse button to zoom.";
-			if(!UserInput.zoom){
+		if (Weapon.getNewWeapon() == 2) {
+			weaponString = "Sniper. Use right mouse button to zoom.";
+			if (!UserInput.zoom) {
 				gl.glBegin(GL.GL_LINES);
 				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 5.0);
 				gl.glVertex2d(screenWidth / 2.0 + 5.0, screenHeight / 2.0 - 5.0);
@@ -322,55 +321,53 @@ public class MazeRunner implements GLEventListener {
 				gl.glVertex2d(screenWidth / 2.0 - 5.0, screenHeight / 2.0 - 5.0);
 				gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 5.0);
 				gl.glEnd();
-				
-			}
-			else{
+
+			} else {
 				// ZOOM! Draw scope
-				//draw Circle:
-				double radius=40;
-				double segments=100;
-				double theta=(2*Math.PI)/segments;				
-				double x=radius;
-				double y=0;
-				double tantheta=Math.tan(theta);
-				double costheta=Math.cos(theta);
-				
+				// draw Circle:
+				double radius = 40;
+				double segments = 100;
+				double theta = (2 * Math.PI) / segments;
+				double x = radius;
+				double y = 0;
+				double tantheta = Math.tan(theta);
+				double costheta = Math.cos(theta);
+
 				gl.glBegin(GL.GL_LINES);
-			
-				for(int i=0;i<segments;i++){
-					gl.glVertex2d(screenWidth/2+x,screenHeight/2+y);
-					double tx = -y; 
-					double ty = x; 
-			        
-					//add the tangential vector 
 
-					x += tx * tantheta; 
-					y += ty * tantheta; 
-			        
-					//correct using the radial factor 
+				for (int i = 0; i < segments; i++) {
+					gl.glVertex2d(screenWidth / 2 + x, screenHeight / 2 + y);
+					double tx = -y;
+					double ty = x;
 
-					x *= costheta; 
-					y *= costheta; 
-					gl.glVertex2d(screenWidth/2+x,screenHeight/2+y);
+					// add the tangential vector
+
+					x += tx * tantheta;
+					y += ty * tantheta;
+
+					// correct using the radial factor
+
+					x *= costheta;
+					y *= costheta;
+					gl.glVertex2d(screenWidth / 2 + x, screenHeight / 2 + y);
 				}
 				// draw lines on the circle:
-				gl.glVertex2d(screenWidth/2+50, screenHeight/2);
-				gl.glVertex2d(screenWidth/2+30, screenHeight/2);
-				gl.glVertex2d(screenWidth/2-50, screenHeight/2);
-				gl.glVertex2d(screenWidth/2-30, screenHeight/2);
-				gl.glVertex2d(screenWidth/2,screenHeight/2+50);
-				gl.glVertex2d(screenWidth/2,screenHeight/2+30);
-				gl.glVertex2d(screenWidth/2,screenHeight/2-50);
-				gl.glVertex2d(screenWidth/2,screenHeight/2-30);
-				
+				gl.glVertex2d(screenWidth / 2 + 50, screenHeight / 2);
+				gl.glVertex2d(screenWidth / 2 + 30, screenHeight / 2);
+				gl.glVertex2d(screenWidth / 2 - 50, screenHeight / 2);
+				gl.glVertex2d(screenWidth / 2 - 30, screenHeight / 2);
+				gl.glVertex2d(screenWidth / 2, screenHeight / 2 + 50);
+				gl.glVertex2d(screenWidth / 2, screenHeight / 2 + 30);
+				gl.glVertex2d(screenWidth / 2, screenHeight / 2 - 50);
+				gl.glVertex2d(screenWidth / 2, screenHeight / 2 - 30);
+
 				gl.glEnd();
-				
-			
+
 			}
-			
+
 		}
-		if(Weapon.getNewWeapon()==3){
-			weaponString="Wallmoving Weapon.";
+		if (Weapon.getNewWeapon() == 3) {
+			weaponString = "Wallmoving Weapon.";
 			gl.glBegin(GL.GL_LINES);
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
 			gl.glVertex2d(screenWidth / 2.0 + 20.0, screenHeight / 2.0 - 20.0);
@@ -378,15 +375,14 @@ public class MazeRunner implements GLEventListener {
 			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
 			gl.glVertex2d(screenWidth / 2.0 - 20.0, screenHeight / 2.0 - 20.0);
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 + 20.0);
-			
+
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
 			gl.glVertex2d(screenWidth / 2.0 + 10.0, screenHeight / 2.0);
 			gl.glVertex2d(screenWidth / 2.0, screenHeight / 2.0 - 20.0);
 			gl.glVertex2d(screenWidth / 2.0 - 10.0, screenHeight / 2.0);
 			gl.glVertex2d(screenWidth / 2.0 - 10.0, screenHeight / 2.0);
 			gl.glVertex2d(screenWidth / 2.0 + 10.0, screenHeight / 2.0);
-			
-			
+
 			gl.glEnd();
 		}
 
@@ -410,25 +406,24 @@ public class MazeRunner implements GLEventListener {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
 					string.charAt(i));
 		}
-		if(Nyan.size()==0){
-			gl.glRasterPos2f(screenWidth / 3,screenHeight - 0.7f*screenHeight );
-			String vlagstring="";
-			if(!Flag.Flag){
-				vlagstring="Loop naar de vlag om te winnen.";
+		if (Nyan.size() == 0) {
+			gl.glRasterPos2f(screenWidth / 3, screenHeight - 0.7f
+					* screenHeight);
+			String vlagstring = "";
+			if (!Flag.Flag) {
+				vlagstring = "Loop naar de vlag om te winnen.";
+			} else {
+				vlagstring = "YOU WIN!";
 			}
-			else{
-				vlagstring="YOU WIN!";
-			}
-			int j=(int) vlagstring.length();
-			for(int k=0;k<j;k++){
-			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-			vlagstring.charAt(k));
+			int j = (int) vlagstring.length();
+			for (int k = 0; k < j; k++) {
+				glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+						vlagstring.charAt(k));
 			}
 		}
-		
-		
+
 		gl.glRasterPos2f(50, screenHeight - 0.95f * screenHeight);
-		int l=(int) weaponString.length();
+		int l = (int) weaponString.length();
 		for (int k = 0; k < l; k++) {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
 					weaponString.charAt(k));
@@ -491,7 +486,6 @@ public class MazeRunner implements GLEventListener {
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glShadeModel(GL.GL_SMOOTH);
-		
 
 	}
 
@@ -506,78 +500,74 @@ public class MazeRunner implements GLEventListener {
 	 * reference of the GL context, so it knows where to draw.
 	 */
 	public void display(GLAutoDrawable drawable) {
-try {
-		GL gl = drawable.getGL();
-		GLU glu = new GLU();
-		// Calculating time since last frame.
-		Calendar now = Calendar.getInstance();
-		long currentTime = now.getTimeInMillis();
-		int deltaTime = (int) (currentTime - previousTime);
-		previousTime = currentTime;
-		
-		// Update any movement since last frame.
+		try {
+			GL gl = drawable.getGL();
+			GLU glu = new GLU();
+			// Calculating time since last frame.
+			Calendar now = Calendar.getInstance();
+			long currentTime = now.getTimeInMillis();
+			int deltaTime = (int) (currentTime - previousTime);
+			previousTime = currentTime;
 
-		// Nyan.update(deltaTime);
+			// Update any movement since last frame.
 
-		if (!UserInput.pause) {
-			updateMovement(deltaTime);
-			updateCamera();
-			updatePhysics(deltaTime);
-		}
-		
-		gl.glMatrixMode(GL.GL_PROJECTION);
-		gl.glLoadIdentity();
-		
-		if(UserInput.zoom){
-			System.out.println("Zoom");
-			glu.gluPerspective(30, screenWidth/ screenHeight,0.1, 200); 
-		}
-		else{
-			glu.gluPerspective(60, screenWidth/ screenHeight,0.1, 200); 
-		}
-		gl.glMatrixMode(GL.GL_MODELVIEW);
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-		gl.glLoadIdentity();
-		glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
-				camera.getLocationZ(), camera.getVrpX(), camera.getVrpY(),
-				camera.getVrpZ(), camera.getVuvX(), camera.getVuvY(),
-				camera.getVuvZ());
+			// Nyan.update(deltaTime);
 
-		// Display all the visible objects of MazeRunner.
-		skybox.display(gl);
-		phworld.displaymaze(gl);
-		for (int i = 0; i < bullets.size(); i++) {
-			phworld.display(gl, i);
-		}
-		for (int j = 0; j < Nyan.size(); j++) {
-			Nyan.get(j).display(gl);
-		}
-	//	floor.display(gl);
-		for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
-				.hasNext();) {
-			it.next().display(gl);
-		}
-		floor.display(gl);
-		
-		
-		weapon.display(gl);
-		Orthoview(gl);
-		DrawHud(gl);
+			if (!UserInput.pause) {
+				updateMovement(deltaTime);
+				updateCamera();
+				updatePhysics(deltaTime);
+			}
 
-		if (UserInput.pause) {
-			pause.display(gl);
-		}
-		Projectview(gl);
+			gl.glMatrixMode(GL.GL_PROJECTION);
+			gl.glLoadIdentity();
 
-		gl.glLoadIdentity();
-		// Flush the OpenGL buffer.
-		gl.glFlush();
-	} catch (GLException e) {
-		System.out.println("no excpetion here...");
+			if (UserInput.zoom) {
+				System.out.println("Zoom");
+				glu.gluPerspective(30, screenWidth / screenHeight, 0.1, 200);
+			} else {
+				glu.gluPerspective(60, screenWidth / screenHeight, 0.1, 200);
+			}
+			gl.glMatrixMode(GL.GL_MODELVIEW);
+			gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+			gl.glLoadIdentity();
+			glu.gluLookAt(camera.getLocationX(), camera.getLocationY(),
+					camera.getLocationZ(), camera.getVrpX(), camera.getVrpY(),
+					camera.getVrpZ(), camera.getVuvX(), camera.getVuvY(),
+					camera.getVuvZ());
+
+			// Display all the visible objects of MazeRunner.
+			skybox.display(gl);
+			phworld.displaymaze(gl);
+			for (int i = 0; i < bullets.size(); i++) {
+				phworld.display(gl, i);
+			}
+			for (int j = 0; j < Nyan.size(); j++) {
+				Nyan.get(j).display(gl);
+			}
+			// floor.display(gl);
+			for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
+					.hasNext();) {
+				it.next().display(gl);
+			}
+			floor.display(gl);
+
+			weapon.display(gl);
+			Orthoview(gl);
+			DrawHud(gl);
+
+			if (UserInput.pause) {
+				pause.display(gl);
+			}
+			Projectview(gl);
+
+			gl.glLoadIdentity();
+			// Flush the OpenGL buffer.
+			gl.glFlush();
+		} catch (GLException e) {
+			System.out.println("Exception: " + e.getMessage());
+		}
 	}
-	}
-	
-	
 
 	/**
 	 * displayChanged(GLAutoDrawable, boolean, boolean) is called upon whenever
@@ -622,6 +612,20 @@ try {
 	 * * Methods * **********************************************
 	 */
 
+	public boolean NyanSeePlayer() {
+		for (int i = 0; i < Nyan.size(); i++) {
+			if (Nyan.get(i).SeePlayer()) {
+				if (!NyanGeluid) {
+					Menu.Sound.play("sounds/nyan.wav");
+				}
+				NyanGeluid = true;
+				return true;
+			}
+		}
+		NyanGeluid = false;
+		return false;
+	}
+
 	/**
 	 * updateMovement(int) updates the position of all objects that need moving.
 	 * This includes rudimentary collision checking and collision reaction.
@@ -632,7 +636,7 @@ try {
 	 */
 	private void updateMovement(int deltaTime) {
 		for (int j = 0; j < Nyan.size(); j++) {
-			player.setHealth(player.getHealth()- Nyan.get(j).getHPoff());
+			player.setHealth(player.getHealth() - Nyan.get(j).getHPoff());
 		}
 		if (player.getHealth() <= 0) {
 			ScoreScreen.score = score;
@@ -640,18 +644,18 @@ try {
 			Game.gsm.setGameState(GameStateManager.DEAD_STATE);
 		}
 		player.update(deltaTime);
-		for(int i=0;i<pickup.size();i++){
-			if(!pickup.get(i).getPickup()){
+		for (int i = 0; i < pickup.size(); i++) {
+			if (!pickup.get(i).getPickup()) {
 				pickup.get(i).update(deltaTime);
-				if(pickup.get(i).getPickup()){
-					int w=Weapon.getNewWeapon();
-					switch(pickup.get(i).getSoort()){
+				if (pickup.get(i).getPickup()) {
+					int w = Weapon.getNewWeapon();
+					switch (pickup.get(i).getSoort()) {
 					case 0:
 						Weapon.setNewWeapon(0);
 						break;
-					case 1: 
-						score=score*2;
-						player.setHealth(player.getHealth()+20);
+					case 1:
+						score = score * 2;
+						player.setHealth(player.getHealth() + 20);
 						break;
 					case 2:
 						Weapon.setNewWeapon(2);
@@ -661,48 +665,61 @@ try {
 						break;
 					}
 					// place your old weapon in new pickup:
-					if(pickup.get(i).getSoort()!=1){
-						PickUp wapen=new PickUp(player.getLocationX() + Math.sin(Math.toRadians(player.getHorAngle()))*player.getSpeed()*20,player.getLocationZ() +
-								Math.cos(Math.toRadians(player.getHorAngle()))*player.getSpeed()*20,player,w);
+					if (pickup.get(i).getSoort() != 1) {
+						PickUp wapen = new PickUp(
+								player.getLocationX()
+										+ Math.sin(Math.toRadians(player
+												.getHorAngle()))
+										* player.getSpeed() * 20,
+								player.getLocationZ()
+										+ Math.cos(Math.toRadians(player
+												.getHorAngle()))
+										* player.getSpeed() * 20, player, w);
 						visibleObjects.add(wapen);
 						pickup.add(wapen);
 					}
 				}
 			}
 		}
-		if(Nyan.size()!=0){
+		if (Nyan.size() != 0) {
 			phworld.update(player);
 			player = phworld.updatePlayer(player);
-			
-		}
-		else{
+
+		} else {
 			flag.update();
-			if(!flag.Flag){
+			if (!flag.Flag) {
 				phworld.update(player);
 				player = phworld.updatePlayer(player);
-			}	
-			else{
-				//TODO: push score naar database!
+			} else {
+				// TODO: push score naar database!
 			}
 		}
-		
-		
+
 		for (int j = 0; j < Nyan.size(); j++) {
 			Nyan.get(j).update(deltaTime);
 			if (phworld.updateNyanhealth(j)) {
-				 PickUp pickupnieuw=new PickUp(Nyan.get(j).getLocationX(),Nyan.get(j).getLocationZ(),player,1);
-                 visibleObjects.add(pickupnieuw);
-                 pickup.add(pickupnieuw);
+				PickUp pickupnieuw = new PickUp(Nyan.get(j).getLocationX(),
+						Nyan.get(j).getLocationZ(), player, 1);
+				visibleObjects.add(pickupnieuw);
+				pickup.add(pickupnieuw);
 				Nyan.remove(j);
 				Menu.Sound.play("sounds/sonic_ring.wav");
 				score = score + 1000;
-				if(Nyan.size()==0){
-					flag=new Flag(maze.PLAYER_SPAWN_X,0,maze.PLAYER_SPAWN_Z,player);
+				if (Nyan.size() == 0) {
+					flag = new Flag(maze.PLAYER_SPAWN_X, 0,
+							maze.PLAYER_SPAWN_Z, player);
 					visibleObjects.add(flag);
 				}
 			}
 		}
-		
+
+		if (NyanSeePlayer()) {
+			for (int i = 0; i < Nyan.size(); i++) {
+				Nyan.get(i).goalX = player.getLocationX();
+				Nyan.get(i).goalZ = player.getLocationZ();
+			}
+
+		}
 
 		if (weapon.update(deltaTime, player, camera, phworld)) {
 			phworld.CreateBullet((float) camera.getLocationX(),
@@ -719,40 +736,6 @@ try {
 		}
 	}
 
-	// TODO: don't let Nyan walk through walls. However: walls will disappear
-	// thus this might not be
-	// necessary.
-	/*
-	 * 
-	 * if (maze.isWall( player.getLocationX() - Math.sin(Math.PI *
-	 * player.getHorAngle() / 180) player.getSpeed(), player.getLocationZ() -
-	 * Math.cos(Math.PI * player.getHorAngle() / 180) player.getSpeed())) {
-	 * 
-	 * player.update(-deltaTime); }
-	 * 
-	 * if (maze.isWall( player.getLocationX() + Math.sin(Math.PI *
-	 * player.getHorAngle() / 180) player.getSpeed() * deltaTime,
-	 * player.getLocationZ() + Math.cos(Math.PI * player.getHorAngle() / 180)
-	 * player.getSpeed() * deltaTime)) {
-	 * 
-	 * player.update(-deltaTime); }
-	 * 
-	 * if (maze.isWall( player.getLocationX() - Math.sin(Math.PI *
-	 * player.getHorAngle() / 180) player.getSpeed() * deltaTime,
-	 * player.getLocationZ() + Math.cos(Math.PI * player.getHorAngle() / 180)
-	 * player.getSpeed() * deltaTime)) { player.update(-deltaTime); }
-	 * 
-	 * if (maze.isWall( player.getLocationX() + Math.sin(Math.PI *
-	 * player.getHorAngle() / 180) player.getSpeed(), player.getLocationZ() -
-	 * Math.cos(Math.PI * player.getHorAngle() / 180) player.getSpeed())) {
-	 * 
-	 * player.update(-deltaTime); }
-	 * 
-	 * 
-	 * /** updateCamera() updates the camera position and orientation. <p> This
-	 * is done by copying the locations from the Player, since MazeRunner runs
-	 * on a first person view.
-	 */
 	private void updateCamera() {
 		camera.setLocationX(player.getLocationX());
 		camera.setLocationY(player.getLocationY());
@@ -769,7 +752,7 @@ try {
 	public void updatePhysics(int deltaTime) {
 
 		phworld.update(deltaTime, box, Nyan, player);
-		
+
 		bullets = phworld.getbullets();
 	}
 

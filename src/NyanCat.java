@@ -24,8 +24,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 															// funz.
 	private int HP = 100; // HealthPoints :D
 	private boolean goal = false; // has Nyan reached its goal yet?
-	private double goalX = 0; // where Nyan wants to go
-	private double goalZ = 0;
+	public double goalX = 0; // where Nyan wants to go
+	public double goalZ = 0;
 	boolean dead = false; // whether Nyan is dead or not.
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
