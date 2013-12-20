@@ -86,6 +86,7 @@ class Menu extends JPanel {
 						Game.frame = Game.gsm.setGameState(Game.gsm.EDITOR_STATE);
 						break;
 					case 3:
+						Game.frame = Game.gsm.setGameState(Game.gsm.SCORE_STATE); 
 						break;
 					case 4:
 						System.exit(0);

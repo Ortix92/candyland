@@ -48,27 +48,36 @@ public SQL() {
    public void GetHighScores(GL gl) {
 	 try {
 		 Statement statement = connect.createStatement();
-         ResultSet rs = statement.executeQuery("SELECT Naam, Score FROM Score");
-         float i = 0.9f;
+         ResultSet rs = statement.executeQuery("SELECT Naam, Score FROM Score ORDER BY Score DESC");
+         int plaats = 1;
          while (rs.next()) {
-            display(gl, rs.getString(1),rs.getString(2), i);
-            i = i - 0.1f;
+            display(gl, rs.getString(1),rs.getString(2), plaats);
+            plaats = plaats + 1;
          }
 	 } catch (SQLException e) {         
      e.printStackTrace();
 	 }
    }
    
-   public void display(GL gl, String a, String b, float num) {
+   public void display(GL gl, String a, String b, int num) {
 	 GLUT glut = new GLUT();
 	   gl.glColor3f(1.0f,1.0f,1.0f);
-		gl.glRasterPos2f(600/2f, 600-num*600);
+		gl.glRasterPos2f(1024/2f - 100, 50 + num*26);
 		int len, i;
-		String string = a + "  " + b; 
+		String string = num + ": " + a + "  " + b; 
 		  len = (int)string.length();
 		  for (i = 0; i < len; i++) {
 		    glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,string.charAt(i));
 		  }
+   }
+   
+   public void wipe() {
+	   try {
+			 Statement statement = connect.createStatement();
+	         statement.executeQuery("TRUNCATE TABLE  `Score`");
+	   } catch (SQLException e) {
+		   System.out.println("MY SCORES REMAIN!");
+	   }
    }
    
    public void close() {
@@ -78,5 +87,15 @@ public SQL() {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+   }	
+   /**
+    * EASY WAY TO WIPE ALL DATA FROM THE SQL SERVERS, WILL WIPE EVERYTHING, CHANGE QUERY TO NOT WIPE
+    * @param args
+    */
+	 // public static void main(String[] args) {
+	//	SQL connection = new SQL();
+	//	connection.wipe();
+	 //  }
+	   
+	   
    }
-}

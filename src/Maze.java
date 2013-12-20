@@ -40,7 +40,7 @@ public class Maze implements VisibleObject {
 
 	public Maze() {
 		World world = new World(Maze.mazeFile);
-		try { 
+		try {  
 			world.loadMapFromFile();
 			MAZE_SIZE = world.getMap().size();
 			System.out.println(MAZE_SIZE);

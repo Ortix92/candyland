@@ -1,3 +1,5 @@
+import java.awt.Component;
+
 import javax.swing.JFrame;
 
 import leveleditor.editor;
@@ -6,14 +8,18 @@ public class GameStateManager {
 
 	private static final long serialVersionUID = -2385197562776088374L;
 	private int gameState;
+	private int oldState;
 	public final static int MENU_STATE = 0;
 	public final static int MAZE_STATE = 1;
 	public final static int LOAD_STATE = 2;
 	public final static int EDITOR_STATE = 3;
+	public final static int SCORE_STATE = 4;
+	public final static int DEAD_STATE  = 5;
 	
 	public MazeRunner mazerunner;
 	public LevelSelector levelselector;
 	public Menu menu = new Menu(this);
+	public ScoreScreen scores;
  
 	public GameStateManager() {
 		gameState = MENU_STATE;
@@ -30,7 +36,6 @@ public class GameStateManager {
 		}
 		else if(state == MAZE_STATE) {
 			Game.frame.getContentPane().removeAll();
-			//Game.frame.remove(Game.gsm.menu);
 			mazerunner = new MazeRunner();
 			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
@@ -48,7 +53,18 @@ public class GameStateManager {
 			editor.main(null);
 			this.gameState = state;	
 		}
-		
+		else if(state == SCORE_STATE) {
+			Game.frame.getContentPane().removeAll();
+			scores = new ScoreScreen(0);
+			Game.frame.add(scores.canvas);
+			this.gameState = state;
+		}
+		else if(state == DEAD_STATE) {
+			Game.frame.getContentPane().removeAll();
+			scores = new ScoreScreen(1);
+			Game.frame.add(scores.canvas);
+			this.gameState = state;
+		}
 		return Game.frame;
 		
 	}

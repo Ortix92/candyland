@@ -8,15 +8,16 @@ import com.sun.opengl.util.j2d.TextRenderer;
 
 public class GameOverScreen {
 	
+	private boolean dood;
 	private double screenWidth = 1024;
 	private double screenHeight = 768;
+	
+	public void setdood(boolean a) {
+		dood = a;
+	}
 
-	public void display(GL gl) {
-		gl.glDisable(GL.GL_DEPTH_TEST);
-		gl.glDisable(GL.GL_LIGHTING);
-
-		
-		gl.glColor4d(.1, .1, .1 , 1); // grey 
+	public void display(GL gl, String naam) {
+		gl.glColor4d(1, 0, .1 , 1);
 		gl.glBegin(GL.GL_QUADS);
 		gl.glVertex2d(0, screenHeight);
 		gl.glVertex2d(screenWidth, screenHeight);
@@ -29,17 +30,11 @@ public class GameOverScreen {
 		TextRenderer tr = new TextRenderer(f);
 		tr.beginRendering((int) screenWidth, (int) screenHeight);
 		tr.draw("JE BENT DOOD", (int) (screenWidth/2 - 150), (int) (screenHeight -200));
-		Font f2 = new Font("SansSerif", Font.ITALIC, 20);
-		tr.draw("", (int) (screenWidth/2 - 200), (int) (screenHeight -300));
 		Font f3 = new Font("SansSerif", Font.ITALIC, 15);
-		tr.draw("", (int) (screenWidth/2 - 360), (int) (screenHeight -400));
+		tr.draw("Enter your name:" + naam, (int) (screenWidth/2 - 360), (int) (screenHeight -400));
 		Font f4 = new Font("SansSerif", Font.ITALIC, 5);
 		tr.draw("PRESS ENTER TO RETURN TO MAIN MENU", (int) (screenWidth/2 - 400), (int) (screenHeight -450));
 		tr.endRendering();
-
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_DEPTH_TEST);
-	
 }
 		
 }
