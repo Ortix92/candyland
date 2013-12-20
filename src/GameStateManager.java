@@ -45,7 +45,7 @@ public class GameStateManager {
 			Game.frame.setVisible(true);
 		}		
 		else if(state == EDITOR_STATE) {
-			new editor();
+			editor.main(null);
 			this.gameState = state;	
 		}
 		
