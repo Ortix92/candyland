@@ -728,7 +728,7 @@ public class MazeRunner implements GLEventListener {
 					camera);
 			bullets.add(new Bullet(player.getLocationX(),
 					player.getLocationY(), player.getLocationZ(), player
-							.getHorAngle(), player.getVerAngle()));
+							.getHorAngle(), player.getVerAngle())); 
 
 		}
 		for (int i = 0; i < bullets.size(); i++) {

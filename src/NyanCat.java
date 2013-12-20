@@ -211,12 +211,13 @@ public class NyanCat extends GameObject implements VisibleObject {
 					for (double j = 0; j < Math.abs(player.getLocationX()
 							- this.getLocationX()); j = j + maze.SQUARE_SIZE
 							/ 2) {
-						if (maze.isWall(this.getLocationX() + i * deltaX,
+						if (jbullet.isNewWall(this.getLocationX() + i * deltaX,
 								this.getLocationZ() + j * deltaZ)) {
 							return false;
 						}
 					}
 				}
+				
 				return true;
 			}
 		}
@@ -233,9 +234,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 				/ Math.sqrt(Math.pow(X - getLocationX(), 2)
 						+ Math.pow(Z - getLocationZ(), 2));
 
-		if (maze.isWall(this.getLocationX() + deltaX, this.getLocationZ()
-				+ deltaZ)) {
-			goal = true;
+		if (jbullet.isNewWall(this.getLocationX() + deltaX*speed, this.getLocationZ()
+				+ deltaZ*speed)) {
+			if (!jbullet.isNewWall(this.getLocationX() - deltaX*speed, this.getLocationZ()
+					+ deltaZ*speed)) {
+				moveTo(this.getLocationX()-deltaX*speed,this.getLocationZ()+deltaZ*speed);
+			}
+			else if (!jbullet.isNewWall(this.getLocationX() + deltaX*speed, this.getLocationZ()
+					- deltaZ*speed)) {
+				moveTo(this.getLocationX()+deltaX*speed,this.getLocationZ()-deltaZ*speed);
+				
+			}
+			else if (!jbullet.isNewWall(this.getLocationX() - deltaX*speed, this.getLocationZ()
+					- deltaZ*speed)) {
+				moveTo(this.getLocationX()-deltaX*speed,this.getLocationZ()-deltaZ*speed);
+			}
 		}
 
 		if (!goal) {
