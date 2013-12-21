@@ -45,6 +45,7 @@ int soort;
 					else{
 						//TODO: // Stuiterbal texture. 
 					}
+				}
 					Textureloader.drawCube(gl, false);
 					if(Textureloader.loadtextures){
 						if(this.soort==1){
@@ -53,8 +54,8 @@ int soort;
 						else{
 							//TODO: // disable stuiterbal texture
 							}
+					
 					}
-				}
 				gl.glPopMatrix();
 			}
 		}
