@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.sun.opengl.util.Animator;
+
 /**
  * A frame for us to draw on using OpenGL.
  * 
@@ -57,7 +58,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 		screenWidth = width;
 		screenHeight = height;
 		points = new ArrayList<Point2D.Float>();
-		spawnPoint =  new Point(2, 2);
+		spawnPoint = new Point(2, 2);
 		// Set the desired size and background color of the frame
 		setSize(screenWidth, screenHeight);
 		// setBackground(Color.white);
@@ -205,6 +206,14 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 				}
 			}
 		}
+	}
+
+	/**
+	 * Clear all the data after a new map is created and set default values
+	 */
+	public void clearMap() {
+		spawnPoint = new Point(2, 2);
+
 	}
 
 	/**

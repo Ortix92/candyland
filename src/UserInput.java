@@ -131,6 +131,8 @@ public class UserInput extends Control implements MouseListener,
 			} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE
 					&& pause == false) {
 				pause = true;
+			} else if (event.getKeyCode() == KeyEvent.VK_SHIFT) {
+				sprint = true;
 			} else if ((event.getKeyCode() == KeyEvent.VK_ESCAPE && pause == true)
 					|| (event.getKeyCode() == KeyEvent.VK_P && pause == true)) {
 				pause = false;
@@ -138,11 +140,12 @@ public class UserInput extends Control implements MouseListener,
 					&& UserInput.pause == true) {
 				Game.frame = Game.gsm.setGameState(GameStateManager.MENU_STATE);
 				pause = false;
-			}  else if (event.getKeyCode() == KeyEvent.VK_ENTER
+			} else if (event.getKeyCode() == KeyEvent.VK_ENTER
 					&& Game.gsm.getGameState() == GameStateManager.DEAD_STATE) {
 				Game.gsm.scores.AddHighScore();
 				ScoreScreen.naam = "";
-				Game.frame = Game.gsm.setGameState(GameStateManager.SCORE_STATE);
+				Game.frame = Game.gsm
+						.setGameState(GameStateManager.SCORE_STATE);
 			} else if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 				backspace = true;
 			} else if (event.getKeyCode() == KeyEvent.VK_ENTER
@@ -169,17 +172,16 @@ public class UserInput extends Control implements MouseListener,
 			net_gebukt = true;
 		} else if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			backspace = false;
-		}
-		else if(event.getKeyCode() == KeyEvent.VK_SHIFT) {
+		} else if (event.getKeyCode() == KeyEvent.VK_SHIFT) {
 			sprint = false;
 		}
 
 	}
-	
+
 	public void setdead() {
 		dead = true;
 	}
-	
+
 	public void isDead() {
 		Game.gsm.setGameState(GameStateManager.DEAD_STATE);
 	}
@@ -215,12 +217,12 @@ public class UserInput extends Control implements MouseListener,
 	public void keyTyped(KeyEvent event) {
 		if (Game.gsm.getGameState() == GameStateManager.DEAD_STATE) {
 			if (event.isShiftDown()) {
-				ScoreScreen.letter = Character.toString(Character.toUpperCase(event.getKeyChar()));
+				ScoreScreen.letter = Character.toString(Character
+						.toUpperCase(event.getKeyChar()));
+			} else {
+				ScoreScreen.letter = Character.toString(event.getKeyChar());
 			}
-			else {
-		ScoreScreen.letter = Character.toString(event.getKeyChar());
-			}
-			
+
 		}
 	}
 

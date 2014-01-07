@@ -46,7 +46,7 @@ public class jbullet {
 	private RigidBody playar;
 	private Maze maze;
 	public static int energy = 1000;
-	
+
 	public jbullet(int n) {
 		Bullets = new ArrayList<Bullet>();
 		nyanies = new ObjectArrayList<RigidBody>();
@@ -207,16 +207,16 @@ public class jbullet {
 	}
 
 	public void updateNyanpos(int i, NyanCat newnyan) {
-	//	RigidBody nyan = nyanies.get(i);
+		// RigidBody nyan = nyanies.get(i);
 		Transform trans = new Transform();
 		trans.setRotation(new Quat4f((float) newnyan.getHorAngle(), 0, 0, 1));
 		trans.origin.set((float) newnyan.getLocationX(),
 				(float) newnyan.getLocationY(), (float) newnyan.getLocationZ());
 		nyanies.get(i).setWorldTransform(trans);
-	//	dynamicworld.addRigidBody(nyan);
-	//	dynamicworld.removeRigidBody(nyanies.get(i));
-	//	nyanies.remove(i);
-	//	nyanies.add(nyan);
+		// dynamicworld.addRigidBody(nyan);
+		// dynamicworld.removeRigidBody(nyanies.get(i));
+		// nyanies.remove(i);
+		// nyanies.add(nyan);
 
 	}
 
@@ -246,15 +246,15 @@ public class jbullet {
 	}
 
 	public static boolean isNewWall(double X, double Z) {
-//		for (int i = 0; i < mazeblocks.size(); i++) {
-//			Transform trans = new Transform();
-//			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
-//			float x = trans.origin.x;
-//			float z = trans.origin.z;
-//			if (Math.abs(X - x) < 3 && Math.abs(Z - z) < 3) {
-//				return true;
-//			}
-//		}
+		// for (int i = 0; i < mazeblocks.size(); i++) {
+		// Transform trans = new Transform();
+		// mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+		// float x = trans.origin.x;
+		// float z = trans.origin.z;
+		// if (Math.abs(X - x) < 3 && Math.abs(Z - z) < 3) {
+		// return true;
+		// }
+		// }
 		return false;
 	}
 
@@ -416,7 +416,7 @@ public class jbullet {
 			System.out.println(energy);
 			if (sprint && energy >= 0) {
 				if (energy > 0) {
-					energy -= 10;
+					energy -= 3;
 					speed = 20f;
 				}
 			}
@@ -574,7 +574,7 @@ public class jbullet {
 					} else if (back) {
 						playar.setLinearVelocity(new Vector3f((float) Math
 								.sin(Math.toRadians(play.getHorAngle()))
-								* speed, 0, (float) Math.cos(Math
+								* speed / 2, 0, (float) Math.cos(Math
 								.toRadians(play.getHorAngle())) * speed / 2));
 					} else if (left) {
 						playar.setLinearVelocity(new Vector3f(-(float) Math

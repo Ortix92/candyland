@@ -86,6 +86,7 @@ public class LevelSelector extends JPanel {
 
 			switch (action) {
 			case "return":
+				Game.gsm.setGameState(Game.gsm.MENU_STATE);
 				break;
 			case "exported":
 				Maze.mazeFile = "map_export.txt";
@@ -99,32 +100,29 @@ public class LevelSelector extends JPanel {
 
 				JOptionPane
 						.showMessageDialog(LevelSelector.this,
-								"Your a pathetic soul. You will dwell for all of eternity in hell.");
+								"You are a pathetic soul. You will dwell for all of eternity in hell.");
 				System.out.println("Map Selected: " + Maze.mazeFile);
 				break;
 			case "map2":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
 				MazeRunner.amountofNyans = 7;
 
-				JOptionPane
-						.showMessageDialog(LevelSelector.this,
-								"You have some skill, warrior, but you still suck.");
+				JOptionPane.showMessageDialog(LevelSelector.this,
+						"You have some skill, warrior, but you still suck.");
 				System.out.println("Map Selected: " + Maze.mazeFile);
 				break;
 			case "map3":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
 				MazeRunner.amountofNyans = 15;
-				JOptionPane
-						.showMessageDialog(LevelSelector.this,
-								"You will avenge your fallen brothers, God like human.");
+				JOptionPane.showMessageDialog(LevelSelector.this,
+						"You will avenge your fallen brothers, Godlike human.");
 				System.out.println("Map Selected: " + Maze.mazeFile);
 				break;
 			case "map4":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
 				MazeRunner.amountofNyans = 25;
-				JOptionPane
-						.showMessageDialog(LevelSelector.this,
-								"Right this way sir... do you want some coffee to go?");
+				JOptionPane.showMessageDialog(LevelSelector.this,
+						"Right this way sir... do you want some coffee to go?");
 				System.out.println("Map Selected: " + Maze.mazeFile);
 				break;
 			}

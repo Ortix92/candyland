@@ -265,6 +265,7 @@ public class editor {
 
 				editor.this.editorPanel.setMaze(emptyMap
 						.getZeroesMatrix(resolution));
+				editor.this.editorPanel.clearMap();
 				editor.this.drawMap(true);
 			} else {
 				JOptionPane.showMessageDialog(frame,
