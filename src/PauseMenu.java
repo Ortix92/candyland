@@ -6,6 +6,11 @@ import javax.media.opengl.GLCanvas;
 
 import com.sun.opengl.util.j2d.TextRenderer;
 
+/**
+ * Class which creates the pause menu
+ * @author Rogier Vrooman
+ *
+ */
 public class PauseMenu {
 	
 	private double screenWidth = 1024;

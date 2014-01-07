@@ -77,6 +77,11 @@ public class LevelSelector extends JPanel {
 
 	}
 
+	/**
+	 * Class containing all the actions which occur after a button press
+	 * @author ntsutsunava
+	 *
+	 */
 	private class LoadMapAction extends AbstractAction {
 
 		private static final long serialVersionUID = 3928887640385948568L;

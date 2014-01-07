@@ -6,6 +6,12 @@ import javax.media.opengl.GL;
 
 import com.sun.opengl.util.GLUT;
 
+/**
+ * The class which governs the Nyan Cat
+ * 
+ * @author Lennie de Roo
+ * 
+ */
 public class NyanCat extends GameObject implements VisibleObject {
 
 	private double horAngle; // sets the direction in which Nyan looks
@@ -32,7 +38,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 	private Maze maze;
 	private TimerTask timertask;
 	private Timer timer = new Timer();
-        private double HPoff = 0;
+	private double HPoff = 0;
+
 	// makes a NyanCat on the location x, y , z, looking in direction h
 	public NyanCat(double x, double y, double z, double h, Player play, Maze m) {
 		super(x, y, z);
@@ -51,21 +58,6 @@ public class NyanCat extends GameObject implements VisibleObject {
 		return HP; // healthpoints
 	}
 
-	// tells Nyan to what he should listen
-	/*
-	 * public void setControl(Control control) { this.Nyancontrol = control; }
-	 * 
-	 * /** Gets the Control object currently controlling the NyanCat
-	 * 
-	 * @return
-	 */
-	/*
-	 * public Control getControl() { return Nyancontrol; }
-	 * 
-	 * /** Returns the horizontal angle of the orientation.
-	 * 
-	 * @return the horAngle
-	 */
 	public double getHorAngle() {
 		return horAngle + 90; // plus 90, omdat Nyancat scheef is gebouwd.
 	}
@@ -106,11 +98,6 @@ public class NyanCat extends GameObject implements VisibleObject {
 	 *            The time in milliseconds since the last update.
 	 */
 	public void update(int deltaTime) {
-		// update Nyans movement.
-		// this.Nyancontrol.update();// does not do anything yet.
-		// Floating animation:
-		// Fly up 70 times:
-
 		boolean up = false;
 		if ((i >= 0) && (i < 70)) {
 			setLocationY(getLocationY() + 0.5 * getSpeed());
@@ -182,6 +169,14 @@ public class NyanCat extends GameObject implements VisibleObject {
 		goal = false;
 	}
 
+	/**
+	 * Check if the Nyancat can see the player. It does so by checking whether a
+	 * line from the Nyan cat intersects with the Z-axis of the player. This
+	 * line has a field of view of 70 degrees. Anything outside this cannot be
+	 * seen by nyan
+	 * 
+	 * @return true if seen, false if not
+	 */
 	public boolean SeePlayer() {
 		// Checks whether the Nyan can see the player.
 		// It does this by checking whether the angle the line from player to
@@ -217,13 +212,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 						}
 					}
 				}
-				
+
 				return true;
 			}
 		}
 		return false;
 	}
 
+	/**
+	 * Sets the location to where the nyancat should move to.
+	 * 
+	 * @param X
+	 *            the X location
+	 * @param Z
+	 *            the Z location
+	 */
 	public void moveTo(double X, double Z) {
 
 		// genormaliseerde richtingsvector:
@@ -234,20 +237,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 				/ Math.sqrt(Math.pow(X - getLocationX(), 2)
 						+ Math.pow(Z - getLocationZ(), 2));
 
-		if (jbullet.isNewWall(this.getLocationX() + deltaX*speed, this.getLocationZ()
-				+ deltaZ*speed)) {
-			if (!jbullet.isNewWall(this.getLocationX() - deltaX*speed, this.getLocationZ()
-					+ deltaZ*speed)) {
-				moveTo(this.getLocationX()-deltaX*speed,this.getLocationZ()+deltaZ*speed);
-			}
-			else if (!jbullet.isNewWall(this.getLocationX() + deltaX*speed, this.getLocationZ()
-					- deltaZ*speed)) {
-				moveTo(this.getLocationX()+deltaX*speed,this.getLocationZ()-deltaZ*speed);
-				
-			}
-			else if (!jbullet.isNewWall(this.getLocationX() - deltaX*speed, this.getLocationZ()
-					- deltaZ*speed)) {
-				moveTo(this.getLocationX()-deltaX*speed,this.getLocationZ()-deltaZ*speed);
+		if (jbullet.isNewWall(this.getLocationX() + deltaX * speed,
+				this.getLocationZ() + deltaZ * speed)) {
+			if (!jbullet.isNewWall(this.getLocationX() - deltaX * speed,
+					this.getLocationZ() + deltaZ * speed)) {
+				moveTo(this.getLocationX() - deltaX * speed,
+						this.getLocationZ() + deltaZ * speed);
+			} else if (!jbullet.isNewWall(this.getLocationX() + deltaX * speed,
+					this.getLocationZ() - deltaZ * speed)) {
+				moveTo(this.getLocationX() + deltaX * speed,
+						this.getLocationZ() - deltaZ * speed);
+
+			} else if (!jbullet.isNewWall(this.getLocationX() - deltaX * speed,
+					this.getLocationZ() - deltaZ * speed)) {
+				moveTo(this.getLocationX() - deltaX * speed,
+						this.getLocationZ() - deltaZ * speed);
 			}
 		}
 
@@ -444,18 +448,20 @@ public class NyanCat extends GameObject implements VisibleObject {
 			for (int i = 0; i < rainbows.size(); i++) {
 				rainbows.get(i).update();
 				rainbows.get(i).display(gl);
-				                                if (rainbows.get(i).CollisionCheck(player)) {
-                                	HPoff = HPoff + 5;
-                                	rainbows.remove(i);
-                                }
+				if (rainbows.get(i).CollisionCheck(player)) {
+					HPoff = HPoff + 5;
+					rainbows.remove(i);
+				}
 			}
 		}
 	}
-        public double getHPoff() {
-        	double res = HPoff;
-        	HPoff = 0;
-        	return res;
-        }
+
+	public double getHPoff() {
+		double res = HPoff;
+		HPoff = 0;
+		return res;
+	}
+
 	public void setHP(int x) {
 		HP = x;
 	}

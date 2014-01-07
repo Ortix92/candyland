@@ -2,12 +2,24 @@ import javax.media.opengl.GL;
 
 import com.sun.opengl.util.GLUT;
 
-
+/**
+ * A class which governs and creates the bullets fired from the guns
+ * @author Michiel Schaap
+ *
+ */
 public class Bullet extends GameObject {
 
 	private int time;
 	private boolean bullet;
 	
+	/**
+	 * The constructor which creates the bullet
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param HorAngle
+	 * @param VerAngle
+	 */
 	public Bullet(double x, double y, double z, double HorAngle, double VerAngle) {
 	super( x,y,z );
 	bullet = true;
@@ -22,10 +34,17 @@ public class Bullet extends GameObject {
     }
 	}
 	
+	/**
+	 * Stops the bullets from firing
+	 */
 	public void BulletStop() {
 		bullet = false;
 	}
 	
+	/**
+	 * 
+	 * @return true if the bullet is firing, false if not
+	 */
 	public boolean getBulletState() {
 		return bullet;
 	}

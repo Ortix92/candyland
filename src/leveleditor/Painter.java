@@ -263,7 +263,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 	/**
 	 * This is a special version of the getYLocationBlock() method since that
-	 * one doesn't work propperly with the spawn point
+	 * one doesn't work properly with the spawn point
 	 * 
 	 * @param i
 	 *            the unscaled location
@@ -310,6 +310,13 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 	}
 
+	/**
+	 * Draws the spawn tile
+	 * 
+	 * @param mode
+	 *            Left(1) or right(3) mouse button which draws or removes
+	 *            respectively
+	 */
 	private void drawSpawnTile(int mode) {
 		if (this.drawMap) {
 			int[] tiles = searchTileToDraw();
@@ -328,6 +335,13 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 		}
 	}
 
+	/**
+	 * Draws the maze tile
+	 * 
+	 * @param mode
+	 *            Left (1) or right(3) mouse button which draws or removes
+	 *            respectively
+	 */
 	private void drawMazeTile(int mode) {
 		if (this.drawMap) {
 
@@ -349,6 +363,11 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 	}
 
+	/**
+	 * Iterates over all the tiles until the tile matches the mouse coordinates
+	 * 
+	 * @return an integer array containing the x and y tile location
+	 */
 	private int[] searchTileToDraw() {
 		int[] tiles = new int[2];
 		int i = 0;
@@ -412,15 +431,6 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	}
 
 	/**
-	 * Help method that uses GL calls to draw a point.
-	 */
-	private void pointOnScreen(GL gl, float x, float y) {
-		gl.glBegin(GL.GL_POINTS);
-		gl.glVertex2f(x, y);
-		gl.glEnd();
-	}
-
-	/**
 	 * Help method that uses GL calls to draw a line.
 	 */
 	private void lineOnScreen(GL gl, float x1, float y1, float x2, float y2) {
@@ -432,7 +442,16 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	}
 
 	/**
-	 * Help method that uses GL calls to draw a square
+	 * Draws a maze tile on the location provided
+	 * 
+	 * @param gl
+	 *            the openGL object
+	 * @param x
+	 *            the x coordinate of the tile
+	 * @param y
+	 *            the y coordinate of the tile
+	 * @param size
+	 *            the size of the tile
 	 */
 	private void mazeBoxOnScreen(GL gl, float x, float y, float size) {
 		gl.glColor3f(1.0f, 1.0f, 1.0f);
@@ -443,6 +462,19 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 		gl.glVertex2f(x, y + size);
 		gl.glEnd();
 	}
+
+	/**
+	 * Draws a spawn tile on the location provided
+	 * 
+	 * @param gl
+	 *            the openGL object
+	 * @param x
+	 *            the x coordinate of the tile
+	 * @param y
+	 *            the y coordinate of the tile
+	 * @param size
+	 *            the size of the tile
+	 */
 
 	private void spawnBoxOnScreen(GL gl, float x, float y, float size) {
 		gl.glColor3f(0f, 1.0f, 1.0f);

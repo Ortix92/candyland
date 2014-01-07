@@ -2,6 +2,12 @@ import javax.media.opengl.GL;
 
 import com.sun.opengl.util.GLUT;
 
+/**
+ * A class which governs all the weapons 
+ * @author Michiel Schaap
+ *
+ */
+
 public class Weapon extends GameObject {
 
 	private Control control;
@@ -29,6 +35,10 @@ public class Weapon extends GameObject {
 		NewWeapon=x;
 	}
 
+	/**
+	 * Constructor which sets the rate of fire
+	 * @param rateoffire sets the time between bullet generation
+	 */
 	public Weapon(int rateoffire) {
 		this.rateoffire = rateoffire;
 	}
@@ -58,6 +68,9 @@ public class Weapon extends GameObject {
 		return false;
 	}
 
+	/**
+	 * Sways the weapon from side to side when walking
+	 */
 	public void Weaponsway() {
 		if (control.getForward()) {
 			counter = counter + 1;
@@ -125,6 +138,9 @@ public class Weapon extends GameObject {
 
 	}
 
+	/**
+	 * Calculates the offset of the weapon sway
+	 */
 	public void Calcoffset() {
 		if (Right) {
 			Xoffset = Xoffset + 0.005f;
@@ -143,6 +159,10 @@ public class Weapon extends GameObject {
 		}
 	}
 
+	/**
+	 * Render everything on the screen
+	 * @param gl the openGL object
+	 */
 	public void display(GL gl) {
 		if (control.getShoot()) {
 			GLUT glut = new GLUT();
