@@ -53,7 +53,7 @@ public class MazeRunner implements GLEventListener {
 	private static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	public static int amountofNyans = 15;
+	public static int amountofNyans = 1;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
@@ -643,7 +643,7 @@ public class MazeRunner implements GLEventListener {
 		}
 		if (player.getHealth() <= 0) {
 			ScoreScreen.score = score;
-			ScoreScreen.dood = true;
+			ScoreScreen.gameover = 1;
 			Game.gsm.setGameState(GameStateManager.DEAD_STATE);
 		}
 		player.update(deltaTime);
@@ -711,7 +711,11 @@ public class MazeRunner implements GLEventListener {
 				phworld.update(player);
 				player = phworld.updatePlayer(player);
 			} else {
-				// TODO: push score naar database!
+				if (flag.geti() >= 4) {
+				ScoreScreen.score = score;
+				ScoreScreen.gameover = 2;
+				Game.gsm.setGameState(Game.gsm.DEAD_STATE);
+			}
 			}
 		}
 
