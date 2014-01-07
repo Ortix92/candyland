@@ -272,7 +272,7 @@ public class jbullet {
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
 		glut.glutSolidCube(0.2f);
-		// Textureloader.stuiterbal(0.1f, 10);
+		//Textureloader.stuiterbal(0.1f, 10);
 		gl.glPopMatrix();
 	}
 

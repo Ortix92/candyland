@@ -55,16 +55,19 @@ public class GameStateManager {
 		}
 		else if(state == SCORE_STATE) {
 			Game.frame.getContentPane().removeAll();
-			scores = new ScoreScreen(0);
+			scores = null;
+			scores = new ScoreScreen();
+			scores.setState(0);
 			Game.frame.add(scores.canvas);
 			this.gameState = state;
 		}
 		else if(state == DEAD_STATE) {
 			Game.frame.getContentPane().removeAll();
-			scores = new ScoreScreen(1);
+			scores = new ScoreScreen();
 			Game.frame.add(scores.canvas);
 			this.gameState = state;
 		}
+		
 		return Game.frame;
 		
 	}

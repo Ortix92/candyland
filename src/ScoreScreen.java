@@ -20,7 +20,7 @@ import com.sun.opengl.util.Animator;
 
 
 public class ScoreScreen implements GLEventListener {
-	private int gameover;
+	public static int gameover;
 	private SQL connection;
 	private GameOverScreen screen = new GameOverScreen();
 	public static String naam;
@@ -32,11 +32,11 @@ public class ScoreScreen implements GLEventListener {
 	public static int score;
 	public static boolean dood;
 	
-public ScoreScreen(int i){
+public ScoreScreen(){
 	initJOGL();
 	connection = new SQL();
 	input = new UserInput(canvas);
-	gameover = i;
+	//gameover = i;
 	naam = "";
 }
 
@@ -109,7 +109,7 @@ public void display(GLAutoDrawable drawable) {
 	
 	GL gl = drawable.getGL();
 	
-	if (gameover == 1 && dood) {
+	if (gameover == 1) {
 		screen.setdood(true);
 		screen.display(gl, naam);
 		if (letter != null) {
@@ -119,7 +119,17 @@ public void display(GLAutoDrawable drawable) {
 			removeLetter();
 		}
 	}
-	if (gameover == 1 && !dood) {
+//	if (gameover == 1 && !dood) {
+//		screen.setdood(false);
+//		screen.display(gl, naam);
+//		if (letter != null) {
+	//	naam = naam + letter;
+//		letter = null; }
+//		if (input.backspace) {
+//			removeLetter();
+//		}
+//	}
+	if (gameover == 2) {
 		screen.setdood(false);
 		screen.display(gl, naam);
 		if (letter != null) {
@@ -128,6 +138,7 @@ public void display(GLAutoDrawable drawable) {
 		if (input.backspace) {
 			removeLetter();
 		}
+		
 	}
 	if (gameover == 0) {
 		

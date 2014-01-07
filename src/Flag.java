@@ -81,5 +81,8 @@ public class Flag extends GameObject implements VisibleObject{
 		
 		
 	}
+	public double geti() {
+		return i;
+	}
 
 }
