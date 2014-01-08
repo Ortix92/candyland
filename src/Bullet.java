@@ -3,19 +3,18 @@ import javax.media.opengl.GL;
 import com.sun.opengl.util.GLUT;
 
 
-public class Bullet extends GameObject {
+public class Bullet {
 
 	private int time;
 	private boolean bullet;
 	
-	public Bullet(double x, double y, double z, double HorAngle, double VerAngle) {
-	super( x,y,z );
+	public Bullet() {
 	bullet = true;
-	time = 300;
+	time = 80;
 	}
 	
 	
-	public void update(int deltaTime) {
+	public void update() {
     time = time - 1;
     if (time <= 0){
     	BulletStop();
@@ -36,7 +35,7 @@ public class Bullet extends GameObject {
 	        gl.glMaterialfv( GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 		
 	    gl.glPushMatrix();
-	    gl.glTranslated(getLocationX(), getLocationY(), getLocationZ());
+	//    gl.glTranslated(getLocationX(), getLocationY(), getLocationZ());
 		
 	    glut.glutSolidSphere(0.05, 10, 10);
 	    gl.glPopMatrix();

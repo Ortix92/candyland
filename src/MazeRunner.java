@@ -17,6 +17,7 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import com.sun.opengl.util.Animator;
+import com.sun.opengl.util.FPSAnimator;
 import com.sun.opengl.util.GLUT;
 
 /**
@@ -53,7 +54,7 @@ public class MazeRunner implements GLEventListener {
 	private static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	public static int amountofNyans = 1;
+	public static int amountofNyans = 100;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
@@ -64,7 +65,7 @@ public class MazeRunner implements GLEventListener {
 	private TestBox box;
 	private PauseMenu pause;
 	private jbullet phworld;
-	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+//	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup = new ArrayList<PickUp>();
@@ -134,7 +135,7 @@ public class MazeRunner implements GLEventListener {
 		 * continuously repaint itself. The Animator class handles that for
 		 * JOGL.
 		 */
-		anim = new Animator(canvas);
+		anim = new FPSAnimator(canvas,60);
 		anim.start();
 		// makes an image of 1 by 1 pixel, type:
 		// Represents an image with 8-bit RGBA color components packed into
@@ -171,7 +172,7 @@ public class MazeRunner implements GLEventListener {
 		visibleObjects = new ArrayList<VisibleObject>();
 		// Add the maze that we will be using.
 		maze = new Maze();
-		visibleObjects.add(maze);
+	//	visibleObjects.add(maze);
 		floor = new Floor(maze);
 
 		// visibleObjects.add(floor);
@@ -238,6 +239,8 @@ public class MazeRunner implements GLEventListener {
 				(float) player.getLocationY(), (float) player.getLocationZ());
 		System.out.println("Maze size: " + maze.MAZE_SIZE);
 
+		
+	
 	}
 
 	/**
@@ -510,6 +513,8 @@ public class MazeRunner implements GLEventListener {
 			Calendar now = Calendar.getInstance();
 			long currentTime = now.getTimeInMillis();
 			int deltaTime = (int) (currentTime - previousTime);
+			long fps = (currentTime - previousTime);
+			System.out.println("FPS:" + 1000/fps);
 			previousTime = currentTime;
 
 			// Update any movement since last frame.
@@ -542,14 +547,14 @@ public class MazeRunner implements GLEventListener {
 			// Display all the visible objects of MazeRunner.
 			skybox.display(gl);
 			phworld.displaymaze(gl);
-			for (int i = 0; i < bullets.size(); i++) {
-				phworld.display(gl, i);
-			}
+		//	for (int i = 0; i < bullets.size(); i++) {
+				phworld.display(gl);
+		//	}
 			for (int j = 0; j < Nyan.size(); j++) {
 				Nyan.get(j).display(gl);
 			}
 			// floor.display(gl);
-			for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
+		 	for (Iterator<VisibleObject> it = visibleObjects.iterator(); it
 					.hasNext();) {
 				it.next().display(gl);
 			}
@@ -734,13 +739,13 @@ public class MazeRunner implements GLEventListener {
 					(float) camera.getVrpY(), (float) camera.getLocationZ(),
 					(float) player.getVerAngle(), (float) player.getHorAngle(),
 					camera);
-			bullets.add(new Bullet(player.getLocationX(),
-					player.getLocationY(), player.getLocationZ(), player
-							.getHorAngle(), player.getVerAngle())); 
+		//	bullets.add(new Bullet(player.getLocationX(),
+	//				player.getLocationY(), player.getLocationZ(), player
+	//						.getHorAngle(), player.getVerAngle())); 
 
-		}
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).update(deltaTime);
+	//	}
+	//	for (int i = 0; i < bullets.size(); i++) {
+	//		bullets.get(i).update(deltaTime);
 		}
 	}
 
@@ -761,7 +766,7 @@ public class MazeRunner implements GLEventListener {
 
 		phworld.update(deltaTime, box, Nyan, player);
 
-		bullets = phworld.getbullets();
+	//	bullets = phworld.getbullets();
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.vecmath.Vector3f;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -112,22 +113,6 @@ public class jbullet {
 	}
 
 	public void initNyan(NyanCat nyancat) {
-		CollisionShape nyanshape = new BoxShape(new Vector3f(1f, 1f, 2f));
-		Transform nyan = new Transform();
-		nyan.setRotation(new Quat4f((float) nyancat.getHorAngle(), 0f, 0f, 1f));
-		nyan.origin.set((float) nyancat.getLocationX(),
-				(float) nyancat.getLocationY(), (float) nyancat.getLocationZ());
-		KinematicMotionState nyanstate = new KinematicMotionState();
-		nyanstate.setWorldTransform(nyan);
-		Vector3f Inertia = new Vector3f(0, 0, 0);
-		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(5,
-				nyanstate, nyanshape, Inertia);
-		RigidBody nyanbody = new RigidBody(nyaninfo);
-		// nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
-		// | CollisionFlags.KINEMATIC_OBJECT);
-		nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-		dynamicworld.addRigidBody(nyanbody);
-		nyanies.add(nyanbody);
 		nyans.add(nyancat);
 	}
 
@@ -166,6 +151,8 @@ public class jbullet {
 		bullet.setLinearVelocity(velocityVector);
 		dynamicworld.addRigidBody(bullet);
 		bullets.add(bullet);
+		Bullet b = new Bullet();
+		Bullets.add(b);
 	}
 
 	public void initPlayer(float x, float y, float z) {
@@ -173,51 +160,20 @@ public class jbullet {
 		startTransform.setIdentity();
 		startTransform.origin.set(x, y, z);
 
-		// Vector3f worldMin = new Vector3f(-1000f,-1000f,-1000f);
-		// Vector3f worldMax = new Vector3f(1000f,1000f,1000f);
-		// AxisSweep3 sweepBP = new AxisSweep3(worldMin, worldMax);
-
-		// PairCachingGhostObject ghostObject = new PairCachingGhostObject();
 		DefaultMotionState playerstate = new DefaultMotionState();
 		CollisionShape playershape = new BoxShape(new Vector3f(1f, 2.5f, 1f));
 		playerstate.setWorldTransform(startTransform);
-		// sweepBP.getOverlappingPairCache().setInternalGhostPairCallback(new
-		// GhostPairCallback());
-		// ConvexShape capsule = new CapsuleShape(characterWidth,
-		// characterHeight);
-		// ghostobject.setCollisionShape(capsule);
-		// ghostobject.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
+		
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo playerRigidBody = new RigidBodyConstructionInfo(
 				20, playerstate, playershape, Inertia);
 		playar = new RigidBody(playerRigidBody);
-		// float stepHeight = 0.35f;
-		// player = new KinematicCharacterController(ghostobject, capsule,
-		// stepHeight);
+		
 		playar.setFriction(5f);
 		playar.applyCentralImpulse(new Vector3f(0, 0, 0));
 		playar.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-		// dynamicworld.addCollisionObject(ghostobject,
-		// CollisionFilterGroups.CHARACTER_FILTER,
-		// (short)(CollisionFilterGroups.STATIC_FILTER |
-		// CollisionFilterGroups.DEFAULT_FILTER));
+		
 		dynamicworld.addRigidBody(playar);
-		// dynamicworld.addAction(player);
-
-	}
-
-	public void updateNyanpos(int i, NyanCat newnyan) {
-		// RigidBody nyan = nyanies.get(i);
-		Transform trans = new Transform();
-		trans.setRotation(new Quat4f((float) newnyan.getHorAngle(), 0, 0, 1));
-		trans.origin.set((float) newnyan.getLocationX(),
-				(float) newnyan.getLocationY(), (float) newnyan.getLocationZ());
-		nyanies.get(i).setWorldTransform(trans);
-		// dynamicworld.addRigidBody(nyan);
-		// dynamicworld.removeRigidBody(nyanies.get(i));
-		// nyanies.remove(i);
-		// nyanies.add(nyan);
-
 	}
 
 	public void displaymaze(GL gl) {
@@ -258,7 +214,8 @@ public class jbullet {
 		return false;
 	}
 
-	public void display(GL gl, int i) {
+	public void display(GL gl) {
+	for (int i = 0; i < bullets.size(); i++) {	
 		GLUT glut = new GLUT();
 		float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
@@ -275,6 +232,7 @@ public class jbullet {
 		//Textureloader.stuiterbal(0.1f, 10);
 		gl.glPopMatrix();
 	}
+	}
 
 	public void removeBullet(int j) {
 		dynamicworld.removeRigidBody(bullets.get(j));
@@ -284,13 +242,8 @@ public class jbullet {
 
 	public void updateBullets() {
 		for (int j = 0; j < Bullets.size(); j++) {
-			if (Bullets.get(j).getBulletState()) {
-				Transform trans = new Transform();
-				bullets.get(j).getMotionState().getWorldTransform(trans);
-				Bullets.get(j).setLocationX(trans.origin.x);
-				Bullets.get(j).setLocationY(trans.origin.y);
-				Bullets.get(j).setLocationZ(trans.origin.z);
-			} else {
+			Bullets.get(j).update();
+			if (!Bullets.get(j).getBulletState()) {
 				removeBullet(j);
 			}
 		}
@@ -311,62 +264,33 @@ public class jbullet {
 			Player play) {
 
 		dynamicworld.stepSimulation(1f);
-		for (int i = 0; i < nyans.size(); i++) {
-
-			// updateNyanpos(0,Nyans[0]);
-			RigidBody nyan = nyanies.get(i);
-			dynamicworld.removeRigidBody(nyan);
-			Transform trans = new Transform();
-			trans.setRotation(new Quat4f((float) Nyans.get(i).getHorAngle(), 0,
-					0, 1));
-			trans.origin
-					.set((float) Nyans.get(i).getLocationX(), (float) Nyans
-							.get(i).getLocationY(), (float) Nyans.get(i)
-							.getLocationZ());
-			nyan.setWorldTransform(trans);
-			dynamicworld.addRigidBody(nyan);
-		}
 		updateBullets();
-		CollisionCheck();
+		CollisionCheck(Nyans);
 		updatePlayer(play);
 	}
 
-	public ArrayList<Bullet> getbullets() {
-		return Bullets;
-	}
-
-	public void CollisionCheck() {
-		for (int j = 0; j < bullets.size(); j++) {
-			for (int i = 0; i < nyanies.size(); i++) {
+	public void CollisionCheck(ArrayList<NyanCat> Nyans) {
+		for (int i = 0; i < Nyans.size(); i++) {
+		   for (int j = 0; j < bullets.size(); j++) {
 				Transform trans = new Transform();
 				Transform trans2 = new Transform();
 				trans = bullets.get(j).getWorldTransform(trans);
-				trans2 = nyanies.get(i).getWorldTransform(trans2);
-				if (trans.origin.x > trans2.origin.x - 2f
-						&& trans.origin.x < trans2.origin.x + 2f
-						&& trans.origin.z > trans2.origin.z - 2f
-						&& trans.origin.z < trans2.origin.z + 2f
-						&& trans.origin.y > trans2.origin.y - 1f
-						&& trans.origin.y < trans2.origin.y + 1f) {
+				if (trans.origin.x > Nyans.get(i).getLocationX() - 2f
+						&& trans.origin.x < Nyans.get(i).getLocationX() + 2f
+						&& trans.origin.z > Nyans.get(i).getLocationZ() - 2f
+						&& trans.origin.z < Nyans.get(i).getLocationZ() + 2f
+						&& trans.origin.y > Nyans.get(i).getLocationY() - 1f
+						&& trans.origin.y < Nyans.get(i).getLocationY() + 1f) {
 					nyans.get(i).setHP(nyans.get(i).getHP() - 50);
-					Bullets.get(j).BulletStop();
+					removeBullet(j);
 				}
 			}
 		}
 	}
 
-	public ArrayList<NyanCat> getNyan() {
-		return nyans;
-	}
-
 	public boolean updateNyanhealth(int i) {
-		// if(Nyan[i].getHP()>-1){
-		// System.out.println(nyans.get(i).getHP());
 		if (nyans.get(i).getHP() <= 0) {
-			// System.out.println(nyans.get(i).getLocationX());
 			nyans.remove(i);
-			dynamicworld.removeRigidBody(nyanies.get(i));
-			nyanies.remove(i);
 			amountofNyans = amountofNyans - 1;
 			return true;
 		}

@@ -11,6 +11,8 @@ public class Floor implements VisibleObject {
 
 	@Override
 	public void display(GL gl) {
+		float wallColour[] = { 1.0f, 1.0f, 1.0f, 0.1f }; // The floor is blue.
+		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 		if (Textureloader.loadtextures) {
 			if (!Textureloader.load) {
 				Textureloader.load();

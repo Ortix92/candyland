@@ -150,7 +150,13 @@ public class NyanCat extends GameObject implements VisibleObject {
 		}
 
 		fireRainbow(10);
-
+		for (int i = 0; i < rainbows.size(); i++) {
+			rainbows.get(i).update();
+		 if (rainbows.get(i).CollisionCheck(player)) {
+         	HPoff = HPoff + 5;
+         	rainbows.remove(i);
+		 }	
+		}
 	}
 
 	private void fireRainbow(int rof) {
@@ -416,7 +422,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 																	// to saved
 																	// last
 																	// coords
-				Textureloader.Rainbow(gl, 0.5 * size); // make the actual
+		//		Textureloader.Rainbow(gl, 0.5 * size); // make the actual
 														// rainbowblock
 				gl.glPopMatrix(); // reset all coords
 			}
@@ -442,14 +448,13 @@ public class NyanCat extends GameObject implements VisibleObject {
 			}
 			// make projectiles visible:
 			for (int i = 0; i < rainbows.size(); i++) {
-				rainbows.get(i).update();
 				rainbows.get(i).display(gl);
-				                                if (rainbows.get(i).CollisionCheck(player)) {
-                                	HPoff = HPoff + 5;
-                                	rainbows.remove(i);
-                                }
-			}
+				
+		                           }
 		}
+				
+				
+		
 	}
         public double getHPoff() {
         	double res = HPoff;

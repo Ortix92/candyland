@@ -204,6 +204,7 @@ public class Textureloader {
 	
 	public static void Rainbow(GL gl, double size){
 		// set de size van de rainbowblokjes:
+				gl.glPushMatrix();
 				gl.glScaled(size, size, size);
 		if(loadtextures) {
 			if(!load){
@@ -258,9 +259,10 @@ public class Textureloader {
 	     if(loadtextures){
 	    	 red.disable();
 	     }
-	     gl.glScaled(1/size,1/size,1/size); // unscale so that following objects will not be scaled. 
+	     gl.glPopMatrix();
+	    // gl.glScaled(1/size,1/size,1/size); // unscale so that following objects will not be scaled. 
 	    
-	     gl.glTranslated(size/2,size/2,size/2); // translate back.
+	    // gl.glTranslated(size/2,size/2,size/2); // translate back.
 	   //  gl.glScaled(1/2,1/2,1);	
 	}
 	
