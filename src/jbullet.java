@@ -163,16 +163,16 @@ public class jbullet {
 		DefaultMotionState playerstate = new DefaultMotionState();
 		CollisionShape playershape = new BoxShape(new Vector3f(1f, 2.5f, 1f));
 		playerstate.setWorldTransform(startTransform);
-		
+
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo playerRigidBody = new RigidBodyConstructionInfo(
 				20, playerstate, playershape, Inertia);
 		playar = new RigidBody(playerRigidBody);
-		
+
 		playar.setFriction(5f);
 		playar.applyCentralImpulse(new Vector3f(0, 0, 0));
 		playar.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-		
+
 		dynamicworld.addRigidBody(playar);
 	}
 
@@ -202,36 +202,37 @@ public class jbullet {
 	}
 
 	public static boolean isNewWall(double X, double Z) {
-		// for (int i = 0; i < mazeblocks.size(); i++) {
-		// Transform trans = new Transform();
-		// mazeblocks.get(i).getMotionState().getWorldTransform(trans);
-		// float x = trans.origin.x;
-		// float z = trans.origin.z;
-		// if (Math.abs(X - x) < 3 && Math.abs(Z - z) < 3) {
-		// return true;
-		// }
-		// }
+		for (int i = 0; i < mazeblocks.size(); i++) {
+			Transform trans = new Transform();
+			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+
+			if (Math.abs(X - trans.origin.x) < 3 && Math.abs(Z - trans.origin.z) < 3) {
+				return true;
+			}
+//			System.out.println("new: " + trans.origin.x + ", " + trans.origin.z);
+//			System.out.println("old: " + X + ", " + Z);
+		}
 		return false;
 	}
 
 	public void display(GL gl) {
-	for (int i = 0; i < bullets.size(); i++) {	
-		GLUT glut = new GLUT();
-		float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
+		for (int i = 0; i < bullets.size(); i++) {
+			GLUT glut = new GLUT();
+			float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };
+			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 
-		Transform trans = new Transform();
-		bullets.get(i).getMotionState().getWorldTransform(trans);
-		float x = trans.origin.x;
-		float y = trans.origin.y;
-		float z = trans.origin.z;
+			Transform trans = new Transform();
+			bullets.get(i).getMotionState().getWorldTransform(trans);
+			float x = trans.origin.x;
+			float y = trans.origin.y;
+			float z = trans.origin.z;
 
-		gl.glPushMatrix();
-		gl.glTranslatef(x, y, z);
-		glut.glutSolidCube(0.2f);
-		//Textureloader.stuiterbal(0.1f, 10);
-		gl.glPopMatrix();
-	}
+			gl.glPushMatrix();
+			gl.glTranslatef(x, y, z);
+			glut.glutSolidCube(0.2f);
+			// Textureloader.stuiterbal(0.1f, 10);
+			gl.glPopMatrix();
+		}
 	}
 
 	public void removeBullet(int j) {
@@ -263,7 +264,7 @@ public class jbullet {
 	public void update(int deltaTime, TestBox box, ArrayList<NyanCat> Nyans,
 			Player play) {
 
-		dynamicworld.stepSimulation(1f);
+		dynamicworld.stepSimulation(1 / 62f);
 		updateBullets();
 		CollisionCheck(Nyans);
 		updatePlayer(play);
@@ -271,7 +272,7 @@ public class jbullet {
 
 	public void CollisionCheck(ArrayList<NyanCat> Nyans) {
 		for (int i = 0; i < Nyans.size(); i++) {
-		   for (int j = 0; j < bullets.size(); j++) {
+			for (int j = 0; j < bullets.size(); j++) {
 				Transform trans = new Transform();
 				Transform trans2 = new Transform();
 				trans = bullets.get(j).getWorldTransform(trans);
@@ -280,7 +281,7 @@ public class jbullet {
 						&& trans.origin.z > Nyans.get(i).getLocationZ() - 2f
 						&& trans.origin.z < Nyans.get(i).getLocationZ() + 2f
 						&& trans.origin.y > Nyans.get(i).getLocationY() - 1f
-						&& trans.origin.y < Nyans.get(i).getLocationY() + 1f) {
+						&& trans.origin.y < Nyans.get(i).getLocationY() + 10f) {
 					nyans.get(i).setHP(nyans.get(i).getHP() - 50);
 					removeBullet(j);
 				}
