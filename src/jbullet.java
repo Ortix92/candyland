@@ -30,6 +30,9 @@ public class jbullet {
 	private ArrayList<Bullet> Bullets;
 	private ArrayList<NyanCat> nyans;
 
+	private ArrayList<Float> oldx = new ArrayList<Float>();
+	private ArrayList<Float> oldz = new ArrayList<Float>();
+	
 	public DiscreteDynamicsWorld dynamicworld;
 	public int maxSubSteps;
 	public float timeStep, fixedTimeStep;
@@ -38,19 +41,15 @@ public class jbullet {
 	private DefaultCollisionConfiguration collisionConfiguration;
 	private BroadphaseInterface broadphase;
 
-	private ObjectArrayList<RigidBody> nyanies;
 	private int amountofNyans;
-	private RigidBody boxRigidBody;
 	private ObjectArrayList<RigidBody> bullets;
 	private static ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
 	private RigidBody groundbody;
 	private RigidBody playar;
-	private Maze maze;
 	public static int energy = 1000;
 
 	public jbullet(int n) {
 		Bullets = new ArrayList<Bullet>();
-		nyanies = new ObjectArrayList<RigidBody>();
 		bullets = new ObjectArrayList<RigidBody>();
 		nyans = new ArrayList<NyanCat>();
 
@@ -87,7 +86,6 @@ public class jbullet {
 	}
 
 	public void initMaze(Maze maze) {
-		this.maze = maze;
 		for (int i = 0; i < maze.MAZE_SIZE; i++) {
 			for (int j = 0; j < maze.MAZE_SIZE; j++) {
 				if (maze.isWall(i, j)) {
@@ -101,15 +99,34 @@ public class jbullet {
 					DefaultMotionState mazeMotionState = new DefaultMotionState(
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
+					if (i == maze.MAZE_SIZE - 1 || j == maze.MAZE_SIZE - 1 || i == 0 || j == 0) {
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							100000, mazeMotionState, mazeshape, Inertia);
+							Float.POSITIVE_INFINITY, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
 					mazebody.setFriction(1);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
+					} else {
+					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
+							100000, mazeMotionState, mazeshape, Inertia);	
+					RigidBody mazebody = new RigidBody(mazeinfo);
+					mazebody.setFriction(1);
+					dynamicworld.addRigidBody(mazebody);
+					mazeblocks.add(mazebody);
+					}
 				}
 			}
-		}
+		}	
+		for (int i = 0; i < mazeblocks.size(); i++) {
+		Transform trans = new Transform();
+						mazeblocks.get(i).getWorldTransform(trans);
+						System.out.println(trans.origin);
+						oldx.add(trans.origin.x);
+						oldz.add(trans.origin.z);
+		}			
+				
+			
+		
 	}
 
 	public void initNyan(NyanCat nyancat) {
@@ -177,7 +194,6 @@ public class jbullet {
 	}
 
 	public void displaymaze(GL gl) {
-		GLUT glut = new GLUT();
 		float wallColour[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 		for (int i = 0; i < mazeblocks.size(); i++) {
@@ -206,7 +222,7 @@ public class jbullet {
 			Transform trans = new Transform();
 			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
 
-			if (Math.abs(X - trans.origin.x) < 3 && Math.abs(Z - trans.origin.z) < 3) {
+			if (Math.abs(X - trans.origin.x) < 2.5 || Math.abs(Z - trans.origin.z) < 2.5) {
 				return true;
 			}
 //			System.out.println("new: " + trans.origin.x + ", " + trans.origin.z);
@@ -268,13 +284,27 @@ public class jbullet {
 		updateBullets();
 		CollisionCheck(Nyans);
 		updatePlayer(play);
+		updateMaze();
+	}
+
+	private void updateMaze() {
+		for (int i = 0; i < mazeblocks.size(); i++) {
+			Transform trans = new Transform();
+			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+
+			if (!MazeRunner.maze.isWall((double)trans.origin.x, (double)trans.origin.z)) {
+				MazeRunner.maze.changeMaze((double)trans.origin.x, (double)trans.origin.z, 
+						    (double)oldx.get(i) , (double)oldz.get(i) );
+			}
+			oldx.set(i, trans.origin.x);
+			oldz.set(i, trans.origin.z);
+		}
 	}
 
 	public void CollisionCheck(ArrayList<NyanCat> Nyans) {
 		for (int i = 0; i < Nyans.size(); i++) {
 			for (int j = 0; j < bullets.size(); j++) {
 				Transform trans = new Transform();
-				Transform trans2 = new Transform();
 				trans = bullets.get(j).getWorldTransform(trans);
 				if (trans.origin.x > Nyans.get(i).getLocationX() - 2f
 						&& trans.origin.x < Nyans.get(i).getLocationX() + 2f
@@ -338,7 +368,6 @@ public class jbullet {
 
 			float speed = 10f;
 
-			System.out.println(energy);
 			if (sprint && energy >= 0) {
 				if (energy > 0) {
 					energy -= 3;

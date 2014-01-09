@@ -157,5 +157,26 @@ public class Maze implements VisibleObject {
 
 	public void update(int deltaTime) {
 	}
+	
+	public void changeMaze(double x, double z, double oldx, double oldz) {
+		int gX = convertToGridX(x);
+		int gZ = convertToGridZ(z);
+		maze[gX][gZ] = 1 - maze[gX][gZ];
+		int oX = convertToGridX(oldx);
+		int oZ = convertToGridZ(oldz);
+		maze[oX][oZ] = 1 - maze[oX][oZ];
+	}
+	
+	public String toString() {
+		String res = "";
+		for (int i=0; i < MAZE_SIZE; i++) {
+			 res = res + "\n";
+			for (int j = 0; j < MAZE_SIZE; j++) {
+				res = res + maze[i][j] + " ";
+			}
+		}
+	return res;
+	}
 
+	
 }

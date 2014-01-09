@@ -54,11 +54,11 @@ public class MazeRunner implements GLEventListener {
 	private static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	public static int amountofNyans = 25;
+	public static int amountofNyans = 15;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
-	private Maze maze;
+	public static Maze maze;
 	private long previousTime = Calendar.getInstance().getTimeInMillis();
 	private Guy guy;
 	private Weapon weapon;
@@ -205,14 +205,14 @@ public class MazeRunner implements GLEventListener {
 			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
 					// horizontal angle
-					player, maze));
+					player));
 
 			// visibleObjects.add(Nyan.get(i)); // make Nyan visible.
 
 			NyanCat nyan = new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
 					// horizontal angle
-					player, maze);
+					player);
 			phworld.initNyan(nyan);
 		}
 		PickUp NewClaws = new PickUp(5, 5, player, 2);
@@ -507,6 +507,7 @@ public class MazeRunner implements GLEventListener {
 	 */
 	public void display(GLAutoDrawable drawable) {
 		try {
+			System.out.println(maze.toString());
 			GL gl = drawable.getGL();
 			GLU glu = new GLU();
 			// Calculating time since last frame.
@@ -514,7 +515,7 @@ public class MazeRunner implements GLEventListener {
 			long currentTime = now.getTimeInMillis();
 			int deltaTime = (int) (currentTime - previousTime);
 			long fps = (currentTime - previousTime);
-			System.out.println("FPS:" + 1000/fps);
+	//		System.out.println("FPS:" + 1000/fps);
 			previousTime = currentTime;
 
 			// Update any movement since last frame.
