@@ -171,6 +171,10 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 					"Maze needs resolution of multiplicity 5");
 		}
 	}
+	
+	public int getResolution() {
+		return this.resolution;
+	}
 
 	/**
 	 * Set the maze array
