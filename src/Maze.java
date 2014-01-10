@@ -167,16 +167,16 @@ public class Maze implements VisibleObject {
 		maze[oX][oZ] = 1 - maze[oX][oZ];
 	}
 	
-	public String toString() {
-		String res = "";
-		for (int i=0; i < MAZE_SIZE; i++) {
-			 res = res + "\n";
-			for (int j = 0; j < MAZE_SIZE; j++) {
-				res = res + maze[i][j] + " ";
-			}
-		}
-	return res;
-	}
+//	public String toString() {
+//		String res = "";
+//		for (int i=0; i < MAZE_SIZE; i++) {
+//			 res = res + "\n";
+//			for (int j = 0; j < MAZE_SIZE; j++) {
+//				res = res + maze[i][j] + " ";
+//			}
+//		}
+//	return res;
+//	}
 
 	
 }

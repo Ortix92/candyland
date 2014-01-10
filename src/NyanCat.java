@@ -29,7 +29,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 	boolean dead = false; // whether Nyan is dead or not.
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
-//	private MazeRunner.maze MazeRunner.maze;
+	// private MazeRunner.maze MazeRunner.maze;
 	private TimerTask timertask;
 	private Timer timer = new Timer();
 	private double HPoff = 0;
@@ -39,7 +39,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 		super(x, y, z);
 		horAngle = h;
 		player = play;
-//		MazeRunner.maze = m;
+		// MazeRunner.maze = m;
 		// init the last locations:
 		for (int i = 0; i < traillength; i++) {
 			lastX[i] = getLocationX();
@@ -204,17 +204,17 @@ public class NyanCat extends GameObject implements VisibleObject {
 		if (this.getHorAngle() < 0) {
 			HorAngle = HorAngle + 360; // for better comparison
 		}
-		double deltaX = (player.getLocationX() - this.getLocationX())
-				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
-						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
-		double deltaZ = (player.getLocationZ() - getLocationZ())
-				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
-						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
-
+//		double deltaX = (player.getLocationX() - this.getLocationX())
+//				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
+//						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
+//		double deltaZ = (player.getLocationZ() - getLocationZ())
+//				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
+//						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
+//
 		if (HorAngle - 70 <= hoekPlayer) {
 			if (HorAngle + 70 >= hoekPlayer) {
-				double x = player.getLocationX() - this.getLocationX();
-				double z = player.getLocationZ() - this.getLocationZ();
+//				double x = player.getLocationX() - this.getLocationX();
+//				double z = player.getLocationZ() - this.getLocationZ();
 //				double length = Math.sqrt(x*x + z*z);
 //				double hoev = Math.floor(length / 2.5);
 //				double hoek = Math.tan(x / z);
@@ -249,8 +249,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 					}
 				}	
 				return true;
-			}
-		}		
+}
+				}
 		return false;
 	}
 
@@ -270,13 +270,13 @@ public class NyanCat extends GameObject implements VisibleObject {
 					this.getLocationZ() + deltaZ * speed)) {
 				moveTo(this.getLocationX() - deltaX * speed,
 						this.getLocationZ() + deltaZ * speed);
-			} else if (!MazeRunner.maze.isWall(this.getLocationX() + deltaX * speed,
-					this.getLocationZ() - deltaZ * speed)) {
+			} else if (!MazeRunner.maze.isWall(this.getLocationX() + deltaX
+					* speed, this.getLocationZ() - deltaZ * speed)) {
 				moveTo(this.getLocationX() + deltaX * speed,
 						this.getLocationZ() - deltaZ * speed);
 
-			} else if (!MazeRunner.maze.isWall(this.getLocationX() - deltaX * speed,
-					this.getLocationZ() - deltaZ * speed)) {
+			} else if (!MazeRunner.maze.isWall(this.getLocationX() - deltaX
+					* speed, this.getLocationZ() - deltaZ * speed)) {
 				moveTo(this.getLocationX() - deltaX * speed,
 						this.getLocationZ() - deltaZ * speed);
 			}
@@ -436,21 +436,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 			gl.glPopMatrix();// reset alle coordinaten tot waar
 								// gl.glPushMatrix() werd aangeroepen.
 			// make rainbowtrail:
-//			for (int i = 0; i < traillength; i++) { // of length traillength
-//				gl.glPushMatrix(); // save all coords
-//				gl.glTranslated(0, 3 / 4 + 0.5 * size, 0); // translate a bit up
-//															// so that the
-//															// rainbowtrail
-//															// origins from the
-//															// middle
-//				gl.glTranslated((lastX[i]), lastY[i], (lastZ[i])); // translate
-//																	// to saved
-//																	// last
-//																	// coords
-//				Textureloader.Rainbow(gl, 0.5 * size); // make the actual
-//														// rainbowblock
-//				gl.glPopMatrix(); // reset all coords
-//			}
+			// for (int i = 0; i < traillength; i++) { // of length traillength
+			// gl.glPushMatrix(); // save all coords
+			// gl.glTranslated(0, 3 / 4 + 0.5 * size, 0); // translate a bit up
+			// // so that the
+			// // rainbowtrail
+			// // origins from the
+			// // middle
+			// gl.glTranslated((lastX[i]), lastY[i], (lastZ[i])); // translate
+			// // to saved
+			// // last
+			// // coords
+			// Textureloader.Rainbow(gl, 0.5 * size); // make the actual
+			// // rainbowblock
+			// gl.glPopMatrix(); // reset all coords
+			// }
 
 			// shift all coords in the last positions one position so that first
 			// position in array becomes
