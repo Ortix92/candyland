@@ -413,7 +413,7 @@ public class jbullet {
 
 			float speed = 10f;
 
-			System.out.println(energy);
+			//System.out.println(energy);
 			if (sprint && energy >= 0) {
 				if (energy > 0) {
 					energy -= 3;

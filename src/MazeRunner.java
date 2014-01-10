@@ -214,10 +214,30 @@ public class MazeRunner implements GLEventListener {
 					player, maze);
 			phworld.initNyan(nyan);
 		}
-		PickUp NewClaws = new PickUp(5, 5, player, 2);
+		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // x-position
+		double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // z-position
+		while (maze.isWall(X, Z)) {
+			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+					+ maze.SQUARE_SIZE / 2; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
+					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+		}
+		PickUp NewClaws = new PickUp(X, Z, player, 2);
 		visibleObjects.add(NewClaws);
 		pickup.add(NewClaws);
-		PickUp NewClaws2 = new PickUp(15, 15, player, 3);
+		X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // x-position
+		Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // z-position
+		while (maze.isWall(X, Z)) {
+			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+					+ maze.SQUARE_SIZE / 2; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
+					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+		}
+		PickUp NewClaws2 = new PickUp(X, Z, player, 3);
 		visibleObjects.add(NewClaws2);
 		pickup.add(NewClaws2);
 
@@ -666,11 +686,17 @@ public class MazeRunner implements GLEventListener {
 						Weapon.setNewWeapon(0);
 						break;
 					case 1:
-						score = score * 2;
-						player.setHealth(player.getHealth() + 20);
-						if(player.getHealth()>100){
-							player.setHealth(100);
+						double rand=Math.random();
+						if(rand<=0.5){
+							score = score * 2;
 						}
+						if(rand>=0.3){
+							player.setHealth(player.getHealth() + 20);
+							if(player.getHealth()>100){
+								player.setHealth(100);
+							}
+						}
+						System.out.println(rand);
 						break;
 					case 2:
 						Weapon.setNewWeapon(2);
