@@ -398,6 +398,15 @@ public class MazeRunner implements GLEventListener {
 				screenHeight - 10.0 - 5 * player.getHealth());
 		gl.glEnd();
 		
+		//Energy Bar
+		gl.glColor4d(0, 0, 1, 1);
+		gl.glBegin(GL.GL_QUADS);
+		gl.glVertex2d(screenWidth / 100.0 +35, screenHeight - 10.0);
+		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0);
+		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0 -0.5* jbullet.energy);
+		gl.glVertex2d(screenWidth / 100.0+35,
+				screenHeight - 10.0 - 0.5*jbullet.energy);
+		gl.glEnd();
 	
 
 		gl.glColor3f(1.0f, 1.0f, 1.0f);
