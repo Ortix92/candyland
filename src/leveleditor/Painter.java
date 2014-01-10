@@ -171,7 +171,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 					"Maze needs resolution of multiplicity 5");
 		}
 	}
-	
+
 	public int getResolution() {
 		return this.resolution;
 	}
@@ -189,6 +189,11 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 
 	public ArrayList<ArrayList<Integer>> getMaze() {
 		return this.maze;
+	}
+
+	public void setSpawnPoint(double x, double y) {
+		this.spawnPoint.x = (int) x;
+		this.spawnPoint.y = (int) y;
 	}
 
 	public Point getSpawnPoint() {
@@ -321,14 +326,15 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 			int tileY = tiles[1];
 			System.out.println(tileX + " " + (this.maze.size() - 1 - tileY));
 
-			if (mode == 1) {
+			try {
 				this.maze.get(this.maze.size() - 1 - this.spawnPoint.y).set(
 						this.spawnPoint.x, 0);
 				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 2);
-			} else if (mode == 3) {
-				this.maze.get(this.maze.size() - 1 - tileY).set(tileX, 0);
+
+				this.spawnPoint.setLocation(tiles[0], tiles[1]);
+			} catch (IndexOutOfBoundsException e) {
+				System.out.println("Index out of bounds: " + e.getMessage());
 			}
-			this.spawnPoint.setLocation(tiles[0], tiles[1]);
 		}
 	}
 

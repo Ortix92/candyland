@@ -2,7 +2,19 @@ package leveleditor;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
+import java.io.FileNotFoundException;
+
 import org.junit.Test;
+
+/**
+ * Test class for the Painter class. Just to clarify, this class does not test
+ * the World class. In other words, we are not testing how well the World class
+ * imports the files
+ * 
+ * @author Nick Tsutsunava
+ * 
+ */
 
 public class PainterTest {
 
@@ -26,34 +38,59 @@ public class PainterTest {
 	}
 
 	@Test
-	public void testSetMaze() {
-		World world = new World("map_export");
-		Painter painter = new Painter(800,600);
-		painter.setMaze(world.getMap());
-	}
+	public void testSet_and_GetMaze() {
+		Painter painter = new Painter(800, 600);
+		World world = new World("map_export_test.txt");
+		try {
+			world.loadMapFromFile();
+			painter.setMaze(world.getMap());
 
-	@Test
-	public void testGetMaze() {
+			assertEquals(painter.getResolution(), 20);
+			assertEquals(painter.getMaze().size(), 20);
+		} catch (FileNotFoundException e) {
+			fail(e.getMessage());
+		}
 	}
 
 	@Test
 	public void testGetSpawnPoint() {
+		Painter painter = new Painter(800, 600);
+		World world = new World("map_export_test.txt");
+		try {
+			world.loadMapFromFile();
+
+			assertEquals((int) world.getSpawnX(), 11);
+			assertEquals((int) world.getSpawnZ(), 9);
+
+			painter.setSpawnPoint(world.getSpawnX(), world.getSpawnZ());
+			Point spawn = new Point(11, 9);
+			assertTrue(painter.getSpawnPoint().equals(spawn));
+			spawn.x = 10;
+			assertFalse(painter.getSpawnPoint().equals(spawn));
+
+		} catch (FileNotFoundException e) {
+			fail(e.getMessage());
+		}
 	}
 
 	@Test
 	public void testFillEdges() {
-	}
+		Painter painter = new Painter(800, 600);
+		World world = new World("map_export_test.txt");
+		World world2 = new World("map_export_test_fill_edges.txt");
+		try {
+			world.loadMapFromFile();
+			world2.loadMapFromFile();
 
-	@Test
-	public void testClearMap() {
-	}
+			painter.setMaze(world.getMap());
+			painter.setDrawMapListener(true);
+			painter.fillEdges();
 
-	@Test
-	public void testSetDrawMapListener() {
-	}
+			assertTrue(painter.getMaze().equals(world2.getMap()));
 
-	@Test
-	public void testSetDrawGridListener() {
+		} catch (FileNotFoundException e) {
+			fail(e.getMessage());
+		}
 	}
 
 }

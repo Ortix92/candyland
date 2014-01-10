@@ -17,6 +17,10 @@ public class World {
 	public World(String absolutePath) {
 		this.worldFile = absolutePath;
 	}
+	
+	public String getWorldFile() {
+		return this.worldFile;
+	}
 
 	public ArrayList<ArrayList<Integer>> getZeroesMatrix(int resolution) {
 
@@ -78,8 +82,7 @@ public class World {
 			// }
 			System.out.println("");
 		} catch (FileNotFoundException e) {
-			// TODO afhandelen!
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (InputMismatchException e) {
 			throw new IllegalArgumentException("Array corrupt");
 		}
