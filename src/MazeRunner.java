@@ -71,6 +71,8 @@ public class MazeRunner implements GLEventListener {
 	private Floor floor;
 	private Flag flag;
 	private boolean NyanGeluid = false;
+	private int Timer = 1000;
+	private double Time0 = Calendar.getInstance().getTimeInMillis();
 
 	/*
 	 * **********************************************
@@ -406,7 +408,6 @@ public class MazeRunner implements GLEventListener {
 			gl.glEnd();
 		}
 
-		
 		// health bar
 		gl.glColor4d(1.0, 0.0, 0.0, 0.2);
 		gl.glBegin(GL.GL_QUADS);
@@ -417,17 +418,17 @@ public class MazeRunner implements GLEventListener {
 		gl.glVertex2d(screenWidth / 100.0,
 				screenHeight - 10.0 - 5 * player.getHealth());
 		gl.glEnd();
-		
-		//Energy Bar
+
+		// Energy Bar
 		gl.glColor4d(0, 0, 1, 1);
 		gl.glBegin(GL.GL_QUADS);
-		gl.glVertex2d(screenWidth / 100.0 +35, screenHeight - 10.0);
+		gl.glVertex2d(screenWidth / 100.0 + 35, screenHeight - 10.0);
 		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0);
-		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0 -0.5* jbullet.energy);
-		gl.glVertex2d(screenWidth / 100.0+35,
-				screenHeight - 10.0 - 0.5*jbullet.energy);
+		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0 - 0.5
+				* jbullet.energy);
+		gl.glVertex2d(screenWidth / 100.0 + 35, screenHeight - 10.0 - 0.5
+				* jbullet.energy);
 		gl.glEnd();
-	
 
 		gl.glColor3f(1.0f, 1.0f, 1.0f);
 		gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f * screenHeight);
@@ -438,6 +439,29 @@ public class MazeRunner implements GLEventListener {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
 					string.charAt(i));
 		}
+
+		// Timer
+		double Time1 = Calendar.getInstance().getTimeInMillis();
+		if (Timer > 0) {
+			if (Time1 - Time0 >= 1000) {
+				Timer = Timer - 1;
+				Time0 = Time1;
+			}
+		}
+		String timerString = "";
+		if (Nyan.size() != 0) {
+			timerString = "Timebonus: " + Timer;
+		} else if (!flag.Flag) {
+			timerString = "Timebonus: " + Timer;
+		}
+		gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
+				* screenHeight);
+		int tim = (int) timerString.length();
+		for (int k = 0; k < tim; k++) {
+			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+					timerString.charAt(k));
+		}
+
 		if (Nyan.size() == 0) {
 			gl.glRasterPos2f(screenWidth / 3, screenHeight - 0.7f
 					* screenHeight);
@@ -686,13 +710,13 @@ public class MazeRunner implements GLEventListener {
 						Weapon.setNewWeapon(0);
 						break;
 					case 1:
-						double rand=Math.random();
-						if(rand<=0.5){
-							score = score * 2;
+						double rand = Math.random();
+						if (rand <= 0.5) {
+							score = score + 500;
 						}
-						if(rand>=0.3){
+						if (rand >= 0.3) {
 							player.setHealth(player.getHealth() + 20);
-							if(player.getHealth()>100){
+							if (player.getHealth() > 100) {
 								player.setHealth(100);
 							}
 						}
@@ -749,15 +773,16 @@ public class MazeRunner implements GLEventListener {
 				phworld.update(player);
 				player = phworld.updatePlayer(player);
 			} else {
+				if (flag.geti() == 0.01) {
+					score = score + Timer;
+				}
 				if (flag.geti() >= 4) {
-				ScoreScreen.score = score;
-				ScoreScreen.gameover = 2;
-				Game.gsm.setGameState(Game.gsm.DEAD_STATE);
-			}
+					ScoreScreen.score = score;
+					ScoreScreen.gameover = 2;
+					Game.gsm.setGameState(Game.gsm.DEAD_STATE);
+				}
 			}
 		}
-
-		
 
 		if (NyanSeePlayer()) {
 			for (int i = 0; i < Nyan.size(); i++) {
@@ -774,7 +799,7 @@ public class MazeRunner implements GLEventListener {
 					camera);
 			bullets.add(new Bullet(player.getLocationX(),
 					player.getLocationY(), player.getLocationZ(), player
-							.getHorAngle(), player.getVerAngle())); 
+							.getHorAngle(), player.getVerAngle()));
 
 		}
 		for (int i = 0; i < bullets.size(); i++) {

@@ -40,6 +40,7 @@ public class GameStateManager {
 			Game.frame.add(mazerunner.canvas); 
 			this.gameState = state;	
 			Textureloader.load = false;
+			Weapon.setNewWeapon(0);
 		}		
 		else if(state == LOAD_STATE) {
 			//Game.frame.setVisible(false);
