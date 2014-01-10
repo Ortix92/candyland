@@ -13,7 +13,7 @@ import com.sun.opengl.util.texture.TextureIO;
 
 
 public class Textureloader {
-	static boolean loadtextures=false; // Nicks spookversie when false;
+	static boolean loadtextures=true; // Nicks spookversie when false;
 	static Texture PoptartTexture; // remembers the texture of the poptart. 
 	static Texture Nyanface; // remembers the texture of the face
 	static Texture Rainbow; // remembers the texture of the rainbow
@@ -29,6 +29,7 @@ public class Textureloader {
     static Texture CandyFloor;
     static Texture PickUp;
     static Texture Flag;
+    static Texture stuiterbal;
 	static boolean load=false; // boolean so that images are only loaded once
 	
 
@@ -147,6 +148,11 @@ public class Textureloader {
                     Flag=TextureIO.newTexture(FlagImage,true);
                     Flag.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
                     Flag.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+                    
+                    BufferedImage StuiterbalImage=ImageIO.read(new File("src/stuiterbal.jpg"));
+                    stuiterbal=TextureIO.newTexture(StuiterbalImage,true);
+                    stuiterbal.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+                    stuiterbal.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
 			} catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("Trolololol"); 
@@ -348,6 +354,28 @@ public class Textureloader {
 		
 	}
 	
+	public static void Stuiterbal(GL gl, float size,int roundness){
+		// makes the head. 
+		if(loadtextures){
+				if(!load){ // checks if loading is needed			
+				load(); //loads textures
+				load=true; // next time loading is not needed anymore. 
+				}
+		
+	
+		stuiterbal.enable(); // enable the texture so that it can be used. 
+		stuiterbal.bind(); // bind texture to the following object
+		}
+		GLU glu=new GLU(); // needed to make a sphere with texture coordinates
+		GLUquadric bal = glu.gluNewQuadric(); // makes a quadric object 
+		  glu.gluQuadricTexture(bal, true);	// Makes the quadric object head capable of having textures. 
+		glu. gluSphere(bal,0.5*size,roundness,roundness); // make the object into a sphere
+		
+		if(loadtextures){
+			stuiterbal.disable(); // disable texture so that it will not be put on every next object. 
+		}
+        
+	}
 	public static void Floor(GL gl, double size,Maze maze){
 		if(loadtextures){
 	    	   if (!load) {

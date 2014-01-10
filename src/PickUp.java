@@ -43,7 +43,8 @@ int soort;
 						Textureloader.PickUp.bind();
 					}
 					else{
-						//TODO: // Stuiterbal texture. 
+						Textureloader.stuiterbal.enable();
+						Textureloader.stuiterbal.bind();
 					}
 				}
 					Textureloader.drawCube(gl, false);
@@ -52,7 +53,7 @@ int soort;
 							Textureloader.PickUp.disable();
 						}
 						else{
-							//TODO: // disable stuiterbal texture
+							Textureloader.stuiterbal.disable();
 							}
 					
 					}

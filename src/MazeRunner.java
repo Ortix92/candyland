@@ -668,6 +668,9 @@ public class MazeRunner implements GLEventListener {
 					case 1:
 						score = score * 2;
 						player.setHealth(player.getHealth() + 20);
+						if(player.getHealth()>100){
+							player.setHealth(100);
+						}
 						break;
 					case 2:
 						Weapon.setNewWeapon(2);
