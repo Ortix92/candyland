@@ -17,6 +17,8 @@ public class LevelSelector extends JPanel {
 	private JButton btnMap4;
 	private final Action action = new LoadMapAction();
 	private JButton btnReturn;
+	public static boolean chucknorris = false;
+	public static boolean blue = false;
 
 	/**
 	 * Create the panel.
@@ -117,6 +119,7 @@ public class LevelSelector extends JPanel {
 				JOptionPane.showMessageDialog(LevelSelector.this,
 						"You will avenge your fallen brothers, Godlike human.");
 				System.out.println("Map Selected: " + Maze.mazeFile);
+				blue = true;
 				break;
 			case "map4":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
@@ -124,6 +127,7 @@ public class LevelSelector extends JPanel {
 				JOptionPane.showMessageDialog(LevelSelector.this,
 						"Right this way sir... do you want some coffee to go?");
 				System.out.println("Map Selected: " + Maze.mazeFile);
+				chucknorris = true;
 				break;
 			}
 

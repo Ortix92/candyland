@@ -107,6 +107,7 @@ public class jbullet {
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
 					} else {
+						Inertia = new Vector3f(0, 0, 0);	
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
 							100000, mazeMotionState, mazeshape, Inertia);	
 					RigidBody mazebody = new RigidBody(mazeinfo);
@@ -154,7 +155,7 @@ public class jbullet {
 
 		int velocityScalar = 200;
 		if (Weapon.getNewWeapon() == 2) {
-			velocityScalar = velocityScalar * 10;
+			velocityScalar = velocityScalar * 2;
 		}
 		Vector3f velocityVector = new Vector3f(
 				velocityScalar
@@ -166,6 +167,7 @@ public class jbullet {
 								.cos(Math.toRadians(verAngle))));
 
 		bullet.setLinearVelocity(velocityVector);
+		bullet.setFriction(20);
 		dynamicworld.addRigidBody(bullet);
 		bullets.add(bullet);
 		Bullet b = new Bullet();
@@ -280,7 +282,7 @@ public class jbullet {
 	public void update(int deltaTime, TestBox box, ArrayList<NyanCat> Nyans,
 			Player play) {
 
-		dynamicworld.stepSimulation(1 / 62f);
+		dynamicworld.stepSimulation(1 / 62f, 0, 1);
 		updateBullets();
 		CollisionCheck(Nyans);
 		updatePlayer(play);

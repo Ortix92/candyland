@@ -1,4 +1,6 @@
+
 import javax.media.opengl.GL;
+
 
 
 public class SkyBox implements VisibleObject {
