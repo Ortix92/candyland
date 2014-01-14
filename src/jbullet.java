@@ -136,6 +136,7 @@ public class jbullet {
 
 	public void CreateBullet(float x, float y, float z, float verAngle,
 			float horAngle, Camera camera) {
+		System.out.println("Shoot");
 		CollisionShape bulletshape = new SphereShape(0.2f);
 		Transform p = new Transform();
 		p.setRotation(new Quat4f(horAngle, verAngle, 0, 1));

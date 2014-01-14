@@ -595,7 +595,7 @@ public class MazeRunner implements GLEventListener {
 			long currentTime = now.getTimeInMillis();
 			int deltaTime = (int) (currentTime - previousTime);
 			long fps = (currentTime - previousTime);
-			System.out.println("FPS:" + 1000 / fps);
+			// System.out.println("FPS:" + 1000 / fps);
 			previousTime = currentTime;
 
 			// Update any movement since last frame.
@@ -823,30 +823,27 @@ public class MazeRunner implements GLEventListener {
 				}
 
 			}
-
-			if (weapon.update(deltaTime, player, camera, phworld)) {
-				phworld.CreateBullet((float) camera.getLocationX(),
-						(float) camera.getVrpY(),
-						(float) camera.getLocationZ(),
-						(float) player.getVerAngle(),
-						(float) player.getHorAngle(), camera);
-				// bullets.add(new Bullet(player.getLocationX(),
-				// player.getLocationY(), player.getLocationZ(), player
-				// .getHorAngle(), player.getVerAngle()));
-
-				// }
-				// for (int i = 0; i < bullets.size(); i++) {
-				// bullets.get(i).update(deltaTime);
-			}
-			double Time2 = Calendar.getInstance().getTimeInMillis();
-			if (Time2 - Time3 > 4000) {
-				Time3 = Time2;
-			}
-			if (Time2 - Time3 == 0) {
-				Menu.Sound.play("sounds/nyan-cat-wav.wav");
-			}
 		}
+		if (weapon.update(deltaTime, player, camera, phworld)) {
+			phworld.CreateBullet((float) camera.getLocationX(),
+					(float) camera.getVrpY(), (float) camera.getLocationZ(),
+					(float) player.getVerAngle(), (float) player.getHorAngle(),
+					camera);
+			// bullets.add(new Bullet(player.getLocationX(),
+			// player.getLocationY(), player.getLocationZ(), player
+			// .getHorAngle(), player.getVerAngle()));
 
+			// }
+			// for (int i = 0; i < bullets.size(); i++) {
+			// bullets.get(i).update(deltaTime);
+		}
+		double Time2 = Calendar.getInstance().getTimeInMillis();
+		if (Time2 - Time3 > 4000) {
+			Time3 = Time2;
+		}
+		if (Time2 - Time3 == 0) {
+			Menu.Sound.play("sounds/nyan-cat-wav.wav");
+		}
 	}
 
 	private void updateCamera() {
