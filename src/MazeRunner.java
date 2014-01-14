@@ -219,27 +219,27 @@ public class MazeRunner implements GLEventListener {
 			phworld.initNyan(nyan);
 		}
 		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // x-position
+				; // x-position
 		double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // z-position
+				; // z-position
 		while (maze.isWall(X, Z)) {
 			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // x-position
-			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
-					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+					; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+					; // z-position
 		}
 		PickUp NewClaws = new PickUp(X, Z, player, 2);
 		visibleObjects.add(NewClaws);
 		pickup.add(NewClaws);
 		X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // x-position
+				; // x-position
 		Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // z-position
+				; // z-position
 		while (maze.isWall(X, Z)) {
 			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // x-position
-			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
-					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+				; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE 
+					; // z-position
 		}
 		PickUp NewClaws2 = new PickUp(X, Z, player, 3);
 		visibleObjects.add(NewClaws2);
