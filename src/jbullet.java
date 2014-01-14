@@ -344,7 +344,7 @@ public class jbullet {
 			boolean sprint = play.getControl().getSprint();
 			boolean floor = false;
 			Transform trans = playar.getWorldTransform(new Transform());
-			if (trans.origin.y <= 2.6 && trans.origin.y >= 2.4) {
+			if (trans.origin.y <= 2.6 && trans.origin.y >= 2.4 || trans.origin.y <= 7.6 && trans.origin.y >= 7.4) {
 				floor = true;
 			} else {
 				floor = false;
