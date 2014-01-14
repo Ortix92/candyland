@@ -1,4 +1,5 @@
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -17,7 +18,9 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import com.sun.opengl.util.Animator;
+import com.sun.opengl.util.FPSAnimator;
 import com.sun.opengl.util.GLUT;
+import com.sun.opengl.util.j2d.TextRenderer;
 
 /**
  * MazeRunner is the base class of the game, functioning as the view controller
@@ -48,23 +51,22 @@ public class MazeRunner implements GLEventListener {
 	public GLCanvas canvas;
 	private Animator anim;
 
-	private static int screenWidth = 1024;
+	public static int screenWidth = 1024;
 
-	private static int screenHeight = 768;
+	public static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
 	public static int amountofNyans = 1;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
-	private Maze maze;
+	public static Maze maze;
 	private long previousTime = Calendar.getInstance().getTimeInMillis();
 	private Guy guy;
 	private Weapon weapon;
-	private TestBox box;
 	private PauseMenu pause;
 	private jbullet phworld;
-	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	// private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup = new ArrayList<PickUp>();
@@ -134,7 +136,7 @@ public class MazeRunner implements GLEventListener {
 		 * continuously repaint itself. The Animator class handles that for
 		 * JOGL.
 		 */
-		anim = new Animator(canvas);
+		anim = new FPSAnimator(canvas, 60);
 		anim.start();
 		// makes an image of 1 by 1 pixel, type:
 		// Represents an image with 8-bit RGBA color components packed into
@@ -171,7 +173,7 @@ public class MazeRunner implements GLEventListener {
 		visibleObjects = new ArrayList<VisibleObject>();
 		// Add the maze that we will be using.
 		maze = new Maze();
-		visibleObjects.add(maze);
+		// visibleObjects.add(maze);
 		floor = new Floor(maze);
 
 		// visibleObjects.add(floor);
@@ -204,14 +206,14 @@ public class MazeRunner implements GLEventListener {
 			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
 					// horizontal angle
-					player, maze));
+					player));
 
 			// visibleObjects.add(Nyan.get(i)); // make Nyan visible.
 
 			NyanCat nyan = new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
 					Z, Math.random() * 360,
 					// horizontal angle
-					player, maze);
+					player);
 			phworld.initNyan(nyan);
 		}
 		PickUp NewClaws = new PickUp(5, 5, player, 2);
@@ -231,7 +233,6 @@ public class MazeRunner implements GLEventListener {
 		player.setControl(input);
 		weapon.setControl(input);
 		guy.setControl(input);
-		// box = new TestBox(27.5, 2.5, 27.5);
 		phworld.initMaze(maze);
 		phworld.initObjects();
 		phworld.initPlayer((float) player.getLocationX(),
@@ -386,7 +387,6 @@ public class MazeRunner implements GLEventListener {
 			gl.glEnd();
 		}
 
-		
 		// health bar
 		gl.glColor4d(1.0, 0.0, 0.0, 0.2);
 		gl.glBegin(GL.GL_QUADS);
@@ -397,39 +397,63 @@ public class MazeRunner implements GLEventListener {
 		gl.glVertex2d(screenWidth / 100.0,
 				screenHeight - 10.0 - 5 * player.getHealth());
 		gl.glEnd();
-		
-	
 
-		gl.glColor3f(1.0f, 1.0f, 1.0f);
-		gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f * screenHeight);
-		int len, i;
-		String string = "Score: " + score;
-		len = (int) string.length();
-		for (i = 0; i < len; i++) {
-			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-					string.charAt(i));
-		}
+		// gl.glColor3f(1.0f, 1.0f, 1.0f);
+		// gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f *
+		// screenHeight);
+		// int len, i;
+		Font f = new Font("SansSerif", Font.BOLD, 36);
+		TextRenderer tr = new TextRenderer(f);
+		tr.setColor(50, 30, 0, 1.0f);
+
+		tr.beginRendering((int) screenWidth, (int) screenHeight);
+		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
+				(int) (0.9f * screenHeight));
+		// String string = "Score: " + score;
+		// len = (int) string.length();
+		// for (i = 0; i < len; i++) {
+		// glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+		// string.charAt(i));
+		// }
+		tr.endRendering();
 		if (Nyan.size() == 0) {
-			gl.glRasterPos2f(screenWidth / 3, screenHeight - 0.7f
-					* screenHeight);
-			String vlagstring = "";
+			Font h = new Font("Castellar", Font.PLAIN, 30);
+			TextRenderer fj = new TextRenderer(h);
+			fj.beginRendering((int) screenWidth, (int) screenHeight);
+			// gl.glRasterPos2f(screenWidth / 3, screenHeight - 0.7f
+			// * screenHeight);
+			// String vlagstring = "";
 			if (!Flag.Flag) {
-				vlagstring = "Loop naar de vlag om te winnen.";
+				// vlagstring = "Loop naar de vlag om te winnen.";
+				fj.draw("Loop naar de vlag om te winnen.",
+						(int) (screenWidth / 4), (int) (0.7f * screenHeight));
 			} else {
-				vlagstring = "YOU WIN!";
+				fj.draw("CONGRATULATUALIAONS!!!!!", (int) (screenWidth / 3),
+						(int) (0.7f * screenHeight));
 			}
-			int j = (int) vlagstring.length();
-			for (int k = 0; k < j; k++) {
-				glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-						vlagstring.charAt(k));
-			}
+			fj.endRendering();
+			// int j = (int) vlagstring.length();
+			// for (int k = 0; k < j; k++) {
+			// glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+			// vlagstring.charAt(k));
+			// }
 		}
+		Font f2 = new Font("Narkisim", Font.PLAIN, 28);
+		TextRenderer tr2 = new TextRenderer(f2);
+		tr2.beginRendering(screenWidth, screenHeight);
+		tr2.draw(weaponString, 50, (int) (0.95 * screenHeight));
+		// int l = (int) weaponString.length();
+		// for (int k = 0; k < l; k++) {
+		// glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+		// weaponString.charAt(k));
+		// }
+		tr2.endRendering();
 
-		gl.glRasterPos2f(50, screenHeight - 0.95f * screenHeight);
-		int l = (int) weaponString.length();
-		for (int k = 0; k < l; k++) {
-			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-					weaponString.charAt(k));
+		if (LevelSelector.chucknorris) {
+			TextRenderer tr3 = new TextRenderer(f);
+			tr3.beginRendering(screenWidth, screenHeight);
+			tr3.setColor(20, 0, 0, 1);
+			tr3.endRendering();
 		}
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_DEPTH_TEST);
@@ -477,15 +501,18 @@ public class MazeRunner implements GLEventListener {
 		gl.glEnable(GL.GL_DEPTH_TEST);
 
 		// Set and enable the lighting.
-		float lightPosition[] = { 0.0f, 50.0f, 0.0f, 1.0f }; // High up in the
-																// sky!
-		float lightColour[] = { 1.0f, 1.0f, 1.0f, 0.0f }; // White light!
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0); // Note
-																		// that
-																		// we're
-																		// setting
-																		// Light0.
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightColour, 0);
+				float lightPosition[] = { (float) (maze.MAZE_SIZE/ 2f), 50.0f, (float) (maze.MAZE_SIZE/ 2f), 1.0f }; // High up in the
+															   // sky!
+				float lightColour[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // White
+																  // light!
+				gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0);   // Note
+																				// that
+																				// we're
+																				// setting
+																				// Light0.
+				gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightColour, 0);
+			
+		
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glShadeModel(GL.GL_SMOOTH);
@@ -510,6 +537,8 @@ public class MazeRunner implements GLEventListener {
 			Calendar now = Calendar.getInstance();
 			long currentTime = now.getTimeInMillis();
 			int deltaTime = (int) (currentTime - previousTime);
+			long fps = (currentTime - previousTime);
+			System.out.println("FPS:" + 1000 / fps);
 			previousTime = currentTime;
 
 			// Update any movement since last frame.
@@ -542,9 +571,9 @@ public class MazeRunner implements GLEventListener {
 			// Display all the visible objects of MazeRunner.
 			skybox.display(gl);
 			phworld.displaymaze(gl);
-			for (int i = 0; i < bullets.size(); i++) {
-				phworld.display(gl, i);
-			}
+			// for (int i = 0; i < bullets.size(); i++) {
+			phworld.display(gl);
+			// }
 			for (int j = 0; j < Nyan.size(); j++) {
 				Nyan.get(j).display(gl);
 			}
@@ -712,14 +741,12 @@ public class MazeRunner implements GLEventListener {
 				player = phworld.updatePlayer(player);
 			} else {
 				if (flag.geti() >= 4) {
-				ScoreScreen.score = score;
-				ScoreScreen.gameover = 2;
-				Game.gsm.setGameState(Game.gsm.DEAD_STATE);
-			}
+					ScoreScreen.score = score;
+					ScoreScreen.gameover = 2;
+					Game.gsm.setGameState(Game.gsm.DEAD_STATE);
+				}
 			}
 		}
-
-		
 
 		if (NyanSeePlayer()) {
 			for (int i = 0; i < Nyan.size(); i++) {
@@ -734,13 +761,13 @@ public class MazeRunner implements GLEventListener {
 					(float) camera.getVrpY(), (float) camera.getLocationZ(),
 					(float) player.getVerAngle(), (float) player.getHorAngle(),
 					camera);
-			bullets.add(new Bullet(player.getLocationX(),
-					player.getLocationY(), player.getLocationZ(), player
-							.getHorAngle(), player.getVerAngle())); 
+			// bullets.add(new Bullet(player.getLocationX(),
+			// player.getLocationY(), player.getLocationZ(), player
+			// .getHorAngle(), player.getVerAngle()));
 
-		}
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).update(deltaTime);
+			// }
+			// for (int i = 0; i < bullets.size(); i++) {
+			// bullets.get(i).update(deltaTime);
 		}
 	}
 
@@ -759,9 +786,9 @@ public class MazeRunner implements GLEventListener {
 
 	public void updatePhysics(int deltaTime) {
 
-		phworld.update(deltaTime, box, Nyan, player);
+		phworld.update(deltaTime, Nyan, player);
 
-		bullets = phworld.getbullets();
+		// bullets = phworld.getbullets();
 	}
 
 }

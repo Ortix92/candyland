@@ -35,17 +35,17 @@ public class NyanCat extends GameObject implements VisibleObject {
 	boolean dead = false; // whether Nyan is dead or not.
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
-	private Maze maze;
+	// private MazeRunner.maze MazeRunner.maze;
 	private TimerTask timertask;
 	private Timer timer = new Timer();
 	private double HPoff = 0;
 
 	// makes a NyanCat on the location x, y , z, looking in direction h
-	public NyanCat(double x, double y, double z, double h, Player play, Maze m) {
+	public NyanCat(double x, double y, double z, double h, Player play) {
 		super(x, y, z);
 		horAngle = h;
 		player = play;
-		maze = m;
+		// MazeRunner.maze = m;
 		// init the last locations:
 		for (int i = 0; i < traillength; i++) {
 			lastX[i] = getLocationX();
@@ -137,7 +137,13 @@ public class NyanCat extends GameObject implements VisibleObject {
 		}
 
 		fireRainbow(10);
-
+		for (int i = 0; i < rainbows.size(); i++) {
+			rainbows.get(i).update();
+			if (rainbows.get(i).CollisionCheck(player)) {
+				HPoff = HPoff + 5;
+				rainbows.remove(i);
+			}
+		}
 	}
 
 	private void fireRainbow(int rof) {
@@ -153,7 +159,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 							NyanCat.this.getLocationX(),
 							NyanCat.this.getLocationY(),
 							NyanCat.this.getLocationZ(), goalX,
-							NyanCat.this.getLocationY(), goalZ, maze);
+							NyanCat.this.getLocationY(), goalZ, MazeRunner.maze);
 					rainbows.add(Rainbow);
 				}
 			};
@@ -192,23 +198,47 @@ public class NyanCat extends GameObject implements VisibleObject {
 		if (this.getHorAngle() < 0) {
 			HorAngle = HorAngle + 360; // for better comparison
 		}
-		double deltaX = (player.getLocationX() - this.getLocationX())
-				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
-						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
-		double deltaZ = (player.getLocationZ() - getLocationZ())
-				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
-						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
-
+//		double deltaX = (player.getLocationX() - this.getLocationX())
+//				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
+//						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
+//		double deltaZ = (player.getLocationZ() - getLocationZ())
+//				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
+//						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
+//
 		if (HorAngle - 70 <= hoekPlayer) {
 			if (HorAngle + 70 >= hoekPlayer) {
+//				double x = player.getLocationX() - this.getLocationX();
+//				double z = player.getLocationZ() - this.getLocationZ();
+//				double length = Math.sqrt(x*x + z*z);
+//				double hoev = Math.floor(length / 2.5);
+//				double hoek = Math.tan(x / z);
+//			for (int i = 0; i < hoev; i++) {	
+//				if (MazeRunner.maze.isWall(this.getLocationX() + Math.sqrt(12.5) * Math.asin(hoek) ,
+//						this.getLocationZ() + Math.sqrt(12.5)*Math.acos(hoek))) {
+//				if (Math.abs(x) > Math.abs(z)) {
+//					for (double i = 0; i < x; i = i + 10) {
+//						if (MazeRunner.maze.isWall(this.getLocationX() + i,
+//								this.getLocationZ() + (z / x) * i )) {
+//							return false;
+//						}
+//					}
+//				}
+//				if (Math.abs(z) > Math.abs(x)) {
+//					for (double i = 0; i < z; i = i + 2.5) {
+//						if (MazeRunner.maze.isWall(this.getLocationX()  + (x / z) * i,
+//								this.getLocationZ() - 2.5 + i )) {
+//							return false;
+//						}
+//					}
+//				}
+//				
 				for (double i = 0; i < Math.abs(player.getLocationX()
-						- this.getLocationX()); i = i + maze.SQUARE_SIZE / 2) {
-					for (double j = 0; j < Math.abs(player.getLocationX()
-							- this.getLocationX()); j = j + maze.SQUARE_SIZE
+						- this.getLocationX()); i = i + MazeRunner.maze.SQUARE_SIZE / 2) {
+					for (double j = 0; j < Math.abs(player.getLocationZ()
+							- this.getLocationZ()); j = j + MazeRunner.maze.SQUARE_SIZE
 							/ 2) {
-						if (jbullet.isNewWall(this.getLocationX() + i * deltaX,
-								this.getLocationZ() + j * deltaZ)) {
-							return false;
+						if (MazeRunner.maze.isWall(this.getLocationX() + i, this.getLocationZ() + j)) {
+						return false;	
 						}
 					}
 				}
@@ -237,19 +267,19 @@ public class NyanCat extends GameObject implements VisibleObject {
 				/ Math.sqrt(Math.pow(X - getLocationX(), 2)
 						+ Math.pow(Z - getLocationZ(), 2));
 
-		if (jbullet.isNewWall(this.getLocationX() + deltaX * speed,
+		if (MazeRunner.maze.isWall(this.getLocationX() + deltaX * speed,
 				this.getLocationZ() + deltaZ * speed)) {
-			if (!jbullet.isNewWall(this.getLocationX() - deltaX * speed,
+			if (!MazeRunner.maze.isWall(this.getLocationX() - deltaX * speed,
 					this.getLocationZ() + deltaZ * speed)) {
 				moveTo(this.getLocationX() - deltaX * speed,
 						this.getLocationZ() + deltaZ * speed);
-			} else if (!jbullet.isNewWall(this.getLocationX() + deltaX * speed,
-					this.getLocationZ() - deltaZ * speed)) {
+			} else if (!MazeRunner.maze.isWall(this.getLocationX() + deltaX
+					* speed, this.getLocationZ() - deltaZ * speed)) {
 				moveTo(this.getLocationX() + deltaX * speed,
 						this.getLocationZ() - deltaZ * speed);
 
-			} else if (!jbullet.isNewWall(this.getLocationX() - deltaX * speed,
-					this.getLocationZ() - deltaZ * speed)) {
+			} else if (!MazeRunner.maze.isWall(this.getLocationX() - deltaX
+					* speed, this.getLocationZ() - deltaZ * speed)) {
 				moveTo(this.getLocationX() - deltaX * speed,
 						this.getLocationZ() - deltaZ * speed);
 			}
@@ -409,21 +439,21 @@ public class NyanCat extends GameObject implements VisibleObject {
 			gl.glPopMatrix();// reset alle coordinaten tot waar
 								// gl.glPushMatrix() werd aangeroepen.
 			// make rainbowtrail:
-			for (int i = 0; i < traillength; i++) { // of length traillength
-				gl.glPushMatrix(); // save all coords
-				gl.glTranslated(0, 3 / 4 + 0.5 * size, 0); // translate a bit up
-															// so that the
-															// rainbowtrail
-															// origins from the
-															// middle
-				gl.glTranslated((lastX[i]), lastY[i], (lastZ[i])); // translate
-																	// to saved
-																	// last
-																	// coords
-				Textureloader.Rainbow(gl, 0.5 * size); // make the actual
-														// rainbowblock
-				gl.glPopMatrix(); // reset all coords
-			}
+			// for (int i = 0; i < traillength; i++) { // of length traillength
+			// gl.glPushMatrix(); // save all coords
+			// gl.glTranslated(0, 3 / 4 + 0.5 * size, 0); // translate a bit up
+			// // so that the
+			// // rainbowtrail
+			// // origins from the
+			// // middle
+			// gl.glTranslated((lastX[i]), lastY[i], (lastZ[i])); // translate
+			// // to saved
+			// // last
+			// // coords
+			// Textureloader.Rainbow(gl, 0.5 * size); // make the actual
+			// // rainbowblock
+			// gl.glPopMatrix(); // reset all coords
+			// }
 
 			// shift all coords in the last positions one position so that first
 			// position in array becomes
@@ -446,12 +476,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 			}
 			// make projectiles visible:
 			for (int i = 0; i < rainbows.size(); i++) {
-				rainbows.get(i).update();
 				rainbows.get(i).display(gl);
-				if (rainbows.get(i).CollisionCheck(player)) {
-					HPoff = HPoff + 5;
-					rainbows.remove(i);
-				}
+
 			}
 		}
 	}

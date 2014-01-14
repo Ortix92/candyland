@@ -7,6 +7,7 @@ import javax.vecmath.Vector3f;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -26,9 +27,12 @@ import com.sun.opengl.util.GLUT;
 
 public class jbullet {
 
-	private ArrayList<Bullet> Bullets;
+	private ArrayList<BulletTimer> Bullets;
 	private ArrayList<NyanCat> nyans;
 
+	private ArrayList<Float> oldx = new ArrayList<Float>();
+	private ArrayList<Float> oldz = new ArrayList<Float>();
+	
 	public DiscreteDynamicsWorld dynamicworld;
 	public int maxSubSteps;
 	public float timeStep, fixedTimeStep;
@@ -37,19 +41,15 @@ public class jbullet {
 	private DefaultCollisionConfiguration collisionConfiguration;
 	private BroadphaseInterface broadphase;
 
-	private ObjectArrayList<RigidBody> nyanies;
 	private int amountofNyans;
-	private RigidBody boxRigidBody;
 	private ObjectArrayList<RigidBody> bullets;
 	private static ObjectArrayList<RigidBody> mazeblocks = new ObjectArrayList<RigidBody>();
 	private RigidBody groundbody;
 	private RigidBody playar;
-	private Maze maze;
 	public static int energy = 1000;
 
 	public jbullet(int n) {
-		Bullets = new ArrayList<Bullet>();
-		nyanies = new ObjectArrayList<RigidBody>();
+		Bullets = new ArrayList<BulletTimer>();
 		bullets = new ObjectArrayList<RigidBody>();
 		nyans = new ArrayList<NyanCat>();
 
@@ -86,7 +86,6 @@ public class jbullet {
 	}
 
 	public void initMaze(Maze maze) {
-		this.maze = maze;
 		for (int i = 0; i < maze.MAZE_SIZE; i++) {
 			for (int j = 0; j < maze.MAZE_SIZE; j++) {
 				if (maze.isWall(i, j)) {
@@ -100,34 +99,38 @@ public class jbullet {
 					DefaultMotionState mazeMotionState = new DefaultMotionState(
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
+					if (i == maze.MAZE_SIZE - 1 || j == maze.MAZE_SIZE - 1 || i == 0 || j == 0) {
 					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							100000, mazeMotionState, mazeshape, Inertia);
+							Float.POSITIVE_INFINITY, mazeMotionState, mazeshape, Inertia);
 					RigidBody mazebody = new RigidBody(mazeinfo);
 					mazebody.setFriction(1);
 					dynamicworld.addRigidBody(mazebody);
 					mazeblocks.add(mazebody);
+					} else {
+						Inertia = new Vector3f(0, 0, 0);	
+					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
+							100000, mazeMotionState, mazeshape, Inertia);	
+					RigidBody mazebody = new RigidBody(mazeinfo);
+					mazebody.setFriction(1);
+					dynamicworld.addRigidBody(mazebody);
+					mazeblocks.add(mazebody);
+					}
 				}
 			}
-		}
+		}	
+		for (int i = 0; i < mazeblocks.size(); i++) {
+		Transform trans = new Transform();
+						mazeblocks.get(i).getWorldTransform(trans);
+						System.out.println(trans.origin);
+						oldx.add(trans.origin.x);
+						oldz.add(trans.origin.z);
+		}			
+				
+			
+		
 	}
 
 	public void initNyan(NyanCat nyancat) {
-		CollisionShape nyanshape = new BoxShape(new Vector3f(1f, 1f, 2f));
-		Transform nyan = new Transform();
-		nyan.setRotation(new Quat4f((float) nyancat.getHorAngle(), 0f, 0f, 1f));
-		nyan.origin.set((float) nyancat.getLocationX(),
-				(float) nyancat.getLocationY(), (float) nyancat.getLocationZ());
-		KinematicMotionState nyanstate = new KinematicMotionState();
-		nyanstate.setWorldTransform(nyan);
-		Vector3f Inertia = new Vector3f(0, 0, 0);
-		RigidBodyConstructionInfo nyaninfo = new RigidBodyConstructionInfo(5,
-				nyanstate, nyanshape, Inertia);
-		RigidBody nyanbody = new RigidBody(nyaninfo);
-		// nyanbody.setCollisionFlags(nyanbody.getCollisionFlags()
-		// | CollisionFlags.KINEMATIC_OBJECT);
-		nyanbody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-		dynamicworld.addRigidBody(nyanbody);
-		nyanies.add(nyanbody);
 		nyans.add(nyancat);
 	}
 
@@ -152,7 +155,7 @@ public class jbullet {
 
 		int velocityScalar = 200;
 		if (Weapon.getNewWeapon() == 2) {
-			velocityScalar = velocityScalar * 10;
+			velocityScalar = velocityScalar * 2;
 		}
 		Vector3f velocityVector = new Vector3f(
 				velocityScalar
@@ -164,8 +167,11 @@ public class jbullet {
 								.cos(Math.toRadians(verAngle))));
 
 		bullet.setLinearVelocity(velocityVector);
+		bullet.setFriction(20);
 		dynamicworld.addRigidBody(bullet);
 		bullets.add(bullet);
+		BulletTimer b = new BulletTimer();
+		Bullets.add(b);
 	}
 
 	public void initPlayer(float x, float y, float z) {
@@ -173,55 +179,23 @@ public class jbullet {
 		startTransform.setIdentity();
 		startTransform.origin.set(x, y, z);
 
-		// Vector3f worldMin = new Vector3f(-1000f,-1000f,-1000f);
-		// Vector3f worldMax = new Vector3f(1000f,1000f,1000f);
-		// AxisSweep3 sweepBP = new AxisSweep3(worldMin, worldMax);
-
-		// PairCachingGhostObject ghostObject = new PairCachingGhostObject();
 		DefaultMotionState playerstate = new DefaultMotionState();
 		CollisionShape playershape = new BoxShape(new Vector3f(1f, 2.5f, 1f));
 		playerstate.setWorldTransform(startTransform);
-		// sweepBP.getOverlappingPairCache().setInternalGhostPairCallback(new
-		// GhostPairCallback());
-		// ConvexShape capsule = new CapsuleShape(characterWidth,
-		// characterHeight);
-		// ghostobject.setCollisionShape(capsule);
-		// ghostobject.setCollisionFlags(CollisionFlags.CHARACTER_OBJECT);
+
 		Vector3f Inertia = new Vector3f(0, 0, 0);
 		RigidBodyConstructionInfo playerRigidBody = new RigidBodyConstructionInfo(
 				20, playerstate, playershape, Inertia);
 		playar = new RigidBody(playerRigidBody);
-		// float stepHeight = 0.35f;
-		// player = new KinematicCharacterController(ghostobject, capsule,
-		// stepHeight);
+
 		playar.setFriction(5f);
 		playar.applyCentralImpulse(new Vector3f(0, 0, 0));
 		playar.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-		// dynamicworld.addCollisionObject(ghostobject,
-		// CollisionFilterGroups.CHARACTER_FILTER,
-		// (short)(CollisionFilterGroups.STATIC_FILTER |
-		// CollisionFilterGroups.DEFAULT_FILTER));
+
 		dynamicworld.addRigidBody(playar);
-		// dynamicworld.addAction(player);
-
-	}
-
-	public void updateNyanpos(int i, NyanCat newnyan) {
-		// RigidBody nyan = nyanies.get(i);
-		Transform trans = new Transform();
-		trans.setRotation(new Quat4f((float) newnyan.getHorAngle(), 0, 0, 1));
-		trans.origin.set((float) newnyan.getLocationX(),
-				(float) newnyan.getLocationY(), (float) newnyan.getLocationZ());
-		nyanies.get(i).setWorldTransform(trans);
-		// dynamicworld.addRigidBody(nyan);
-		// dynamicworld.removeRigidBody(nyanies.get(i));
-		// nyanies.remove(i);
-		// nyanies.add(nyan);
-
 	}
 
 	public void displaymaze(GL gl) {
-		GLUT glut = new GLUT();
 		float wallColour[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 		for (int i = 0; i < mazeblocks.size(); i++) {
@@ -246,34 +220,37 @@ public class jbullet {
 	}
 
 	public static boolean isNewWall(double X, double Z) {
-		// for (int i = 0; i < mazeblocks.size(); i++) {
-		// Transform trans = new Transform();
-		// mazeblocks.get(i).getMotionState().getWorldTransform(trans);
-		// float x = trans.origin.x;
-		// float z = trans.origin.z;
-		// if (Math.abs(X - x) < 3 && Math.abs(Z - z) < 3) {
-		// return true;
-		// }
-		// }
+		for (int i = 0; i < mazeblocks.size(); i++) {
+			Transform trans = new Transform();
+			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+
+			if (Math.abs(X - trans.origin.x) < 2.5 || Math.abs(Z - trans.origin.z) < 2.5) {
+				return true;
+			}
+//			System.out.println("new: " + trans.origin.x + ", " + trans.origin.z);
+//			System.out.println("old: " + X + ", " + Z);
+		}
 		return false;
 	}
 
-	public void display(GL gl, int i) {
-		GLUT glut = new GLUT();
-		float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
+	public void display(GL gl) {
+		for (int i = 0; i < bullets.size(); i++) {
+			GLUT glut = new GLUT();
+			float wallColour[] = { 30.0f, 10.0f, 30.0f, 1.0f };
+			gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0);
 
-		Transform trans = new Transform();
-		bullets.get(i).getMotionState().getWorldTransform(trans);
-		float x = trans.origin.x;
-		float y = trans.origin.y;
-		float z = trans.origin.z;
+			Transform trans = new Transform();
+			bullets.get(i).getMotionState().getWorldTransform(trans);
+			float x = trans.origin.x;
+			float y = trans.origin.y;
+			float z = trans.origin.z;
 
-		gl.glPushMatrix();
-		gl.glTranslatef(x, y, z);
-		glut.glutSolidCube(0.2f);
-		//Textureloader.stuiterbal(0.1f, 10);
-		gl.glPopMatrix();
+			gl.glPushMatrix();
+			gl.glTranslatef(x, y, z);
+			glut.glutSolidCube(0.2f);
+			// Textureloader.stuiterbal(0.1f, 10);
+			gl.glPopMatrix();
+		}
 	}
 
 	public void removeBullet(int j) {
@@ -284,13 +261,8 @@ public class jbullet {
 
 	public void updateBullets() {
 		for (int j = 0; j < Bullets.size(); j++) {
-			if (Bullets.get(j).getBulletState()) {
-				Transform trans = new Transform();
-				bullets.get(j).getMotionState().getWorldTransform(trans);
-				Bullets.get(j).setLocationX(trans.origin.x);
-				Bullets.get(j).setLocationY(trans.origin.y);
-				Bullets.get(j).setLocationZ(trans.origin.z);
-			} else {
+			Bullets.get(j).update();
+			if (!Bullets.get(j).getBulletState()) {
 				removeBullet(j);
 			}
 		}
@@ -307,66 +279,51 @@ public class jbullet {
 		return play;
 	}
 
-	public void update(int deltaTime, TestBox box, ArrayList<NyanCat> Nyans,
+	public void update(int deltaTime, ArrayList<NyanCat> Nyans,
 			Player play) {
 
-		dynamicworld.stepSimulation(1f);
-		for (int i = 0; i < nyans.size(); i++) {
-
-			// updateNyanpos(0,Nyans[0]);
-			RigidBody nyan = nyanies.get(i);
-			dynamicworld.removeRigidBody(nyan);
-			Transform trans = new Transform();
-			trans.setRotation(new Quat4f((float) Nyans.get(i).getHorAngle(), 0,
-					0, 1));
-			trans.origin
-					.set((float) Nyans.get(i).getLocationX(), (float) Nyans
-							.get(i).getLocationY(), (float) Nyans.get(i)
-							.getLocationZ());
-			nyan.setWorldTransform(trans);
-			dynamicworld.addRigidBody(nyan);
-		}
+		dynamicworld.stepSimulation(1 / 62f, 0, 1);
 		updateBullets();
-		CollisionCheck();
+		CollisionCheck(Nyans);
 		updatePlayer(play);
+		updateMaze();
 	}
 
-	public ArrayList<Bullet> getbullets() {
-		return Bullets;
+	private void updateMaze() {
+		for (int i = 0; i < mazeblocks.size(); i++) {
+			Transform trans = new Transform();
+			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
+
+			if (!MazeRunner.maze.isWall((double)trans.origin.x, (double)trans.origin.z)) {
+				MazeRunner.maze.changeMaze((double)trans.origin.x, (double)trans.origin.z, 
+						    (double)oldx.get(i) , (double)oldz.get(i) );
+			}
+			oldx.set(i, trans.origin.x);
+			oldz.set(i, trans.origin.z);
+		}
 	}
 
-	public void CollisionCheck() {
-		for (int j = 0; j < bullets.size(); j++) {
-			for (int i = 0; i < nyanies.size(); i++) {
+	public void CollisionCheck(ArrayList<NyanCat> Nyans) {
+		for (int i = 0; i < Nyans.size(); i++) {
+			for (int j = 0; j < bullets.size(); j++) {
 				Transform trans = new Transform();
-				Transform trans2 = new Transform();
 				trans = bullets.get(j).getWorldTransform(trans);
-				trans2 = nyanies.get(i).getWorldTransform(trans2);
-				if (trans.origin.x > trans2.origin.x - 2f
-						&& trans.origin.x < trans2.origin.x + 2f
-						&& trans.origin.z > trans2.origin.z - 2f
-						&& trans.origin.z < trans2.origin.z + 2f
-						&& trans.origin.y > trans2.origin.y - 1f
-						&& trans.origin.y < trans2.origin.y + 1f) {
+				if (trans.origin.x > Nyans.get(i).getLocationX() - 2f
+						&& trans.origin.x < Nyans.get(i).getLocationX() + 2f
+						&& trans.origin.z > Nyans.get(i).getLocationZ() - 2f
+						&& trans.origin.z < Nyans.get(i).getLocationZ() + 2f
+						&& trans.origin.y > Nyans.get(i).getLocationY() - 1f
+						&& trans.origin.y < Nyans.get(i).getLocationY() + 10f) {
 					nyans.get(i).setHP(nyans.get(i).getHP() - 50);
-					Bullets.get(j).BulletStop();
+					removeBullet(j);
 				}
 			}
 		}
 	}
 
-	public ArrayList<NyanCat> getNyan() {
-		return nyans;
-	}
-
 	public boolean updateNyanhealth(int i) {
-		// if(Nyan[i].getHP()>-1){
-		// System.out.println(nyans.get(i).getHP());
 		if (nyans.get(i).getHP() <= 0) {
-			// System.out.println(nyans.get(i).getLocationX());
 			nyans.remove(i);
-			dynamicworld.removeRigidBody(nyanies.get(i));
-			nyanies.remove(i);
 			amountofNyans = amountofNyans - 1;
 			return true;
 		}
@@ -413,7 +370,6 @@ public class jbullet {
 
 			float speed = 10f;
 
-			System.out.println(energy);
 			if (sprint && energy >= 0) {
 				if (energy > 0) {
 					energy -= 3;
@@ -594,24 +550,38 @@ public class jbullet {
 		}
 
 	}
+	
+/**
+ * A simple timer for the bullets, so they get removed from the game after a certain amount of time
+ * 	
+ * @author Michiel
+ *
+ */
+	public class BulletTimer {
 
-	public class KinematicMotionState extends MotionState {
-		private Transform worldTransform;
-
-		public KinematicMotionState() {
-			worldTransform = new Transform();
-			worldTransform.setIdentity();
+		private int time;
+		private boolean bullet;
+		
+		public BulletTimer() {
+		bullet = true;
+		time = 80;
+		}
+		
+		public void update() {
+	    time = time - 1;
+	    if (time <= 0){
+	    	BulletStop();
+	    }
+		}
+		
+		public void BulletStop() {
+			bullet = false;
+		}
+		
+		public boolean getBulletState() {
+			return bullet;
 		}
 
-		@Override
-		public Transform getWorldTransform(Transform out) {
-			out.set(worldTransform);
-			return out;
-		}
-
-		public void setWorldTransform(Transform worldTrans) {
-			worldTransform.set(worldTrans);
-		}
-	}
-
+}
+	
 }
