@@ -436,20 +436,7 @@ public class MazeRunner implements GLEventListener {
 		// gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f *
 		// screenHeight);
 		// int len, i;
-		Font f = new Font("SansSerif", Font.BOLD, 36);
-		TextRenderer tr = new TextRenderer(f);
-		tr.setColor(50, 30, 0, 1.0f);
-
-		tr.beginRendering((int) screenWidth, (int) screenHeight);
-		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
-				(int) (0.9f * screenHeight));
-		// String string = "Score: " + score;
-		// len = (int) string.length();
-		// for (i = 0; i < len; i++) {
-		// glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-		// string.charAt(i));
-		// }
-		tr.endRendering();
+		
 
 		// Timer
 		double Time1 = Calendar.getInstance().getTimeInMillis();
@@ -465,13 +452,24 @@ public class MazeRunner implements GLEventListener {
 		} else if (!flag.Flag) {
 			timerString = "Timebonus: " + Timer;
 		}
-		gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
+		
+		Font f = new Font("SansSerif", Font.BOLD, 24);
+		TextRenderer tr = new TextRenderer(f);
+		tr.setColor(50, 30, 0, 1.0f);
+
+		tr.beginRendering((int) screenWidth, (int) screenHeight);
+		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
+				(int) (0.85f * screenHeight));
+		tr.draw(timerString, (int) (screenWidth / 2.3f),
+				(int) (0.9f * screenHeight));
+		tr.endRendering();
+		
+		/*gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
 				* screenHeight);
 		int tim = (int) timerString.length();
 		for (int k = 0; k < tim; k++) {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-					timerString.charAt(k));
-		}
+					timerString.charAt(k));*/
 
 		if (Nyan.size() == 0) {
 			Font h = new Font("Castellar", Font.PLAIN, 30);
