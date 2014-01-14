@@ -261,6 +261,7 @@ public class MazeRunner implements GLEventListener {
 				(float) player.getLocationY(), (float) player.getLocationZ());
 		System.out.println("Maze size: " + maze.MAZE_SIZE);
 		Time3 = Calendar.getInstance().getTimeInMillis();
+		Menu.Sound.play("sounds/nyan-cat-wav.wav");
 	}
 
 	/**
