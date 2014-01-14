@@ -66,13 +66,15 @@ public class MazeRunner implements GLEventListener {
 	private Weapon weapon;
 	private PauseMenu pause;
 	private jbullet phworld;
-	// private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private int score = 0;
 	private SkyBox skybox;
 	private ArrayList<PickUp> pickup = new ArrayList<PickUp>();
 	private Floor floor;
 	private Flag flag;
 	private boolean NyanGeluid = false;
+	private int Timer = 1000;
+	private double Time0 = Calendar.getInstance().getTimeInMillis();
+	private double Time3;
 
 	/*
 	 * **********************************************
@@ -136,7 +138,7 @@ public class MazeRunner implements GLEventListener {
 		 * continuously repaint itself. The Animator class handles that for
 		 * JOGL.
 		 */
-		anim = new FPSAnimator(canvas, 60);
+		anim = new Animator(canvas);
 		anim.start();
 		// makes an image of 1 by 1 pixel, type:
 		// Represents an image with 8-bit RGBA color components packed into
@@ -216,10 +218,30 @@ public class MazeRunner implements GLEventListener {
 					player);
 			phworld.initNyan(nyan);
 		}
-		PickUp NewClaws = new PickUp(5, 5, player, 2);
+		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // x-position
+		double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // z-position
+		while (maze.isWall(X, Z)) {
+			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+					+ maze.SQUARE_SIZE / 2; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
+					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+		}
+		PickUp NewClaws = new PickUp(X, Z, player, 2);
 		visibleObjects.add(NewClaws);
 		pickup.add(NewClaws);
-		PickUp NewClaws2 = new PickUp(15, 15, player, 3);
+		X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // x-position
+		Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+				+ maze.SQUARE_SIZE / 2; // z-position
+		while (maze.isWall(X, Z)) {
+			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+					+ maze.SQUARE_SIZE / 2; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
+					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+		}
+		PickUp NewClaws2 = new PickUp(X, Z, player, 3);
 		visibleObjects.add(NewClaws2);
 		pickup.add(NewClaws2);
 
@@ -238,7 +260,8 @@ public class MazeRunner implements GLEventListener {
 		phworld.initPlayer((float) player.getLocationX(),
 				(float) player.getLocationY(), (float) player.getLocationZ());
 		System.out.println("Maze size: " + maze.MAZE_SIZE);
-
+		Time3 = Calendar.getInstance().getTimeInMillis();
+		Menu.Sound.play("sounds/nyan-cat-wav.wav");
 	}
 
 	/**
@@ -398,6 +421,17 @@ public class MazeRunner implements GLEventListener {
 				screenHeight - 10.0 - 5 * player.getHealth());
 		gl.glEnd();
 
+		// Energy Bar
+		gl.glColor4d(0, 0, 1, 1);
+		gl.glBegin(GL.GL_QUADS);
+		gl.glVertex2d(screenWidth / 100.0 + 35, screenHeight - 10.0);
+		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0);
+		gl.glVertex2d(screenWidth / 100.0 + 65.0, screenHeight - 10.0 - 0.5
+				* jbullet.energy);
+		gl.glVertex2d(screenWidth / 100.0 + 35, screenHeight - 10.0 - 0.5
+				* jbullet.energy);
+		gl.glEnd();
+
 		// gl.glColor3f(1.0f, 1.0f, 1.0f);
 		// gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f *
 		// screenHeight);
@@ -416,6 +450,29 @@ public class MazeRunner implements GLEventListener {
 		// string.charAt(i));
 		// }
 		tr.endRendering();
+
+		// Timer
+		double Time1 = Calendar.getInstance().getTimeInMillis();
+		if (Timer > 0) {
+			if (Time1 - Time0 >= 1000) {
+				Timer = Timer - 1;
+				Time0 = Time1;
+			}
+		}
+		String timerString = "";
+		if (Nyan.size() != 0) {
+			timerString = "Timebonus: " + Timer;
+		} else if (!flag.Flag) {
+			timerString = "Timebonus: " + Timer;
+		}
+		gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
+				* screenHeight);
+		int tim = (int) timerString.length();
+		for (int k = 0; k < tim; k++) {
+			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
+					timerString.charAt(k));
+		}
+
 		if (Nyan.size() == 0) {
 			Font h = new Font("Castellar", Font.PLAIN, 30);
 			TextRenderer fj = new TextRenderer(h);
@@ -501,18 +558,18 @@ public class MazeRunner implements GLEventListener {
 		gl.glEnable(GL.GL_DEPTH_TEST);
 
 		// Set and enable the lighting.
-				float lightPosition[] = { (float) (maze.MAZE_SIZE/ 2f), 50.0f, (float) (maze.MAZE_SIZE/ 2f), 1.0f }; // High up in the
-															   // sky!
-				float lightColour[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // White
-																  // light!
-				gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0);   // Note
-																				// that
-																				// we're
-																				// setting
-																				// Light0.
-				gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightColour, 0);
-			
-		
+		float lightPosition[] = { (float) (maze.MAZE_SIZE / 2f), 50.0f,
+				(float) (maze.MAZE_SIZE / 2f), 1.0f }; // High up in the
+		// sky!
+		float lightColour[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // White
+															// light!
+		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0); // Note
+																		// that
+																		// we're
+																		// setting
+																		// Light0.
+		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightColour, 0);
+
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glShadeModel(GL.GL_SMOOTH);
@@ -686,8 +743,17 @@ public class MazeRunner implements GLEventListener {
 						Weapon.setNewWeapon(0);
 						break;
 					case 1:
-						score = score * 2;
-						player.setHealth(player.getHealth() + 20);
+						double rand = Math.random();
+						if (rand <= 0.5) {
+							score = score + 500;
+						}
+						if (rand >= 0.3) {
+							player.setHealth(player.getHealth() + 20);
+							if (player.getHealth() > 100) {
+								player.setHealth(100);
+							}
+						}
+						// System.out.println(rand);
 						break;
 					case 2:
 						Weapon.setNewWeapon(2);
@@ -740,35 +806,47 @@ public class MazeRunner implements GLEventListener {
 				phworld.update(player);
 				player = phworld.updatePlayer(player);
 			} else {
+				if (flag.geti() == 0.01) {
+					score = score + Timer;
+				}
 				if (flag.geti() >= 4) {
 					ScoreScreen.score = score;
 					ScoreScreen.gameover = 2;
 					Game.gsm.setGameState(Game.gsm.DEAD_STATE);
 				}
 			}
-		}
 
-		if (NyanSeePlayer()) {
-			for (int i = 0; i < Nyan.size(); i++) {
-				Nyan.get(i).goalX = player.getLocationX();
-				Nyan.get(i).goalZ = player.getLocationZ();
+			if (NyanSeePlayer()) {
+				for (int i = 0; i < Nyan.size(); i++) {
+					Nyan.get(i).goalX = player.getLocationX();
+					Nyan.get(i).goalZ = player.getLocationZ();
+				}
+
 			}
 
+			if (weapon.update(deltaTime, player, camera, phworld)) {
+				phworld.CreateBullet((float) camera.getLocationX(),
+						(float) camera.getVrpY(),
+						(float) camera.getLocationZ(),
+						(float) player.getVerAngle(),
+						(float) player.getHorAngle(), camera);
+				// bullets.add(new Bullet(player.getLocationX(),
+				// player.getLocationY(), player.getLocationZ(), player
+				// .getHorAngle(), player.getVerAngle()));
+
+				// }
+				// for (int i = 0; i < bullets.size(); i++) {
+				// bullets.get(i).update(deltaTime);
+			}
+			double Time2 = Calendar.getInstance().getTimeInMillis();
+			if (Time2 - Time3 > 4000) {
+				Time3 = Time2;
+			}
+			if (Time2 - Time3 == 0) {
+				Menu.Sound.play("sounds/nyan-cat-wav.wav");
+			}
 		}
 
-		if (weapon.update(deltaTime, player, camera, phworld)) {
-			phworld.CreateBullet((float) camera.getLocationX(),
-					(float) camera.getVrpY(), (float) camera.getLocationZ(),
-					(float) player.getVerAngle(), (float) player.getHorAngle(),
-					camera);
-			// bullets.add(new Bullet(player.getLocationX(),
-			// player.getLocationY(), player.getLocationZ(), player
-			// .getHorAngle(), player.getVerAngle()));
-
-			// }
-			// for (int i = 0; i < bullets.size(); i++) {
-			// bullets.get(i).update(deltaTime);
-		}
 	}
 
 	private void updateCamera() {
