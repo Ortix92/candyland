@@ -65,20 +65,20 @@ public class Weapon extends GameObject {
 				Right = true;
 				Up = true; }
 			if (counter > 20 && counter <= 40) {
-				Right = false;
-				Up = false;
 				Left = true;
 				Down = true;
+				Right = false;
+				Up = false;
 			}
 			if (counter > 40 && counter <= 60) {
-				Down = false;
 				Up = true;
+				Down = false;
 			}
 			if (counter > 60 && counter <= 80) {
 				Down = true;
+				Right = true;
 				Up = false;
 				Left = false;
-				Right = true;
 			}
 			if (counter > 80) {
 				Down = false;
@@ -93,20 +93,20 @@ public class Weapon extends GameObject {
 					Left = true;
 					Up = true; }
 				if (counter > 20 && counter <= 40) {
-					Left = false;
-					Up = false;
 					Right = true;
 					Down = true;
+					Left = false;
+					Up = false;
 				}
 				if (counter > 40 && counter <= 60) {
-					Down = false;
 					Up = true;
+					Down = false;
 				}
 				if (counter > 60 && counter <= 80) {
+					Left = true;
 					Down = true;
 					Up = false;
 					Right = false;
-					Left = true;
 				}
 				if (counter > 80) {
 					Down = false;
@@ -127,16 +127,16 @@ public class Weapon extends GameObject {
 
 	public void Calcoffset() {
 		if (Right) {
-			Xoffset = Xoffset + 0.005f;
+			Xoffset = Xoffset + 0.003f;
 		}
 		if (Left) {
-			Xoffset = Xoffset - 0.005f;
+			Xoffset = Xoffset - 0.003f;
 		}
 		if (Up) {
-			Yoffset = Yoffset - 0.006f;
+			Yoffset = Yoffset - 0.003f;
 		}
 		if (Down) {
-			Yoffset = Yoffset + 0.006f;
+			Yoffset = Yoffset + 0.003f;
 		} else {
 			Xoffset = 0;
 			Yoffset = 0;

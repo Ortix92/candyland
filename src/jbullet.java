@@ -32,7 +32,7 @@ public class jbullet {
 
 	private ArrayList<Float> oldx = new ArrayList<Float>();
 	private ArrayList<Float> oldz = new ArrayList<Float>();
-	
+
 	public DiscreteDynamicsWorld dynamicworld;
 	public int maxSubSteps;
 	public float timeStep, fixedTimeStep;
@@ -99,35 +99,34 @@ public class jbullet {
 					DefaultMotionState mazeMotionState = new DefaultMotionState(
 							t);
 					Vector3f Inertia = new Vector3f(0, 0, 0);
-					if (i == maze.MAZE_SIZE - 1 || j == maze.MAZE_SIZE - 1 || i == 0 || j == 0) {
-					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							Float.POSITIVE_INFINITY, mazeMotionState, mazeshape, Inertia);
-					RigidBody mazebody = new RigidBody(mazeinfo);
-					mazebody.setFriction(1);
-					dynamicworld.addRigidBody(mazebody);
-					mazeblocks.add(mazebody);
+					if (i == maze.MAZE_SIZE - 1 || j == maze.MAZE_SIZE - 1
+							|| i == 0 || j == 0) {
+						RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
+								Float.POSITIVE_INFINITY, mazeMotionState,
+								mazeshape, Inertia);
+						RigidBody mazebody = new RigidBody(mazeinfo);
+						mazebody.setFriction(1);
+						dynamicworld.addRigidBody(mazebody);
+						mazeblocks.add(mazebody);
 					} else {
-						Inertia = new Vector3f(0, 0, 0);	
-					RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
-							100000, mazeMotionState, mazeshape, Inertia);	
-					RigidBody mazebody = new RigidBody(mazeinfo);
-					mazebody.setFriction(1);
-					dynamicworld.addRigidBody(mazebody);
-					mazeblocks.add(mazebody);
+						Inertia = new Vector3f(0, 0, 0);
+						RigidBodyConstructionInfo mazeinfo = new RigidBodyConstructionInfo(
+								100000, mazeMotionState, mazeshape, Inertia);
+						RigidBody mazebody = new RigidBody(mazeinfo);
+						mazebody.setFriction(1);
+						dynamicworld.addRigidBody(mazebody);
+						mazeblocks.add(mazebody);
 					}
 				}
 			}
-		}	
+		}
 		for (int i = 0; i < mazeblocks.size(); i++) {
-		Transform trans = new Transform();
-						mazeblocks.get(i).getWorldTransform(trans);
-						System.out.println(trans.origin);
-						oldx.add(trans.origin.x);
-						oldz.add(trans.origin.z);
-		}			
-				
-			
-		
+			Transform trans = new Transform();
+			mazeblocks.get(i).getWorldTransform(trans);
+			oldx.add(trans.origin.x);
+			oldz.add(trans.origin.z);
+		}
+
 	}
 
 	public void initNyan(NyanCat nyancat) {
@@ -224,11 +223,13 @@ public class jbullet {
 			Transform trans = new Transform();
 			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
 
-			if (Math.abs(X - trans.origin.x) < 2.5 || Math.abs(Z - trans.origin.z) < 2.5) {
+			if (Math.abs(X - trans.origin.x) < 2.5
+					|| Math.abs(Z - trans.origin.z) < 2.5) {
 				return true;
 			}
-//			System.out.println("new: " + trans.origin.x + ", " + trans.origin.z);
-//			System.out.println("old: " + X + ", " + Z);
+			// System.out.println("new: " + trans.origin.x + ", " +
+			// trans.origin.z);
+			// System.out.println("old: " + X + ", " + Z);
 		}
 		return false;
 	}
@@ -294,9 +295,11 @@ public class jbullet {
 			Transform trans = new Transform();
 			mazeblocks.get(i).getMotionState().getWorldTransform(trans);
 
-			if (!MazeRunner.maze.isWall((double)trans.origin.x, (double)trans.origin.z)) {
-				MazeRunner.maze.changeMaze((double)trans.origin.x, (double)trans.origin.z, 
-						    (double)oldx.get(i) , (double)oldz.get(i) );
+			if (!MazeRunner.maze.isWall((double) trans.origin.x,
+					(double) trans.origin.z)) {
+				MazeRunner.maze.changeMaze((double) trans.origin.x,
+						(double) trans.origin.z, (double) oldx.get(i),
+						(double) oldz.get(i));
 			}
 			oldx.set(i, trans.origin.x);
 			oldz.set(i, trans.origin.z);

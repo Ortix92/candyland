@@ -26,8 +26,8 @@ public class ScoreScreen implements GLEventListener {
 	public static String naam;
 	public static String letter = null;
 	public GLCanvas canvas;
-	private int screenWidth = 1024;
-	private int screenHeight = 768;
+	private int screenWidth = MazeRunner.screenWidth;
+	private int screenHeight = MazeRunner.screenHeight;
 	public static UserInput input; 
 	public static int score;
 	public static boolean dood;
@@ -67,7 +67,7 @@ private void initJOGL() {
 	 * perform the OpenGL phases of MazeRunner.
 	 */
 	canvas.addGLEventListener(this);
-	canvas.setSize(1024, 768);
+	canvas.setSize(screenWidth, screenHeight);
 	/*
 	 * We need to create an internal thread that instructs OpenGL to
 	 * continuously repaint itself. The Animator class handles that for

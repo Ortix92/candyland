@@ -9,8 +9,8 @@ import com.sun.opengl.util.j2d.TextRenderer;
 public class GameOverScreen {
 	
 	private boolean dood;
-	private double screenWidth = 1024;
-	private double screenHeight = 768;
+	private double screenWidth = MazeRunner.screenWidth;
+	private double screenHeight = MazeRunner.screenHeight;
 	
 	public void setdood(boolean a) {
 		dood = a;
@@ -40,9 +40,7 @@ public class GameOverScreen {
 	if (!dood) {
 		tr.draw("YOU ARE WINNER", (int) (screenWidth/2 - 150), (int) (screenHeight -200));
 	}
-		Font f3 = new Font("SansSerif", Font.ITALIC, 15);
-		tr.draw("Enter your name:" + naam, (int) (screenWidth/2 - 360), (int) (screenHeight -400));
-		Font f4 = new Font("SansSerif", Font.ITALIC, 5);
+		tr.draw("Enter your name: " + naam, (int) (screenWidth/2 - 360), (int) (screenHeight -400));
 		tr.draw("PRESS ENTER TO RETURN TO MAIN MENU", (int) (screenWidth/2 - 400), (int) (screenHeight -450));
 		tr.endRendering();
 }

@@ -51,9 +51,9 @@ public class MazeRunner implements GLEventListener {
 	public GLCanvas canvas;
 	private Animator anim;
 
-	private static int screenWidth = 1024;
+	public static int screenWidth = 1024;
 
-	private static int screenHeight = 768;
+	public static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
 	public static int amountofNyans = 1;
