@@ -462,6 +462,8 @@ public class MazeRunner implements GLEventListener {
 				(int) (0.85f * screenHeight));
 		tr.draw(timerString, (int) (screenWidth / 2.3f),
 				(int) (0.9f * screenHeight));
+		tr.draw("Amount of Nyans left: "+Nyan.size(), (int) (screenWidth / 2.3f),
+				(int) (0.8f * screenHeight));
 		tr.endRendering();
 		
 		/*gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
