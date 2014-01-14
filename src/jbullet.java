@@ -27,7 +27,7 @@ import com.sun.opengl.util.GLUT;
 
 public class jbullet {
 
-	private ArrayList<Bullet> Bullets;
+	private ArrayList<BulletTimer> Bullets;
 	private ArrayList<NyanCat> nyans;
 
 	private ArrayList<Float> oldx = new ArrayList<Float>();
@@ -49,7 +49,7 @@ public class jbullet {
 	public static int energy = 1000;
 
 	public jbullet(int n) {
-		Bullets = new ArrayList<Bullet>();
+		Bullets = new ArrayList<BulletTimer>();
 		bullets = new ObjectArrayList<RigidBody>();
 		nyans = new ArrayList<NyanCat>();
 
@@ -170,7 +170,7 @@ public class jbullet {
 		bullet.setFriction(20);
 		dynamicworld.addRigidBody(bullet);
 		bullets.add(bullet);
-		Bullet b = new Bullet();
+		BulletTimer b = new BulletTimer();
 		Bullets.add(b);
 	}
 
@@ -550,24 +550,39 @@ public class jbullet {
 		}
 
 	}
+	
+/**
+ * A simple timer for the bullets, so they get removed from the game after a certain amount of time
+ * 	
+ * @author Michiel
+ *
+ */
+	public class BulletTimer {
 
-	public class KinematicMotionState extends MotionState {
-		private Transform worldTransform;
-
-		public KinematicMotionState() {
-			worldTransform = new Transform();
-			worldTransform.setIdentity();
+		private int time;
+		private boolean bullet;
+		
+		public BulletTimer() {
+		bullet = true;
+		time = 80;
+		}
+		
+		
+		public void update() {
+	    time = time - 1;
+	    if (time <= 0){
+	    	BulletStop();
+	    }
+		}
+		
+		public void BulletStop() {
+			bullet = false;
+		}
+		
+		public boolean getBulletState() {
+			return bullet;
 		}
 
-		@Override
-		public Transform getWorldTransform(Transform out) {
-			out.set(worldTransform);
-			return out;
-		}
-
-		public void setWorldTransform(Transform worldTrans) {
-			worldTransform.set(worldTrans);
-		}
-	}
-
+}
+	
 }

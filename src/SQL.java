@@ -94,9 +94,9 @@ public class SQL {
 	 * 
 	 * @param args
 	 */
-	// public static void main(String[] args) {
-	// SQL connection = new SQL();
-	// connection.wipe();
-	// }
+//	 public static void main(String[] args) {
+//	 SQL connection = new SQL();
+//	 connection.wipe();
+//	 }
 
 }

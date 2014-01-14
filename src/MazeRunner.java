@@ -788,7 +788,7 @@ public class MazeRunner implements GLEventListener {
 
 	public void updatePhysics(int deltaTime) {
 
-		phworld.update(deltaTime, box, Nyan, player);
+		phworld.update(deltaTime, Nyan, player);
 
 		// bullets = phworld.getbullets();
 	}
