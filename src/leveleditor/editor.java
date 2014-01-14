@@ -26,6 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.JTextField;
 
 public class editor {
 
@@ -40,6 +41,7 @@ public class editor {
 	private JSlider resolutionSlider;
 	private JPanel panel;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	public static int amountOfNyans = 5;
 	public static int drawMode;
 
 	/**
@@ -83,7 +85,7 @@ public class editor {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1080, 750);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -203,6 +205,24 @@ public class editor {
 		btnFillEdges.setAction(action);
 		btnFillEdges.setText("Fill Edges");
 		panel.add(btnFillEdges);
+		
+		JSlider nyanSlider = new JSlider();
+		nyanSlider.setToolTipText("Select the amount of nyans\r\n");
+		nyanSlider.setSnapToTicks(true);
+		nyanSlider.setPaintTicks(true);
+		nyanSlider.setPaintLabels(true);
+		nyanSlider.setOrientation(SwingConstants.VERTICAL);
+		nyanSlider.setMinorTickSpacing(1);
+		nyanSlider.setMinimum(0);
+		nyanSlider.setMaximum(25);
+		nyanSlider.setMajorTickSpacing(5);
+		nyanSlider.setBounds(337, 82, 43, 200);
+		amountOfNyans = nyanSlider.getValue();
+		panel.add(nyanSlider);
+		
+		JLabel lblAmountOfNyans = new JLabel("Amount of Nyans");
+		lblAmountOfNyans.setBounds(308, 57, 96, 14);
+		panel.add(lblAmountOfNyans);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
@@ -274,7 +294,7 @@ public class editor {
 		}
 
 		private void exportMaze() {
-			System.out.println("exporting");
+			System.out.println("exporting...");
 			ArrayList<ArrayList<Integer>> map = editor.this.editorPanel
 					.getMaze();
 

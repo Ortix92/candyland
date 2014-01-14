@@ -17,6 +17,8 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
+import leveleditor.editor;
+
 import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.FPSAnimator;
 import com.sun.opengl.util.GLUT;
@@ -56,7 +58,7 @@ public class MazeRunner implements GLEventListener {
 	public static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	public static int amountofNyans = 1;
+	public static int amountofNyans = editor.amountOfNyans;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
