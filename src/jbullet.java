@@ -279,7 +279,7 @@ public class jbullet {
 		return play;
 	}
 
-	public void update(int deltaTime, TestBox box, ArrayList<NyanCat> Nyans,
+	public void update(int deltaTime, ArrayList<NyanCat> Nyans,
 			Player play) {
 
 		dynamicworld.stepSimulation(1 / 62f, 0, 1);
