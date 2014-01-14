@@ -501,20 +501,18 @@ public class MazeRunner implements GLEventListener {
 		gl.glEnable(GL.GL_DEPTH_TEST);
 
 		// Set and enable the lighting.
-		for (int i = 0; i < maze.MAZE_SIZE; i = i + 5) {
-			for (int j = 0; j < maze.MAZE_SIZE; j = j + 5) {
-				float lightPosition[] = { i, 50.0f, j, 1.0f }; // High up in the
-																// sky!
-				float lightColour[] = { 1.0f, 1.0f, 1.0f, 0.0f }; // White
-																	// light!
-				gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0); // Note
+				float lightPosition[] = { (float) (maze.MAZE_SIZE/ 2f), 50.0f, (float) (maze.MAZE_SIZE/ 2f), 1.0f }; // High up in the
+															   // sky!
+				float lightColour[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // White
+																  // light!
+				gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPosition, 0);   // Note
 																				// that
 																				// we're
 																				// setting
 																				// Light0.
 				gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightColour, 0);
-			}
-		}
+			
+		
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glShadeModel(GL.GL_SMOOTH);

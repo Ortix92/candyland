@@ -567,7 +567,6 @@ public class jbullet {
 		time = 80;
 		}
 		
-		
 		public void update() {
 	    time = time - 1;
 	    if (time <= 0){
