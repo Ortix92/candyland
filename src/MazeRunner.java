@@ -184,8 +184,6 @@ public class MazeRunner implements GLEventListener {
 
 		// visibleObjects.add(skybox);
 
-		new NyanCatInput(canvas);
-
 		player = new Player(maze.PLAYER_SPAWN_X, 3, maze.PLAYER_SPAWN_Z, -120,
 				-90);
 

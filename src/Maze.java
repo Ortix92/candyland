@@ -128,32 +128,6 @@ public class Maze implements VisibleObject {
 
 	}
 
-	/**
-	 * paintSingleFloorTile(GL, double) paints a single floor tile, to represent
-	 * the floor of the entire maze.
-	 * 
-	 * @param gl
-	 *            the GL context in which should be drawn
-	 * @param size
-	 *            the size of the tile
-	 */
-	private void paintSingleFloorTile(GL gl, double size) {
-		// Setting the floor color and material.
-		float wallColour[] = { 0.0f, 0.0f, 1.0f, 1.0f }; // The floor is blue.
-		gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, wallColour, 0); // Set the
-																	// materials
-																	// used by
-																	// the
-																	// floor.
-
-		gl.glNormal3d(0, 1, 0);
-		gl.glBegin(GL.GL_QUADS);
-		gl.glVertex3d(0, 0, 0);
-		gl.glVertex3d(0, 0, size);
-		gl.glVertex3d(size, 0, size);
-		gl.glVertex3d(size, 0, 0);
-		gl.glEnd();
-	}
 
 	public void update(int deltaTime) {
 	}
