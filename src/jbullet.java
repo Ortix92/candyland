@@ -319,8 +319,13 @@ public class jbullet {
 						&& trans.origin.z < Nyans.get(i).getLocationZ() + 2f
 						&& trans.origin.y > Nyans.get(i).getLocationY() - 1f
 						&& trans.origin.y < Nyans.get(i).getLocationY() + 10f) {
-					nyans.get(i).setHP(nyans.get(i).getHP() - 50);
-					removeBullet(j);
+						if (Weapon.getNewWeapon() == 2) {
+							nyans.get(i).setHP(nyans.get(i).getHP() - 100);
+							removeBullet(j); 
+						} else {
+							nyans.get(i).setHP(nyans.get(i).getHP() - 50);
+							removeBullet(j); 
+						}
 				}
 			}
 		}
