@@ -64,7 +64,6 @@ public class MazeRunner implements GLEventListener {
 	private UserInput input;
 	public static Maze maze;
 	private long previousTime = Calendar.getInstance().getTimeInMillis();
-	private Guy guy;
 	private Weapon weapon;
 	private PauseMenu pause;
 	private jbullet phworld;
@@ -250,13 +249,11 @@ public class MazeRunner implements GLEventListener {
 		camera = new Camera(player.getLocationX(), player.getLocationY(),
 				player.getLocationZ(), player.getHorAngle(),
 				player.getVerAngle());
-		guy = new Guy();
 		weapon = new Weapon(10);
 		input = new UserInput(canvas);
 		pause = new PauseMenu();
 		player.setControl(input);
 		weapon.setControl(input);
-		guy.setControl(input);
 		phworld.initMaze(maze);
 		phworld.initObjects();
 		phworld.initPlayer((float) player.getLocationX(),
