@@ -192,22 +192,15 @@ public class MazeRunner implements GLEventListener {
 		System.out.println("Maze size: " + maze.MAZE_SIZE);
 		// initialize the NyanCat.
 		for (int i = 0; i < amountofNyans; i++) {
-			double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // x-position
-			double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // z-position
+			double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // x-position
+			double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // z-position
 			while (maze.isWall(X, Z)) {
-				X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-						+ maze.SQUARE_SIZE / 2; // x-position
-				Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
-						* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+				X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // x-position
+				Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // z-position
 			}
 
 			System.out.println("X " + X + " Z " + Z);
-			Nyan.add(new NyanCat(X, maze.SQUARE_SIZE / 4, // y-position
-					Z, Math.random() * 360,
-					// horizontal angle
-					player));
+			
 
 			// visibleObjects.add(Nyan.get(i)); // make Nyan visible.
 
@@ -216,6 +209,7 @@ public class MazeRunner implements GLEventListener {
 					// horizontal angle
 					player);
 			phworld.initNyan(nyan);
+			Nyan.add(nyan);
 		}
 		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
 				; // x-position
