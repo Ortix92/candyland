@@ -49,7 +49,7 @@ public class Player extends GameObject {
 		horAngle = h;
 		verAngle = v;
 		speed = 0.2;
-		health = 100000;
+		health = 100;
 	}
 
 	/**

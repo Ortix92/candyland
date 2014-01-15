@@ -115,6 +115,7 @@ class Menu extends JPanel {
 					}
 				}
 			}).start();
+			return;
 		}
 	}
 

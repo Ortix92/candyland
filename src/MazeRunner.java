@@ -221,27 +221,27 @@ public class MazeRunner implements GLEventListener {
 			phworld.initNyan(nyan);
 		}
 		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // x-position
+				; // x-position
 		double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // z-position
+				; // z-position
 		while (maze.isWall(X, Z)) {
 			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // x-position
-			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
-					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+					; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
+					; // z-position
 		}
 		PickUp NewClaws = new PickUp(X, Z, player, 2);
 		visibleObjects.add(NewClaws);
 		pickup.add(NewClaws);
 		X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // x-position
+				; // x-position
 		Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				+ maze.SQUARE_SIZE / 2; // z-position
+				; // z-position
 		while (maze.isWall(X, Z)) {
 			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					+ maze.SQUARE_SIZE / 2; // x-position
-			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE + 3
-					* maze.SQUARE_SIZE + maze.SQUARE_SIZE / 2; // z-position
+				; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE 
+					; // z-position
 		}
 		PickUp NewClaws2 = new PickUp(X, Z, player, 3);
 		visibleObjects.add(NewClaws2);
@@ -438,20 +438,7 @@ public class MazeRunner implements GLEventListener {
 		// gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f *
 		// screenHeight);
 		// int len, i;
-		Font f = new Font("SansSerif", Font.BOLD, 36);
-		TextRenderer tr = new TextRenderer(f);
-		tr.setColor(50, 30, 0, 1.0f);
-
-		tr.beginRendering((int) screenWidth, (int) screenHeight);
-		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
-				(int) (0.9f * screenHeight));
-		// String string = "Score: " + score;
-		// len = (int) string.length();
-		// for (i = 0; i < len; i++) {
-		// glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-		// string.charAt(i));
-		// }
-		tr.endRendering();
+		
 
 		// Timer
 		double Time1 = Calendar.getInstance().getTimeInMillis();
@@ -467,13 +454,26 @@ public class MazeRunner implements GLEventListener {
 		} else if (!flag.Flag) {
 			timerString = "Timebonus: " + Timer;
 		}
-		gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
+		
+		Font f = new Font("SansSerif", Font.BOLD, 24);
+		TextRenderer tr = new TextRenderer(f);
+		tr.setColor(50, 30, 0, 1.0f);
+
+		tr.beginRendering((int) screenWidth, (int) screenHeight);
+		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
+				(int) (0.85f * screenHeight));
+		tr.draw(timerString, (int) (screenWidth / 2.3f),
+				(int) (0.9f * screenHeight));
+		tr.draw("Amount of Nyans left: "+Nyan.size(), (int) (screenWidth / 2.3f),
+				(int) (0.8f * screenHeight));
+		tr.endRendering();
+		
+		/*gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
 				* screenHeight);
 		int tim = (int) timerString.length();
 		for (int k = 0; k < tim; k++) {
 			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-					timerString.charAt(k));
-		}
+					timerString.charAt(k));*/
 
 		if (Nyan.size() == 0) {
 			Font h = new Font("Castellar", Font.PLAIN, 30);
