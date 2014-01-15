@@ -205,8 +205,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 //				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
 //						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
 //
-		if (HorAngle - 70 <= hoekPlayer) {
-			if (HorAngle + 70 >= hoekPlayer) {
+		if (HorAngle - 360 <= hoekPlayer) {
+			if (HorAngle + 360 >= hoekPlayer) {
 //				double x = player.getLocationX() - this.getLocationX();
 //				double z = player.getLocationZ() - this.getLocationZ();
 //				double length = Math.sqrt(x*x + z*z);
