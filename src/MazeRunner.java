@@ -268,7 +268,6 @@ public class MazeRunner implements GLEventListener {
 	 */
 	public void Orthoview(GL gl) {
 		gl.glMatrixMode(GL.GL_PROJECTION);
-		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glOrtho(0, screenWidth, screenHeight, 0, -1, 1);
 		gl.glMatrixMode(GL.GL_MODELVIEW);
@@ -280,8 +279,6 @@ public class MazeRunner implements GLEventListener {
 	 * Switches the view to projectionview
 	 */
 	public void Projectview(GL gl) {
-		gl.glMatrixMode(GL.GL_PROJECTION);
-		gl.glPopMatrix();
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glPopMatrix();
 	}
