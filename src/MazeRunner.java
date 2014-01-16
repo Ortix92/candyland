@@ -252,7 +252,8 @@ public class MazeRunner implements GLEventListener {
 				(float) player.getLocationY(), (float) player.getLocationZ());
 		System.out.println("Maze size: " + maze.MAZE_SIZE);
 		Time3 = Calendar.getInstance().getTimeInMillis();
-		Menu.Sound.play("sounds/nyan-cat-wav.wav");
+		Menu.Music.play=false;
+		Menu.Music.play("sounds/nyan-cat-wav.wav");
 	}
 
 	/**
@@ -825,13 +826,7 @@ public class MazeRunner implements GLEventListener {
 			// for (int i = 0; i < bullets.size(); i++) {
 			// bullets.get(i).update(deltaTime);
 		}
-		double Time2 = Calendar.getInstance().getTimeInMillis();
-		if (Time2 - Time3 > 4000) {
-			Time3 = Time2;
-		}
-		if (Time2 - Time3 == 0) {
-			Menu.Sound.play("sounds/nyan-cat-wav.wav");
-		}
+		
 	}
 
 	private void updateCamera() {
