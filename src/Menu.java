@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Calendar;
 
 import javax.media.opengl.GLCanvas;
 import javax.sound.sampled.AudioInputStream;
@@ -109,6 +110,39 @@ class Menu extends JPanel {
 								.getAudioInputStream(new File(fileName));
 						clip.open(inputStream);
 						clip.start();
+					} catch (Exception e) {
+						System.out.println("play sound error: "
+								+ e.getMessage() + " for " + fileName);
+					}
+				}
+			}).start();
+			return;
+		}
+	}
+	
+	public static class Music {
+		static boolean play;
+			public static synchronized void play(final String fileName) {			
+			new Thread(new Runnable() {
+				public void run() {
+					double Time=Calendar.getInstance().getTimeInMillis();
+					play=true;
+					
+					try {
+						while(play){
+							double Time2 = Calendar.getInstance().getTimeInMillis();
+							if (Time2 - Time > 4000) {
+								Time = Time2;
+							}
+							if (Time2 - Time == 0) {
+								Clip clip = AudioSystem.getClip();
+								AudioInputStream inputStream = AudioSystem
+										.getAudioInputStream(new File(fileName));
+								clip.open(inputStream);
+								clip.start();
+							}
+					
+						}
 					} catch (Exception e) {
 						System.out.println("play sound error: "
 								+ e.getMessage() + " for " + fileName);
