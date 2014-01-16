@@ -76,6 +76,10 @@ public class MazeRunner implements GLEventListener {
 	private int Timer = 1000;
 	private double Time0 = Calendar.getInstance().getTimeInMillis();
 	private double Time3;
+	private TextRenderer tr;
+	private TextRenderer tr2;
+	private TextRenderer tr3;
+	private TextRenderer fj;
 
 	/*
 	 * **********************************************
@@ -443,9 +447,10 @@ public class MazeRunner implements GLEventListener {
 		}
 		
 		Font f = new Font("SansSerif", Font.BOLD, 24);
-		TextRenderer tr = new TextRenderer(f);
+		if (tr == null) {
+		tr = new TextRenderer(f);
 		tr.setColor(50, 30, 0, 1.0f);
-
+		}
 		tr.beginRendering((int) screenWidth, (int) screenHeight);
 		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
 				(int) (0.85f * screenHeight));
@@ -464,7 +469,9 @@ public class MazeRunner implements GLEventListener {
 
 		if (Nyan.size() == 0) {
 			Font h = new Font("Castellar", Font.PLAIN, 30);
-			TextRenderer fj = new TextRenderer(h);
+			if (fj == null) {
+			fj = new TextRenderer(h);
+			}
 			fj.beginRendering((int) screenWidth, (int) screenHeight);
 			// gl.glRasterPos2f(screenWidth / 3, screenHeight - 0.7f
 			// * screenHeight);
@@ -485,7 +492,9 @@ public class MazeRunner implements GLEventListener {
 			// }
 		}
 		Font f2 = new Font("Narkisim", Font.PLAIN, 28);
-		TextRenderer tr2 = new TextRenderer(f2);
+		if (tr2 == null) {
+		tr2 = new TextRenderer(f2);
+		}
 		tr2.beginRendering(screenWidth, screenHeight);
 		tr2.draw(weaponString, 50, (int) (0.95 * screenHeight));
 		// int l = (int) weaponString.length();
@@ -494,9 +503,11 @@ public class MazeRunner implements GLEventListener {
 		// weaponString.charAt(k));
 		// }
 		tr2.endRendering();
-
+		
 		if (LevelSelector.chucknorris) {
+			if (tr3 == null) {
 			TextRenderer tr3 = new TextRenderer(f);
+			}
 			tr3.beginRendering(screenWidth, screenHeight);
 			tr3.setColor(20, 0, 0, 1);
 			tr3.endRendering();

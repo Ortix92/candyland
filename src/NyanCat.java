@@ -125,10 +125,12 @@ public class NyanCat extends GameObject implements VisibleObject {
 																// location
 		}
 		if (!goal) {
+				if (!SeePlayer()) {
 			if (MazeRunner.maze.isWall(goalX,goalZ)) {
 				goal(Math.random() * MazeRunner.maze.MAZE_SIZE * MazeRunner.maze.SQUARE_SIZE,
 						Math.random() * MazeRunner.maze.MAZE_SIZE *  MazeRunner.maze.SQUARE_SIZE);
 			}
+				}
 			if (t > 350) {
 				goal(Math.random() * MazeRunner.maze.MAZE_SIZE *  MazeRunner.maze.SQUARE_SIZE, 
 						Math.random() * MazeRunner.maze.MAZE_SIZE *  MazeRunner.maze.SQUARE_SIZE);
