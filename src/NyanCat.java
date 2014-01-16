@@ -30,8 +30,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 															// funz.
 	private int HP = 100; // HealthPoints :D
 	private boolean goal = false; // has Nyan reached its goal yet?
-	public double goalX = 0; // where Nyan wants to go
-	public double goalZ = 0;
+	public double goalX = Math.random() * 100; // where Nyan wants to go
+	public double goalZ =  Math.random() * 100;
 	boolean dead = false; // whether Nyan is dead or not.
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
@@ -39,6 +39,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 	private TimerTask timertask;
 	private Timer timer = new Timer();
 	private double HPoff = 0;
+	private int t = 0;
 
 	// makes a NyanCat on the location x, y , z, looking in direction h
 	public NyanCat(double x, double y, double z, double h, Player play) {
@@ -124,7 +125,13 @@ public class NyanCat extends GameObject implements VisibleObject {
 																// location
 		}
 		if (!goal) {
+			if (t > 350) {
+				goal(Math.random() * 100, Math.random() * 100);
+				t = 0;
+		} else {
 			moveTo(goalX, goalZ); // move to goalX,goalZ
+			t = t + 1;
+		}
 		}
 		// when goal is reached choose randomly a new goal:
 		if ((Math.abs(getLocationX() - goalX) < speed)
@@ -205,8 +212,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 //				/ Math.sqrt(Math.pow(player.getLocationX() - getLocationX(), 2)
 //						+ Math.pow(player.getLocationZ() - getLocationZ(), 2));
 //
-		if (HorAngle - 360 <= hoekPlayer) {
-			if (HorAngle + 360 >= hoekPlayer) {
+		if (HorAngle - 85 <= hoekPlayer) {
+			if (HorAngle + 85 >= hoekPlayer) {
 //				double x = player.getLocationX() - this.getLocationX();
 //				double z = player.getLocationZ() - this.getLocationZ();
 //				double length = Math.sqrt(x*x + z*z);
