@@ -41,7 +41,7 @@ public class editor {
 	private JSlider resolutionSlider;
 	private JPanel panel;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	public static int amountOfNyans = 5;
+	public static int amountOfNyans = 25;
 	public static int drawMode;
 
 	/**
