@@ -506,7 +506,7 @@ public class MazeRunner implements GLEventListener {
 		
 		if (LevelSelector.chucknorris) {
 			if (tr3 == null) {
-			TextRenderer tr3 = new TextRenderer(f);
+			tr3 = new TextRenderer(f);
 			}
 			tr3.beginRendering(screenWidth, screenHeight);
 			tr3.setColor(20, 0, 0, 1);
