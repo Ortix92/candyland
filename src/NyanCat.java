@@ -30,8 +30,8 @@ public class NyanCat extends GameObject implements VisibleObject {
 															// funz.
 	private int HP = 100; // HealthPoints :D
 	private boolean goal = false; // has Nyan reached its goal yet?
-	public double goalX = Math.random() * 100; // where Nyan wants to go
-	public double goalZ =  Math.random() * 100;
+	public double goalX = Math.random() * MazeRunner.maze.MAZE_SIZE; // where Nyan wants to go
+	public double goalZ =  Math.random() * MazeRunner.maze.MAZE_SIZE;
 	boolean dead = false; // whether Nyan is dead or not.
 	private Player player;
 	private ArrayList<RainbowBlock> rainbows = new ArrayList<RainbowBlock>();
@@ -115,7 +115,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 			}
 		}
 		if (goal) {
-			goal(Math.random() * 100, Math.random() * 100);
+			goal(Math.random() * MazeRunner.maze.MAZE_SIZE, Math.random() * MazeRunner.maze.MAZE_SIZE);
 		}
 		if (SeePlayer()) { // checks if player is seen
 			goal(player.getLocationX(), player.getLocationZ()); // if player is
@@ -126,7 +126,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 		}
 		if (!goal) {
 			if (t > 350) {
-				goal(Math.random() * 100, Math.random() * 100);
+				goal(Math.random() * MazeRunner.maze.MAZE_SIZE, Math.random() * MazeRunner.maze.MAZE_SIZE);
 				t = 0;
 		} else {
 			moveTo(goalX, goalZ); // move to goalX,goalZ
