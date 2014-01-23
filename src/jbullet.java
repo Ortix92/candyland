@@ -318,7 +318,7 @@ public class jbullet {
 						&& trans.origin.z > Nyans.get(i).getLocationZ() - 2f
 						&& trans.origin.z < Nyans.get(i).getLocationZ() + 2f
 						&& trans.origin.y > Nyans.get(i).getLocationY() - 1f
-						&& trans.origin.y < Nyans.get(i).getLocationY() + 10f) {
+						&& trans.origin.y < Nyans.get(i).getLocationY() + 2.5f) {
 						if (Weapon.getNewWeapon() == 2) {
 							nyans.get(i).setHP(nyans.get(i).getHP() - 100);
 							removeBullet(j); 
