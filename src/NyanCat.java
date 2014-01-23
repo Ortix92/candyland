@@ -126,20 +126,24 @@ public class NyanCat extends GameObject implements VisibleObject {
 		}
 		if (!goal) {
 				if (!SeePlayer()) {
-			if (MazeRunner.maze.isWall(goalX,goalZ)) {
+			if (MazeRunner.maze.isWall(goalX,goalZ) || MazeRunner.maze.isWall(this.getLocationX() - 2 * speed * Math.sin(Math.toRadians(horAngle)),
+					this.getLocationZ() - 2 * speed * Math.cos(Math.toRadians(horAngle)))) {
 				goal(Math.random() * MazeRunner.maze.MAZE_SIZE * MazeRunner.maze.SQUARE_SIZE,
 						Math.random() * MazeRunner.maze.MAZE_SIZE *  MazeRunner.maze.SQUARE_SIZE);
 			}
-				}
+				
 			if (t > 350) {
 				goal(Math.random() * MazeRunner.maze.MAZE_SIZE *  MazeRunner.maze.SQUARE_SIZE, 
 						Math.random() * MazeRunner.maze.MAZE_SIZE *  MazeRunner.maze.SQUARE_SIZE);
 				t = 0;
-		} else {
-			moveTo(goalX, goalZ); // move to goalX,goalZ
+		} 
+		}
+			 // move to goalX,goalZ
+			moveTo(goalX, goalZ);
 			t = t + 1;
 		}
-		}
+			
+		
 		// when goal is reached choose randomly a new goal:
 		if ((Math.abs(getLocationX() - goalX) < speed)
 				&& (Math.abs(getLocationZ() - goalZ) < speed)) {
@@ -169,12 +173,14 @@ public class NyanCat extends GameObject implements VisibleObject {
 			timertask = new TimerTask() {
 				@Override
 				public void run() {
+					if (SeePlayer()) {
 					RainbowBlock Rainbow = new RainbowBlock(
 							NyanCat.this.getLocationX(),
 							NyanCat.this.getLocationY(),
 							NyanCat.this.getLocationZ(), goalX,
 							NyanCat.this.getLocationY(), goalZ, MazeRunner.maze);
 					rainbows.add(Rainbow);
+					}
 				}
 			};
 

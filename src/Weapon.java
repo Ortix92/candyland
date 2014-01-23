@@ -143,16 +143,16 @@ public class Weapon extends GameObject {
 	 */
 	public void Calcoffset() {
 		if (Right) {
-			Xoffset = Xoffset + 0.005f;
+			Xoffset = Xoffset + 0.0025f;
 		}
 		if (Left) {
-			Xoffset = Xoffset - 0.005f;
+			Xoffset = Xoffset - 0.0025f;
 		}
 		if (Up) {
-			Yoffset = Yoffset - 0.006f;
+			Yoffset = Yoffset - 0.003f;
 		}
 		if (Down) {
-			Yoffset = Yoffset + 0.006f;
+			Yoffset = Yoffset + 0.003f;
 		} else {
 			Xoffset = 0;
 			Yoffset = 0;
@@ -239,7 +239,7 @@ public class Weapon extends GameObject {
 			}
 			gl.glTranslatef(0.1f + Xoffset, -0.25f + Yoffset, -0.4f);
 			glut.glutSolidSphere(0.05, 50, 40);
-			gl.glTranslatef(-0.2f + Xoffset, 0.0f, 0.0f);
+			gl.glTranslatef(-0.2f, 0.0f, 0.0f);
 			glut.glutSolidSphere(0.05, 50, 40);
 
 			

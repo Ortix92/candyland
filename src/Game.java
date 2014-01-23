@@ -18,7 +18,6 @@ public class Game extends JFrame implements KeyListener {
 		frame.addKeyListener(this);
 		frame.setFocusable(true);
 		frame.setVisible(true);
-		UserInput input;
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
