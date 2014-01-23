@@ -80,8 +80,10 @@ public class Textureloader {
 			PickUp=TextureIO.newTexture(image7,false);
 			PickUp.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR );
 			PickUp.setTexParameteri( GL.GL_TEXTURE_MAG_FILTER,  GL.GL_LINEAR );
+			// image source: http://tux.crystalxp.net/en.id.1685-podoxav-wolverine.html
 			
 			 // Skybox
+			// image source: http://www.keithlantz.net/2011/10/rendering-a-skybox-using-a-cube-map-with-opengl-and-glsl/
             BufferedImage skyboxImage1 = ImageIO.read(new File(
                             "src/skybox_02.png"));
             SkyBox1 = TextureIO.newTexture(skyboxImage1, false);
@@ -135,12 +137,14 @@ public class Textureloader {
             SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
      SkyBox6.setTexParameteri(GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
     
-     BufferedImage CandyWallImage=ImageIO.read(new File("src/CandyWall.png"));
-     CandyWall=TextureIO.newTexture(CandyWallImage,true);
+     	BufferedImage CandyWallImage=ImageIO.read(new File("src/CandyWall.png"));   
+     	// image source: http://nl.depositphotos.com/7071832/stock-illustration-abstract-pattern-with-sweets.html
+     				CandyWall=TextureIO.newTexture(CandyWallImage,true);     
                     CandyWall.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
                     CandyWall.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     
                     BufferedImage CandyFloorImage=ImageIO.read(new File("src/CandyFloor3.png"));
+                    // image source: http://nl.depositphotos.com/5632941/stock-illustration-Vivid-striped-candy-seamless-pattern.html
                     CandyFloor=TextureIO.newTexture(CandyFloorImage,true);
                     CandyFloor.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
                     CandyFloor.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
