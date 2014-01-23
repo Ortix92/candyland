@@ -29,6 +29,7 @@ public class Textureloader {
     static Texture CandyFloor;
     static Texture PickUp;
     static Texture Flag;
+    static Texture pokebal;
     static Texture stuiterbal;
 	static boolean load=false; // boolean so that images are only loaded once
 	
@@ -153,6 +154,11 @@ public class Textureloader {
                     stuiterbal=TextureIO.newTexture(StuiterbalImage,true);
                     stuiterbal.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
                     stuiterbal.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+                    
+                    BufferedImage pokebalImage=ImageIO.read(new File("src/pokeball.jpg"));
+                    pokebal=TextureIO.newTexture(pokebalImage,true);
+                    pokebal.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+                    pokebal.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
 			} catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("Trolololol"); 
@@ -365,8 +371,8 @@ public class Textureloader {
 				}
 		
 	
-		stuiterbal.enable(); // enable the texture so that it can be used. 
-		stuiterbal.bind(); // bind texture to the following object
+		pokebal.enable(); // enable the texture so that it can be used. 
+		pokebal.bind(); // bind texture to the following object
 		}
 		GLU glu=new GLU(); // needed to make a sphere with texture coordinates
 		GLUquadric bal = glu.gluNewQuadric(); // makes a quadric object 
@@ -374,7 +380,7 @@ public class Textureloader {
 		glu. gluSphere(bal,0.5*size,roundness,roundness); // make the object into a sphere
 		
 		if(loadtextures){
-			stuiterbal.disable(); // disable texture so that it will not be put on every next object. 
+			pokebal.disable(); // disable texture so that it will not be put on every next object. 
 		}
         
 	}
