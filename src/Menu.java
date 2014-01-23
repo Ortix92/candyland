@@ -74,7 +74,11 @@ class Menu extends JPanel {
 				}
 
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
-					Sound.play("sounds/sonic_ring.wav");
+					Sound sound = new Sound();
+					sound.filename = "sounds/sonic_ring.wav";
+					sound.run();
+
+					sound = null;
 
 					switch (j) {
 					case 0:
@@ -84,10 +88,12 @@ class Menu extends JPanel {
 						Game.frame = Game.gsm.setGameState(Game.gsm.LOAD_STATE);
 						break;
 					case 2:
-						Game.frame = Game.gsm.setGameState(Game.gsm.EDITOR_STATE);
+						Game.frame = Game.gsm
+								.setGameState(Game.gsm.EDITOR_STATE);
 						break;
 					case 3:
-						Game.frame = Game.gsm.setGameState(Game.gsm.SCORE_STATE); 
+						Game.frame = Game.gsm
+								.setGameState(Game.gsm.SCORE_STATE);
 						break;
 					case 4:
 						System.exit(0);
@@ -99,58 +105,56 @@ class Menu extends JPanel {
 		}
 	}
 
-	public static class Sound {
-		public static synchronized void play(final String fileName) {
+	public static class Sound extends Thread {
 
-			new Thread(new Runnable() {
-				public void run() {
-					try {
-						Clip clip = AudioSystem.getClip();
-						AudioInputStream inputStream = AudioSystem
-								.getAudioInputStream(new File(fileName));
-						clip.open(inputStream);
-						clip.start();
-					} catch (Exception e) {
-						System.out.println("play sound error: "
-								+ e.getMessage() + " for " + fileName);
-					}
-				}
-			}).start();
-			return;
-		}
-	}
-	
-	public static class Music {
-		static boolean play;
-			public static synchronized void play(final String fileName) {			
-			new Thread(new Runnable() {
-				public void run() {
-					double Time=Calendar.getInstance().getTimeInMillis();
-					play=true;
-					
-					try {
-						while(play){
-							double Time2 = Calendar.getInstance().getTimeInMillis();
-							if (Time2 - Time > 4000) {
-								Time = Time2;
-							}
-							if (Time2 - Time == 0) {
-								Clip clip = AudioSystem.getClip();
-								AudioInputStream inputStream = AudioSystem
-										.getAudioInputStream(new File(fileName));
-								clip.open(inputStream);
-								clip.start();
-							}
-					
-						}
-					} catch (Exception e) {
-						System.out.println("play sound error: "
-								+ e.getMessage() + " for " + fileName);
-					}
-				}
-			}).start();
-			return;
+		static String filename; // filename of the file
+
+		public void run() {
+			try {
+				Clip clip = AudioSystem.getClip();
+				AudioInputStream inputStream = AudioSystem
+						.getAudioInputStream(new File(filename));
+				clip.open(inputStream);
+				clip.start();
+			} catch (Exception e) {
+				System.out.println("play sound error: " + e.getMessage()
+						+ " for " + filename);
+			}
 		}
 	}
 
 }
+
+// public static class Music {
+// static boolean play;
+// public static synchronized void play(final String fileName) {
+// new Thread(new Runnable() {
+// public void run() {
+// double Time=Calendar.getInstance().getTimeInMillis();
+// play=true;
+//
+// try {
+// while(play){
+// double Time2 = Calendar.getInstance().getTimeInMillis();
+// if (Time2 - Time > 4000) {
+// Time = Time2;
+// }
+// if (Time2 - Time == 0) {
+// Clip clip = AudioSystem.getClip();
+// AudioInputStream inputStream = AudioSystem
+// .getAudioInputStream(new File(fileName));
+// clip.open(inputStream);
+// clip.start();
+// }
+//
+// }
+// } catch (Exception e) {
+// System.out.println("play sound error: "
+// + e.getMessage() + " for " + fileName);
+// }
+// }
+// }).start();
+// return;
+// }
+// }
+

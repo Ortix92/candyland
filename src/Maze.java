@@ -47,6 +47,7 @@ public class Maze implements VisibleObject {
 			maze = world.convertMapToArray();
 			PLAYER_SPAWN_X = world.getSpawnX()*SQUARE_SIZE;
 			PLAYER_SPAWN_Z = world.getSpawnZ()*SQUARE_SIZE;
+			MazeRunner.amountofNyans = world.getAmountOfNyans();
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Falling back to default map due to error");

@@ -44,6 +44,7 @@ public class NyanCat extends GameObject implements VisibleObject {
 	// makes a NyanCat on the location x, y , z, looking in direction h
 	public NyanCat(double x, double y, double z, double h, Player play) {
 		super(x, y, z);
+		System.out.println("nyan aangemaakt");
 		horAngle = h;
 		player = play;
 		// MazeRunner.maze = m;

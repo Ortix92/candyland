@@ -20,7 +20,6 @@ import javax.media.opengl.glu.GLU;
 import leveleditor.editor;
 
 import com.sun.opengl.util.Animator;
-import com.sun.opengl.util.FPSAnimator;
 import com.sun.opengl.util.GLUT;
 import com.sun.opengl.util.j2d.TextRenderer;
 
@@ -58,7 +57,7 @@ public class MazeRunner implements GLEventListener {
 	public static int screenHeight = 768;
 	private ArrayList<VisibleObject> visibleObjects;
 	private Player player;
-	public static int amountofNyans = editor.amountOfNyans;
+	public static int amountofNyans;
 	private ArrayList<NyanCat> Nyan = new ArrayList<NyanCat>();
 	private Camera camera;
 	private UserInput input;
@@ -203,7 +202,6 @@ public class MazeRunner implements GLEventListener {
 			}
 
 			System.out.println("X " + X + " Z " + Z);
-			
 
 			// visibleObjects.add(Nyan.get(i)); // make Nyan visible.
 
@@ -214,28 +212,20 @@ public class MazeRunner implements GLEventListener {
 			phworld.initNyan(nyan);
 			Nyan.add(nyan);
 		}
-		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				; // x-position
-		double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				; // z-position
+		double X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // x-position
+		double Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // z-position
 		while (maze.isWall(X, Z)) {
-			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					; // x-position
-			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-					; // z-position
+			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // z-position
 		}
 		PickUp NewClaws = new PickUp(X, Z, player, 2);
 		visibleObjects.add(NewClaws);
 		pickup.add(NewClaws);
-		X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				; // x-position
-		Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				; // z-position
+		X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // x-position
+		Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // z-position
 		while (maze.isWall(X, Z)) {
-			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE
-				; // x-position
-			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE 
-					; // z-position
+			X = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // x-position
+			Z = Math.random() * maze.MAZE_SIZE * maze.SQUARE_SIZE; // z-position
 		}
 		PickUp NewClaws2 = new PickUp(X, Z, player, 3);
 		visibleObjects.add(NewClaws2);
@@ -254,8 +244,8 @@ public class MazeRunner implements GLEventListener {
 		phworld.initPlayer((float) player.getLocationX(),
 				(float) player.getLocationY(), (float) player.getLocationZ());
 		System.out.println("Maze size: " + maze.MAZE_SIZE);
-		Menu.Music.play=false;
-		Menu.Music.play("sounds/nyan-cat-wav.wav");
+		// Menu.Music.play=false;
+		// Menu.Music.play("sounds/nyan-cat-wav.wav");
 	}
 
 	/**
@@ -427,7 +417,6 @@ public class MazeRunner implements GLEventListener {
 		// gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.9f *
 		// screenHeight);
 		// int len, i;
-		
 
 		// Timer
 		double Time1 = Calendar.getInstance().getTimeInMillis();
@@ -443,32 +432,25 @@ public class MazeRunner implements GLEventListener {
 		} else if (!flag.Flag) {
 			timerString = "Timebonus: " + Timer;
 		}
-		
+
 		Font f = new Font("SansSerif", Font.BOLD, 24);
 		if (tr == null) {
-		tr = new TextRenderer(f);
-		tr.setColor(50, 30, 0, 1.0f);
+			tr = new TextRenderer(f);
+			tr.setColor(50, 30, 0, 1.0f);
 		}
 		tr.beginRendering((int) screenWidth, (int) screenHeight);
 		tr.draw("Score:  " + score, (int) (screenWidth / 2.3f),
 				(int) (0.85f * screenHeight));
 		tr.draw(timerString, (int) (screenWidth / 2.3f),
 				(int) (0.9f * screenHeight));
-		tr.draw("Amount of Nyans left: "+Nyan.size(), (int) (screenWidth / 2.3f),
-				(int) (0.8f * screenHeight));
+		tr.draw("Amount of Nyans left: " + Nyan.size(),
+				(int) (screenWidth / 2.3f), (int) (0.8f * screenHeight));
 		tr.endRendering();
-		
-		/*gl.glRasterPos2f(screenWidth / 2.3f, screenHeight - 0.95f
-				* screenHeight);
-		int tim = (int) timerString.length();
-		for (int k = 0; k < tim; k++) {
-			glut.glutBitmapCharacter(GLUT.BITMAP_TIMES_ROMAN_24,
-					timerString.charAt(k));*/
 
 		if (Nyan.size() == 0) {
 			Font h = new Font("Castellar", Font.PLAIN, 30);
 			if (fj == null) {
-			fj = new TextRenderer(h);
+				fj = new TextRenderer(h);
 			}
 			fj.beginRendering((int) screenWidth, (int) screenHeight);
 			// gl.glRasterPos2f(screenWidth / 3, screenHeight - 0.7f
@@ -491,7 +473,7 @@ public class MazeRunner implements GLEventListener {
 		}
 		Font f2 = new Font("Narkisim", Font.PLAIN, 28);
 		if (tr2 == null) {
-		tr2 = new TextRenderer(f2);
+			tr2 = new TextRenderer(f2);
 		}
 		tr2.beginRendering(screenWidth, screenHeight);
 		tr2.draw(weaponString, 50, (int) (0.95 * screenHeight));
@@ -501,10 +483,10 @@ public class MazeRunner implements GLEventListener {
 		// weaponString.charAt(k));
 		// }
 		tr2.endRendering();
-		
+
 		if (LevelSelector.chucknorris) {
 			if (tr3 == null) {
-			tr3 = new TextRenderer(f);
+				tr3 = new TextRenderer(f);
 			}
 			tr3.beginRendering(screenWidth, screenHeight);
 			tr3.setColor(20, 0, 0, 1);
@@ -593,7 +575,7 @@ public class MazeRunner implements GLEventListener {
 			long currentTime = now.getTimeInMillis();
 			int deltaTime = (int) (currentTime - previousTime);
 			long fps = (currentTime - previousTime);
-			// System.out.println("FPS:" + 1000 / fps);
+			System.out.println("FPS:" + 1000 / fps);
 			previousTime = currentTime;
 
 			// Update any movement since last frame.
@@ -702,14 +684,9 @@ public class MazeRunner implements GLEventListener {
 	public boolean NyanSeePlayer() {
 		for (int i = 0; i < Nyan.size(); i++) {
 			if (Nyan.get(i).SeePlayer()) {
-				if (!NyanGeluid) {
-					Menu.Sound.play("sounds/nyan.wav");
-				}
-				NyanGeluid = true;
 				return true;
 			}
 		}
-		NyanGeluid = false;
 		return false;
 	}
 
@@ -785,9 +762,14 @@ public class MazeRunner implements GLEventListener {
 				visibleObjects.add(pickupnieuw);
 				pickup.add(pickupnieuw);
 				Nyan.remove(j);
-				Menu.Sound.play("sounds/sonic_ring.wav");
+
+				Menu.Sound sound = new Menu.Sound();
+				sound.filename = "sounds/sonic_ring.wav";
+				sound.run();
+				sound = null;
 				score = score + 1000;
 				if (Nyan.size() == 0) {
+					System.out.println("flag made");
 					flag = new Flag(maze.PLAYER_SPAWN_X, 0,
 							maze.PLAYER_SPAWN_Z, player);
 					visibleObjects.add(flag);
@@ -835,7 +817,7 @@ public class MazeRunner implements GLEventListener {
 			// for (int i = 0; i < bullets.size(); i++) {
 			// bullets.get(i).update(deltaTime);
 		}
-		
+
 	}
 
 	private void updateCamera() {

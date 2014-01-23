@@ -81,8 +81,9 @@ public class LevelSelector extends JPanel {
 
 	/**
 	 * Class containing all the actions which occur after a button press
+	 * 
 	 * @author ntsutsunava
-	 *
+	 * 
 	 */
 	private class LoadMapAction extends AbstractAction {
 
@@ -103,7 +104,6 @@ public class LevelSelector extends JPanel {
 				break;
 			case "map1":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
-				MazeRunner.amountofNyans = 4;
 
 				JOptionPane
 						.showMessageDialog(LevelSelector.this,
@@ -112,7 +112,6 @@ public class LevelSelector extends JPanel {
 				break;
 			case "map2":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
-				MazeRunner.amountofNyans = 7;
 
 				JOptionPane.showMessageDialog(LevelSelector.this,
 						"You have some skill, warrior, but you still suck.");
@@ -120,7 +119,6 @@ public class LevelSelector extends JPanel {
 				break;
 			case "map3":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
-				MazeRunner.amountofNyans = 15;
 				JOptionPane.showMessageDialog(LevelSelector.this,
 						"You will avenge your fallen brothers, Godlike human.");
 				System.out.println("Map Selected: " + Maze.mazeFile);
@@ -128,7 +126,6 @@ public class LevelSelector extends JPanel {
 				break;
 			case "map4":
 				Maze.mazeFile = "src/assets/maps/" + action + ".txt";
-				MazeRunner.amountofNyans = 25;
 				JOptionPane.showMessageDialog(LevelSelector.this,
 						"Right this way sir... do you want some coffee to go?");
 				System.out.println("Map Selected: " + Maze.mazeFile);

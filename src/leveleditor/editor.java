@@ -1,4 +1,5 @@
 package leveleditor;
+
 import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -41,7 +42,8 @@ public class editor {
 	private JSlider resolutionSlider;
 	private JPanel panel;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	public static int amountOfNyans = 25;
+	private JSlider nyanSlider;
+	public static int amountOfNyans = 5;
 	public static int drawMode;
 
 	/**
@@ -199,14 +201,14 @@ public class editor {
 		JLabel lblDrawMode = new JLabel("Draw Mode");
 		lblDrawMode.setBounds(250, 336, 84, 14);
 		panel.add(lblDrawMode);
-		
+
 		JButton btnFillEdges = new JButton("Fill Edges");
 		btnFillEdges.setBounds(241, 457, 126, 50);
 		btnFillEdges.setAction(action);
 		btnFillEdges.setText("Fill Edges");
 		panel.add(btnFillEdges);
-		
-		JSlider nyanSlider = new JSlider();
+
+		nyanSlider = new JSlider();
 		nyanSlider.setToolTipText("Select the amount of nyans\r\n");
 		nyanSlider.setSnapToTicks(true);
 		nyanSlider.setPaintTicks(true);
@@ -219,7 +221,7 @@ public class editor {
 		nyanSlider.setBounds(337, 82, 43, 200);
 		amountOfNyans = nyanSlider.getValue();
 		panel.add(nyanSlider);
-		
+
 		JLabel lblAmountOfNyans = new JLabel("Amount of Nyans");
 		lblAmountOfNyans.setBounds(308, 57, 96, 14);
 		panel.add(lblAmountOfNyans);
@@ -299,11 +301,13 @@ public class editor {
 					.getMaze();
 
 			Point spawn = editor.this.editorPanel.getSpawnPoint();
+			editor.amountOfNyans = editor.this.nyanSlider.getValue();
 			String filename = "map_export.txt";
 
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-				bw.write(spawn.x + " " + spawn.y + "\r\n");
+				bw.write(spawn.x + " " + spawn.y + " " + editor.amountOfNyans
+						+ "\r\n");
 				for (int i = 0; i < map.size(); i++) {
 					for (int j = 0; j < map.size(); j++) {
 						bw.write(map.get(i).get(j) + " ");

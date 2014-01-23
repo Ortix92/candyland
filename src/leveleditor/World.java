@@ -13,11 +13,12 @@ public class World {
 	private int[][] mapArray;
 	private double spawnZ;
 	private double spawnX;
+	private int AmountOfNyans;
 
 	public World(String absolutePath) {
 		this.worldFile = absolutePath;
 	}
-	
+
 	public String getWorldFile() {
 		return this.worldFile;
 	}
@@ -42,6 +43,7 @@ public class World {
 			// retrieve spawnpoints
 			spawnX = Integer.parseInt(sc.next());
 			spawnZ = Integer.parseInt(sc.next());
+			setAmountOfNyans(Integer.parseInt(sc.next()));
 			sc.nextLine();
 
 			ArrayList<Integer> row;
@@ -115,17 +117,25 @@ public class World {
 	}
 
 	public double getSpawnX() {
-		return spawnX;
+		return spawnX + 2 * (map.size() / 2 - spawnX); // mirror over x
 	}
 
-//	public static void main(String[] args) {
-//		World world = new World("map_export.txt");
-//		try {
-//			world.loadMapFromFile();
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	public int getAmountOfNyans() {
+		return AmountOfNyans;
+	}
+
+	public void setAmountOfNyans(int amountOfNyans) {
+		AmountOfNyans = amountOfNyans;
+	}
+
+	// public static void main(String[] args) {
+	// World world = new World("map_export.txt");
+	// try {
+	// world.loadMapFromFile();
+	// } catch (FileNotFoundException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 }

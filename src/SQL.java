@@ -25,7 +25,8 @@ public class SQL {
 			connect = DriverManager.getConnection(db_connect_string, db_userid,
 					db_password);
 		} catch (Exception e) {
-			System.out.println("Failed to connect to the database with following error: ");
+			System.out
+					.println("Failed to connect to the database with following error: ");
 			System.out.println(e.getMessage());
 		}
 	}
@@ -50,9 +51,11 @@ public class SQL {
 			ResultSet rs = statement
 					.executeQuery("SELECT Naam, Score FROM Score ORDER BY Score DESC");
 			int plaats = 1;
-			while (rs.next()) {
-				display(gl, rs.getString(1), rs.getString(2), plaats);
-				plaats = plaats + 1;
+			for (int i = 0; i < 20; i++) {
+				if (rs.next()) {
+					display(gl, rs.getString(1), rs.getString(2), plaats);
+					plaats = plaats + 1;
+				}
 			}
 		} catch (SQLException e) {
 			System.out.println("Failed to get Highscores from DB");
@@ -94,9 +97,9 @@ public class SQL {
 	 * 
 	 * @param args
 	 */
-//	 public static void main(String[] args) {
-//	 SQL connection = new SQL();
-//	 connection.wipe();
-//	 }
+	// public static void main(String[] args) {
+	// SQL connection = new SQL();
+	// connection.wipe();
+	// }
 
 }

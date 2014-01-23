@@ -164,7 +164,7 @@ public class Painter extends JPanel implements GLEventListener, MouseListener,
 	 *            simple integer which sets the resolution
 	 */
 	public void setResolution(int resolution) throws IllegalArgumentException {
-		if (resolution % 5 == 0) {
+		if (resolution % 5 == 0) { 
 			this.resolution = resolution;
 		} else {
 			throw new IllegalArgumentException(
